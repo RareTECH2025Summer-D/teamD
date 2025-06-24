@@ -1,0 +1,14 @@
+<h1>Channels</h1>
+
+<ul>
+  {% for channel in channels %}
+    <li><a href="{% url 'channel_detail' channel.pk %}">{{ channel.name }}</a></li>
+  {% endfor %}
+</ul>
+
+<h2>Create New Channel</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create</button>
+</form>

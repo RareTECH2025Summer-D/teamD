@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+.env
+*.log
+*.swp
+*.swo
+*.bak
+*.tmp
+*.DS_Store
+
+# Django
+/static/
+*.sqlite3
+*.pot
+*.pyc
+*.py[cod]
+db.sqlite3
+
+# VSCode
+.vscode/
+
+# Docker
+**/mysql_data/
