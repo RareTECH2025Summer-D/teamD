@@ -30,9 +30,6 @@ DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
 🔧 初期セットアップ
 以下のコマンドで初期化してください。
 
-bash
-コピーする
-編集する
 # イメージのビルドとコンテナ起動
 docker-compose up --build
 
@@ -41,6 +38,7 @@ docker-compose exec app python manage.py migrate
 
 # 必要に応じてスーパーユーザー作成
 docker-compose exec app python manage.py createsuperuser
+
 ✅ 動作確認
 URL	説明
 http://localhost/	トップページ (Nginxが返す静的HTML)
@@ -48,9 +46,7 @@ http://localhost/channels/	チャンネル一覧 (Django)
 http://localhost/admin/	管理画面 (Django, 任意)
 
 📦 ディレクトリ構成
-plaintext
-コピーする
-編集する
+
 .
 ├── docker-compose.yml
 ├── env.example
