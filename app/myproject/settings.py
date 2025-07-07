@@ -1,5 +1,5 @@
 from pathlib import Path
-from decouple import config, Csv  # ← 追加
+from decouple import config, Csv  
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -51,14 +51,9 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('MYSQL_DATABASE'),
-        'USER': 'root',  # ← ここ固定でOK！
-        'PASSWORD': config('MYSQL_ROOT_PASSWORD'),  # ← root のパスは ROOT_PASSWORD
-        'HOST': config('MYSQL_HOST', default='db'),  # ← Docker の service 名で OK
-        'PORT': config('MYSQL_PORT', default='3306'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
 STATIC_URL = '/static/'
-

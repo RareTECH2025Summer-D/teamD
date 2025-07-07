@@ -1,27 +1,34 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
-*.db
+
+# SQLite DB
 *.sqlite3
-.env
+*.db
+db.sqlite3
+
+# Logs, temp files
 *.log
 *.swp
 *.swo
 *.bak
 *.tmp
-*.DS_Store
 
-# Django
-/static/
-*.sqlite3
-*.pot
-*.pyc
-*.py[cod]
-db.sqlite3
+# Environment variables
+.env
+
+# macOS
+.DS_Store
 
 # VSCode
 .vscode/
 
-# Docker
+# Django static files
+staticfiles/
+static/
+*.pot
+
+# Docker volume data
 **/mysql_data/
