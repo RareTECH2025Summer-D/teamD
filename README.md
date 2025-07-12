@@ -40,13 +40,16 @@ http://localhost:8000/admin/	Django 管理画面（ログイン必要）
 📁 ディレクトリ構成
 ```bash
 .
-├── app/
+├── .env　　               # 環境変数
+├── .env.example　　       # 共有用テンプレ
+├── .gitignore          
+├── README.md　　　　　　　  # ← このファイル
+├── app
+│   ├── Dockerfile
 │   ├── manage.py
-│   ├── myapp/        # アプリケーション
-│   └── myproject/    # プロジェクト設定
-├── docker-compose.yml
-├── .env              # 環境変数
-├── .env.example      # 共有用テンプレ
-├── requirements.txt
-└── README.md         # ← このファイル
+│   ├── requirements.txt
+│   ├── myapp/　　　　　　　# アプリケーション
+│   └── myproject/　　　　 # プロジェクト設定
+└── docker-compose.yml
+
 ```
