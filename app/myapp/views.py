@@ -1,7 +1,18 @@
 from django.views.generic import ListView, DetailView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from .models import Channel
 from .forms import ChannelForm
+
+
+#ユーザー登録
+def signup_view(request):
+    return render(request, 'registration/signup.html')
+
+#ログイン
+def login_view(request):
+    return render(request, 'registration/login.html')
+
+
 
 # チャンネル一覧 + チャンネル作成
 class ChannelListView(ListView):

@@ -1,0 +1,30 @@
+/* それぞれのコンポーネントを正しく配置 */
+
+/* ヘッダーを抜いたメイン部分（画面全体の78%をメインにしますという意味） */
+.registration-container {
+    height: 78%;
+}
+
+/* 「ユーザー登録」「ログイン」の題名の文字 */
+.registration-container p {
+    margin-top: 1em;
+    font-size: 28px;
+}
+
+/* フォーム入力部分の単位 */
+.registration-piece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6em;
+    margin-top: 3em;
+}
+
+/* ボタンと画面遷移ボタンの単位 */
+.registration-button-piece {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.8em;
+    margin-top: 3em;
+}
