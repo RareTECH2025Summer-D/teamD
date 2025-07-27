@@ -1,0 +1,42 @@
+/* ！　ユーザー登録・ログイン画面のヘッダー ！ */
+.circle-wrapper {
+    display: flex;
+    justify-content: center;
+    height: 22%;
+    overflow: hidden;
+    position: relative;
+}
+
+.app-name {
+    align-self: center;
+    color: var(--white);
+    margin-right: 15em;
+    z-index: 1;
+}
+
+.circle1 {
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: var(--student_primary);
+    opacity: 0.7;
+    margin-top: -270px;
+    margin-right: 200px;
+    position: absolute;
+    /* z-index: 2; */
+}
+
+.circle2 {
+    width: 400px;
+    height: 300px;
+    border-radius: 50%;
+    background: var(--teacher_primary);
+    opacity: 0.7;
+    margin-top: -170px;
+    margin-left: 450px;
+    position: absolute;
+    z-index: 2;
+}
+
+
+

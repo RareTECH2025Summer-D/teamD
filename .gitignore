@@ -27,7 +27,7 @@ db.sqlite3
 
 # Django static files
 staticfiles/
-static/
+# static/
 *.pot
 
 # Docker volume data

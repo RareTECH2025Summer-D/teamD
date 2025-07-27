@@ -1,0 +1,47 @@
+/* ！　ユーザー登録・ログイン画面のパーツ ！ */
+/* フォーム入力のパーツ */
+.registration-form {
+    width: 305px;
+    height: 45px;
+    border-radius: 25px;
+    border: 1px solid var(--gray);
+    background: var(--light_gray);
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 19px;
+}
+
+.registration-form::placeholder {
+    font-size: 20px;
+    color: var(--slate_gray);
+}
+
+/* 「登録」「ログイン」ボタンのパーツ */
+.registration-submit {
+    width: 160px;
+    height: 45px;
+    border-radius: 25px;
+    border: hidden;
+    background: var(--student_primary);
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--white);
+    align-self: center;
+    transition: .3s;
+}
+
+.registration-submit:hover {
+    transform: scale(1.1,1.1);
+}
+
+/* 「登録」「ログイン」画面へ戻るボタンのパーツ */
+.registration-back {
+    text-decoration: none;
+    font-size: 20px;
+    color: var(--slate_gray);
+    transition: .2s;
+}
+
+.registration-back:hover {
+    color: var(--charcoal_gray);
+}
