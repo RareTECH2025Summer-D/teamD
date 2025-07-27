@@ -2,6 +2,10 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect
 from .models import Channel
 from .forms import ChannelForm
+from django.http import HttpResponse
+
+def health_check(request):
+    return HttpResponse("OK", status=200)
 
 # チャンネル一覧 + チャンネル作成
 class ChannelListView(ListView):

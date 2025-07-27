@@ -15,4 +15,4 @@ COPY . .
 #使うポートを開放（ローカル用）EXPOSE は「このポート使うよ」と他のコンテナに教えるだけで、実際の公開は ports で決まるから必須ではない
 EXPOSE 8000
 #起動するコマンドを指定（コンテナ内のアプリ）がどのアドレス・ポートで待ち受けるか決める　
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
