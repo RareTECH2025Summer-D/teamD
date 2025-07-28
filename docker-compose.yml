@@ -5,13 +5,32 @@ services:
     build:
       context: ./app
     container_name: app
+# nginx使うならportsをコメントアウト
     ports:  
       - "8000:8000"
     expose:
       - "8000"
+    depends_on:
+      - db
     env_file:
       - .env 
     volumes: 
       - ./app:/app
     working_dir: /app
+  # command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
     command: python manage.py runserver 0.0.0.0:8000
+
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    env_file:
+      - .env 
+    # ports:
+      # - "3306:3306"
+# データ永続化設定
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

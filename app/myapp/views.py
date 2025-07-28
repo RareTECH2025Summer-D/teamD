@@ -2,6 +2,12 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect, render
 from .models import Channel
 from .forms import ChannelForm
+from django.http import HttpResponse
+
+
+# ヘルスチェック
+def health_check(request):
+    return HttpResponse("OK", status=200)
 
 
 #ユーザー登録
