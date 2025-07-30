@@ -51,8 +51,12 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('MYSQL_DATABASE'),
+        'USER': config('MYSQL_USER'),  # ← ここはローカルならroot
+        'PASSWORD': config('MYSQL_PASSWORD'),  # ← root のパスは ROOT_PASSWORD
+        'HOST': config('MYSQL_HOST', default='db'),  # ← Docker の service 名で OK
+        'PORT': config('MYSQL_PORT', default='3306'),
     }
 }
 
