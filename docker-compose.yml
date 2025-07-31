@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 services:
   app:
@@ -11,12 +11,14 @@ services:
     expose:
       - "8000"
     depends_on:
-      - db
+        db:
+          condition: service_healthy
     env_file:
       - .env 
     volumes: 
       - ./app:/app
     working_dir: /app
+    entrypoint: ""  # ← ENTRYPOINT 無効化
   # command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
     command: python manage.py runserver 0.0.0.0:8000
 
@@ -31,6 +33,19 @@ services:
 # データ永続化設定
     volumes:
       - mysql_data:/var/lib/mysql
+
+    # DBのコンテナのヘルスチェックを行う
+    # mysqladmin(MySQLサーバーの管理を行うクライアントを使ってDBコンテナ自身(127.0.0.1)にpingを送ってヘルスチェックを行う
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD
+      # ヘルスチェックのインターバルは10秒
+      interval: 10s
+      # タイムアウト時間は10秒
+      timeout: 10s
+      # リトライ回数は3回
+      retries: 3
+      # ヘルスチェックが失敗しても無視する時間は30秒
+      start_period: 30s
 
 volumes:
   mysql_data:
