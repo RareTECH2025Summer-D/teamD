@@ -3,7 +3,7 @@
 # DB起動待ち
 echo " Waiting for MySQL..."
 for i in $(seq 1 30); do
-  nc -z "$MYSQL_HOST" "$MYSQL_PORT" && echo " MySQL is up!" && break
+  nc -z "$MYSQL_HOST" "3306" && echo " MySQL is up!" && break
   echo " Waiting... ($i)"
   sleep 1
 done
