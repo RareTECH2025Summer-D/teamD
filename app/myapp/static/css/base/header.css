@@ -39,4 +39,19 @@
 }
 
 
+/* ！ スキル登録・スキル作成・プロフィール作成画面ヘッダー ！ */
+.opening-header {
+    position: relative;
+    height: 15vh;
+    /* background: var(--student_primary_translucent); */
+    background: var(--primary_translucent);
+}
+
+.opening-app-name {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 15px;
+    color: var(--charcoal_gray);
+}
 

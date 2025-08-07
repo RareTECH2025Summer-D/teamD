@@ -1,0 +1,5 @@
+body.student {
+    --primary_color: var(--student_primary);
+    --primary_translucent: var(--student_primary_translucent);
+    --button_color: var(--student_button)
+}
