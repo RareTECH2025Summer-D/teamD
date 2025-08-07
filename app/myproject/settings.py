@@ -1,14 +1,10 @@
 from pathlib import Path
 from decouple import config, Csv  
+import boto3
+import json
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# .envから読み込む
-SECRET_KEY = config('DJANGO_SECRET_KEY')
-
-DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
-
-ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', cast=Csv())  # カンマ区切りでリスト化
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -47,21 +43,65 @@ TEMPLATES = [
     },
 ]
 
+LANGUAGE_CODE = 'ja'  
+TIME_ZONE = 'Asia/Tokyo'  
+USE_I18N = True  
+USE_TZ = True  
+
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('MYSQL_DATABASE'),
-        'USER': config('MYSQL_USER'),  # ← ここはローカルならroot
-        'PASSWORD': config('MYSQL_PASSWORD'),  # ← root のパスは ROOT_PASSWORD
-        'HOST': config('MYSQL_HOST', default='db'),  # ← Docker の service 名で OK
-        'PORT': config('MYSQL_PORT', default='3306'),
-    }
-}
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'myapp' / 'static',
 ]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+env = os.environ.get("ENV_NAME", "production")
+
+if env == "local":
+    #ローカル
+    
+    SECRET_KEY = config('DJANGO_SECRET_KEY')
+
+    DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
+    ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', cast=Csv())
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('MYSQL_DATABASE'),
+            'USER': config('MYSQL_USER'),
+            'PASSWORD': config('MYSQL_PASSWORD', default=config('MYSQL_ROOT_PASSWORD')),
+            'HOST': config('MYSQL_HOST', default='db'),
+            'PORT': config('MYSQL_PORT', default='3306'),
+        }
+    }
+
+else:
+    #本番
+
+    def get_secret(secret_name):
+        region = os.environ.get("AWS_REGION", "ap-northeast-1")
+        client = boto3.client("secretsmanager", region_name=region)
+        response = client.get_secret_value(SecretId=secret_name)
+        return json.loads(response["SecretString"])
+
+    secrets = get_secret("skima-secrets")
+
+    SECRET_KEY = secrets["DJANGO_SECRET_KEY"]
+    DEBUG = False
+    ALLOWED_HOSTS = secrets["DJANGO_ALLOWED_HOSTS"].split(",")  # カンマ区切り
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': secrets["DB_NAME"],
+            'USER': secrets["DB_USER"],
+            'PASSWORD': secrets["DB_PASSWORD"],
+            'HOST': secrets["DB_HOST"],
+            'PORT': '3306',
+        }
+    }
