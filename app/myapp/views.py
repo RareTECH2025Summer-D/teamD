@@ -1,56 +1,23 @@
-from django.views.generic import ListView, DetailView,CreateView,DeleteView,UpdateView,TemplateView,View
+from django.views.generic import ListView, DetailView,CreateView,UpdateView,TemplateView,View
 from django.contrib.auth.views import LoginView,LogoutView
-from formtools.wizard.views import SessionWizardView
-from django.shortcuts import redirect, render
-from .models import Channel
-from .forms import ChannelForm
-from django.http import HttpResponse
+from django.urls import reverse_lazy
+from .forms import *
+# from django.shortcuts import redirect, render
+# from django.http import HttpResponse
 
-"""
-# ヘルスチェック
-def health_check(request):
-    return HttpResponse("OK", status=200)
-
-
-#ユーザー登録
-def signup_view(request):
-    return render(request, 'registration/signup.html')
-
-#ログイン
-def login_view(request):
-    return render(request, 'registration/login.html')
-
-
-
-# チャンネル一覧 + チャンネル作成
-class ChannelListView(ListView):
-    model = Channel
-    template_name = 'sample.html'
-    context_object_name = 'channels'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ChannelForm()
-        return context
-
-    def post(self, request, *args, **kwargs):
-        form = ChannelForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('channel_list')
-"""
 # サインアップ
 class UserSignup(CreateView):
-    pass
+    model = Users
+    form_class = SignupForm
+    success_url = reverse_lazy('login')
 
-
-
-
-
-
-
-
-
+    def form_valid(self, form):
+        # フォームが有効な際に実行
+        user = form.save(commit=False)                      # 入力フォームの情報を取得
+        user.set_password(form.cleaned_data["password"])    # passwordをハッシュ化
+        user.save()
+        return super().form_valid(form)
+        
 
 # ログイン
 class Login(LoginView):
@@ -66,9 +33,15 @@ class Login(LoginView):
 
 
 
-# ログアウト
-class Logout(LogoutView):
-    pass  
+
+# ホーム画面
+class UserHome(TemplateView):
+    def get():
+
+        pass
+
+    def post():
+        pass  
 
 
 
@@ -81,29 +54,13 @@ class Logout(LogoutView):
 # 学ぶ・教える選択
 class RoleSelect(TemplateView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass  
 
 
-
-
-
-
-
-
-
-
-# ホーム画面
-class UserHome(TemplateView):
-    def get():
-          
-        pass
-    
-    def post():
-        pass  
 
 
 
@@ -114,11 +71,13 @@ class UserHome(TemplateView):
 
 
 # 初回スキル登録（学ぶ・教える共通）
-class ProfileCreate():
+# View継承時はtemplate_nameでHTMLファイル指定できないので、render()関数でHTMLファイルの指定をする
+class ProfileCreate(View):
     def get():
-          
+
+        # return render(request, 'skill_registration.html', context)
         pass
-    
+
     def post():
         pass  
 
@@ -132,11 +91,13 @@ class ProfileCreate():
 
 
 # スキル作成
-class SkillCreate():
+# HTMLファイル確認
+class SkillCreate(View):
     def get():
-          
+
+        # return render(request, '.html', context)
         pass
-    
+
     def post():
         pass  
 
@@ -150,11 +111,12 @@ class SkillCreate():
 
 
 # プロフィール作成(学ぶ・教える共通)
-class ProfileCreate():
+class ProfileCreate(View):
     def get():
-          
+
+        # return render(request, 'profile_create.html', context)
         pass
-    
+
     def post():
         pass
 
@@ -167,12 +129,31 @@ class ProfileCreate():
 
 
 
+
+
+
+#設定画面
+class Setting(TemplateView):
+    pass
+
+     
+
+
+
+
+
+
+
+
+
+
+
 # プロフィール編集
-class ProfileUpdate():
+class ProfileUpdate(UpdateView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
 
@@ -186,11 +167,11 @@ class ProfileUpdate():
 
 
 # 先生・生徒検索(学ぶ・教える共通)
-class SearchUsers():
+class SearchUsers(ListView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
 
@@ -204,11 +185,11 @@ class SearchUsers():
 
 
 # ユーザー詳細画面(学ぶ・教える共通)
-class UserDitail():
+class UserDitail(DetailView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
 
@@ -222,11 +203,11 @@ class UserDitail():
 
 
 # リクエスト送信(学ぶ・教える共通)
-class SendRequest():
+class SendRequest(TemplateView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
 
@@ -240,11 +221,11 @@ class SendRequest():
 
 
 # リクエスト一覧(学ぶ・教える共通)
-class RequestList():
+class RequestList(ListView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
 
@@ -258,11 +239,11 @@ class RequestList():
 
 
 # 承認・削除送信(学ぶ・教える共通)
-class RequestApproval():
+class RequestApproval(TemplateView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
 
@@ -276,11 +257,11 @@ class RequestApproval():
 
 
 # マッチング成立一覧(学ぶ・教える共通)
-class MatchingList():
+class MatchingList(ListView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
 
@@ -294,11 +275,11 @@ class MatchingList():
 
 
 # コンタクト
-class Contact():
+class Contact(TemplateView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
 
@@ -313,20 +294,13 @@ class Contact():
 
 
 # 評価
-class Review():
+class Review(CreateView):
     def get():
-          
+
         pass
-    
+
     def post():
         pass
-
-
-
-
-
-
-
 
 
 
