@@ -1,10 +1,15 @@
 :root {
     --student_primary: #FFD61F;
+    --student_primary_translucent: rgba(255, 214, 31, 0.2); /* ヘッダーの半透明の色として使う */
+    --student_button: #F3E819;
     --teacher_primary: #1F9EFF;
+    --teacher_primary_translucent: rgba(31, 158, 255, 0.2);
+    --teacher_button: #04C1E2;
     --light_gray: #f5f5f5;
     --gray: #d9d9d9;
     --slate_gray: #b3acac;
     --charcoal_gray: #7A7373;
     --white: #fff;
-
+    --slate_white: #f9f9f9;
+    --shadow_gray: rgb(0, 0, 0, 0.25);
 }

@@ -12,3 +12,12 @@ html, body {
     height: 100vh;
     text-align: center;
 }
+
+
+/* base_app_button.htmlのmainタグにかかる設定（後で画面によってmain部分の指定を変えたいなら、mainにクラスをつけて管理する） */
+main {
+    height: 85vh;
+    overflow-y: auto;
+    padding-bottom: 120px; /* ボタンの高さ分の余白を確保 */
+    position: relative;
+}
