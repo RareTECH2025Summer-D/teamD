@@ -1,0 +1,89 @@
+/* "opening-title"はskill_registration_create.cssにまとめて記述 */
+
+/* フォーム部分全体（下部固定ボタンは含めない） */
+.profile-form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+/* ユーザーアイコン部分 */
+.user-icon-piece {
+    position: relative;
+    margin: 8px auto;
+}
+
+.user-icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2.5px solid var(--charcoal_gray);
+    /* margin-left: 15px; アイコンが真ん中になるように微調整（泣） */
+}
+.user-icon {
+    font-size: 60px;
+    color: var(--charcoal_gray);
+    padding-top: 9px;
+}
+
+.plus-icon-circle {
+    position: absolute;
+    bottom: 0;
+    right: -1px;
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background-color: var(--charcoal_gray);
+}
+.plus-icon {
+    color: var(--white);
+}
+
+/* 「ニックネーム」部分 */
+.username-piece {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 auto;
+    width: max-content;
+}
+
+.input-username {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--charcoal_gray);
+    margin: 0 0 5px 15px; /*　上・右・下・左 */
+}
+
+/* 「マッチングした際の連絡先」部分 */
+.contact-info-piece {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 auto;
+    width: max-content;
+}
+
+.input-contact-info {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--charcoal_gray);
+    margin: 0 0 5px 15px; /*　上・右・下・左 */
+}
+
+/* 「自己紹介文」部分 */
+.introduction-piece {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 auto;
+    width: max-content;
+}
+
+.input-introduction {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--charcoal_gray);
+    margin: 0 0 5px 15px; /*　上・右・下・左 */
+}

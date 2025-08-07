@@ -3,3 +3,4 @@ gunicorn>=21.2,<22.0
 mysqlclient>=2.2,<3.0
 django-formtools
 python-decouple
+boto3

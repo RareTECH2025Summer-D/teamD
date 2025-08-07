@@ -3,3 +3,7 @@
 @import 'base/components.css';
 @import 'base/color.css';
 @import 'pages/registration.css';
+@import 'pages/skill_registration_create.css';
+@import 'pages/profile_create.css';
+@import 'themes/student.css';
+@import 'themes/teacher.css';

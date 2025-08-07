@@ -23,6 +23,44 @@ class UserSignup(CreateView):
 class Login(LoginView):
     pass  
 
+# スキル登録画面
+def skill_setup_view(request):
+    # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+    role = request.GET.get("role", "student")
+
+    if role == "student":
+        page_title = "学びたいスキルを<br>選択してください！"
+    elif role == "teacher":
+        page_title = "教えたいスキルを<br>選択してください！"
+    
+    return render(request, 'app/skill_registration.html', {
+        "role": role,
+        "page_title": page_title,
+    })
+
+# スキル作成画面
+def skill_create_view(request):
+    role = request.GET.get("role", "student")
+
+    if role == "student":
+        page_title = "学びたいスキルを<br>作りましょう！"
+    elif role == "teacher":
+        page_title = "教えたいスキルを<br>作りましょう！"
+
+    return render(request, 'app/skill_create.html', {
+        "role": role,
+        "page_title": page_title
+    })
+
+# プロフィール作成画面
+def profile_create_view(request):
+    # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+    role = request.GET.get("role", "student")
+    
+    return render(request, 'app/profile_create.html', {
+        "role": role,
+    })
+
 
 
 

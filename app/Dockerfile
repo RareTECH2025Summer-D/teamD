@@ -17,4 +17,5 @@ COPY . .
 RUN chmod +x entrypoint.sh
 #使うポートを開放（ローカル用）EXPOSE は「このポート使うよ」と他のコンテナに教えるだけで、実際の公開は ports で決まるから必須ではない
 EXPOSE 8000
-ENTRYPOINT ["./entrypoint.sh"]  
+ENTRYPOINT ["./entrypoint.sh"]
+  

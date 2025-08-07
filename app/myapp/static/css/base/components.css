@@ -45,3 +45,126 @@
 .registration-back:hover {
     color: var(--charcoal_gray);
 }
+
+/* ！「スキル登録・作成画面」「プロフィール作成画面」のパーツ ！ */
+/* 「下部固定ボタン」のパーツ */
+.sticky-button {
+    width: 175px;
+    height: 55px;
+    border-radius: 30px;
+    border: hidden;
+    background-color: var(--button_color);
+    box-shadow: 0 1px 4px var(--shadow_gray);
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--white);
+}
+
+/* 「スキル作成画面」のフォーム */
+.skill-form {
+    width: 300px;
+    height: 40px;
+    border-radius: 25px;
+    border: none;
+    background: var(--light_gray);
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 19px;
+}
+
+/* 「プロフィール作成画面」のフォーム */
+.profile-form {
+    width: 285px;
+    height: 35px;
+    border-radius: 25px;
+    border: none;
+    background: var(--light_gray);
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 18px;
+}
+
+.introduction-form {
+    width: 285px;
+    height: 250px;
+    border-radius: 25px;
+    border: none;
+    background: var(--light_gray);
+    padding: 15px 25px; /* 上下・左右 */
+    font-size: 18px;
+}
+
+
+/* ！ 「スキル登録画面」のパーツ ！ */
+/* 虫眼鏡ボタン */
+.skill-search-btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 20px 0 0 20px;
+    background-color: var(--slate_white);
+    border: none;
+    box-shadow: 1px 1px 5px 1px var(--shadow_gray);
+    cursor: pointer;
+}
+
+.skill-search-btn:hover {
+    background-color: var(--student_primary);
+    color: var(--white);
+}
+
+/* 検索窓 */
+.skill-search-form {
+    width: 220px;
+    height: 35px;
+    border-radius: 0 20px 20px 0;
+    background-color: var(--slate_white);
+    border: none;
+    box-shadow: 1px 1px 5px 1px var(--shadow_gray);
+    padding: 5px 17px;
+    outline: none;
+    font-size: 15px;
+}
+
+/* プラスボタン(「スキル作成画面」遷移) */
+.plus-btn-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--primary_color);
+    opacity: 0.6;
+    transition: 0.2s;
+}
+
+.plus-btn {
+    font-size: 20px;
+    color: var(--white);
+}
+
+.plus-btn-circle:hover {
+    opacity: 1;
+}
+
+/* スキル選択タグ */
+.skill-checkbox[type=checkbox] {
+    display: none;
+}
+
+.skill-checkbox[type=checkbox]:checked + .skill-name-selection {
+    background-color: var(--primary_color);
+    color: var(--white);
+    border: 1px solid var(--primary_color);
+    transition: 0.08s;
+}
+
+.skill-name-selection {
+    display: inline-block;
+    border: 1px solid var(--gray);
+    color: var(--charcoal_gray);
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: bold;
+    margin: 4px 0;
+}
