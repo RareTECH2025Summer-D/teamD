@@ -4,7 +4,7 @@ from .views import *
 urlpatterns = [
     path('signup/',UserSignup.as_view(template_name='registration/signup.html'),name='signup'),
     path('login/',Login.as_view(template_name='registration/login.html'),name='login'),
-    path('logout/',LogoutView.as_view(),name='logout'),                                 # DjangoのLogoutViewで完結
+    path('logout/',LogoutView.as_view(next_page='login'),name='logout'),                                 # DjangoのLogoutViewで完結
     path('select/role/',RoleSelect.as_view(template_name='settings.html'),name='select_role'),
     path('user/home/',UserHome.as_view(template_name='home.html'),name='user_home'),
     path('user/setup/skill/',ProfileCreate.as_view(),name='user_setup_skill'),          # View継承のためtemplate_nameなし
