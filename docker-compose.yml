@@ -1,13 +1,13 @@
 version: "3.9"
-
 services:
   app:
     build:
-      context: ./app
+      context: .
+      dockerfile: app/Dockerfile
     container_name: app
 # nginx使うならportsをコメントアウト
-    ports:  
-      - "8000:8000"
+    # ports:  
+    #   - "8000:8000"
     expose:
       - "8000"
     depends_on:
@@ -19,8 +19,8 @@ services:
       - ./app:/app
     working_dir: /app
     entrypoint: ""  # ← ENTRYPOINT 無効化
-  # command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
 
   db:
     image: mysql:8.0
@@ -46,6 +46,18 @@ services:
       retries: 3
       # ヘルスチェックが失敗しても無視する時間は30秒
       start_period: 30s
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    container_name: nginx
+    #ローカルだけで公開
+    ports:
+    - "127.0.0.1:80:80"
+    depends_on:
+      - app
+  
 
 volumes:
   mysql_data:
