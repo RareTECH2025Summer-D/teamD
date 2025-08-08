@@ -1,15 +1,35 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from .models import * #,Channel
 
 # Metaはモデルに存在するフィールドを、入力フォームにそのまま利用できる（12行目）
 # モデルにないものに関しては、Metaの外で定義する
 # widgetでCSSのクラスやidなどを設定できる
 
+# ログイン画面（作成中）
+class LoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # username フィールドのウィジェットをカスタマイズ
+        self.fields['username'].widget = forms.EmailInput(attrs={
+            'class': 'registration-form',
+            'placeholder': 'Email',
+            'required': True,
+        })
+        
+        # password フィールドのウィジェットをカスタマイズ
+        self.fields['password'].widget = forms.PasswordInput(attrs={
+            'class': 'registration-form',
+            'placeholder': 'パスワード',
+            'required': True,
+        })
+
 # サインアップ画面
 class SignupForm(forms.ModelForm):
     
-    password = forms.CharField(
-        widget=forms.PasswordInput(
+    password = forms.CharField(label=''
+        ,widget=forms.PasswordInput(
             attrs={
                 'class': 'registration-form'    # CSSのクラス
                 , 'name': 'password1'           # name
@@ -18,8 +38,8 @@ class SignupForm(forms.ModelForm):
             }
         )
     )
-    confirmation_password = forms.CharField(
-        widget=forms.PasswordInput(
+    confirmation_password = forms.CharField(label=''
+        ,widget=forms.PasswordInput(
             attrs={
                 'class': 'registration-form'        # CSSのクラス
                 , 'name': 'password2'               # name
@@ -43,9 +63,10 @@ class SignupForm(forms.ModelForm):
                 }
             )
         }
-
-
-
+        # ラベルなし設定
+        labels = {
+            'email': ''
+        }
 
     # 検証メソッド
     def clean(self):
@@ -59,10 +80,11 @@ class SignupForm(forms.ModelForm):
         
         return cleaned_data
 
+    
+    
 
 
-
-# 学ぶ教える選択画面
+# 学ぶ教える選択画面（作成中）
 class RoleForm(forms.ModelForm):
     
     class Meta:
@@ -77,9 +99,7 @@ class RoleForm(forms.ModelForm):
     ]
     
 
-
-
-# スキル選択
+# スキル選択画面（作成中）
 class SkillSelectForm(forms.ModelForm):
 
     # skillsよりスキル一覧を取得
@@ -89,7 +109,13 @@ class SkillSelectForm(forms.ModelForm):
 
         self.fields['selected_skills'] = forms.MultipleChoiceField(
             choices=skill_choices
-            , widget=forms.CheckboxSelectMultiple
+            , widget=forms.CheckboxSelectMultiple(
+                attrs={
+                    'class': 'skill-checkbox'
+                    , 'id': {{ skill.id }}
+                    , 'name': 'skill_name[]'
+                }
+            )
             , required=False
         )
 
