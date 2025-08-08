@@ -8,12 +8,19 @@
     <p>ユーザー登録</p>
 
     <form method="post" action="">
-    {% csrf_token %}
+        {% csrf_token %}
 
         <div class="registration-piece">
+            <!--
             <input class="registration-form" type="email" name="email" placeholder="Email" required>
             <input class="registration-form" type="password" name="password1" placeholder="パスワード" required>
             <input class="registration-form" type="password" name="password2" placeholder="パスワード確認用" required>
+             -->
+
+            {{ form.email }}
+            {{ form.password }}
+            {{ form.confirmation_password }}
+
         </div>
 
         <div class="registration-button-piece">
@@ -24,5 +31,5 @@
     </form>
 
 </div>
-    
+
 {% endblock content %}

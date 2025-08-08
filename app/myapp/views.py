@@ -1,22 +1,34 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView,CreateView,UpdateView,TemplateView,View
+from django.contrib.auth.views import LoginView,LogoutView
+from django.urls import reverse_lazy
+from .forms import *
 from django.shortcuts import redirect, render
-from .models import Channel
-from .forms import ChannelForm
-from django.http import HttpResponse
+# from django.http import HttpResponse
+
+# サインアップ
+class UserSignup(CreateView):
+    model = Users
+    form_class = SignupForm
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        # フォームが有効な際に実行
+        user = form.save(commit=False)                      # 入力フォームの情報を取得
+        user.set_password(form.cleaned_data["password"])    # passwordをハッシュ化
+        user.save()
+        return super().form_valid(form)
+        
+
+# ログイン
+class Login(LoginView):
+    model = Users
+    loginform = SignupForm
+    success_url = reverse_lazy('user_home')
 
 
-# ヘルスチェック
-def health_check(request):
-    return HttpResponse("OK", status=200)
 
 
-#ユーザー登録
-def signup_view(request):
-    return render(request, 'registration/signup.html')
 
-#ログイン
-def login_view(request):
-    return render(request, 'registration/login.html')
 
 # スキル登録画面
 def skill_setup_view(request):
@@ -58,20 +70,282 @@ def profile_create_view(request):
 
 
 
-# チャンネル一覧 + チャンネル作成
-class ChannelListView(ListView):
-    model = Channel
-    template_name = 'sample.html'
-    context_object_name = 'channels'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ChannelForm()
-        return context
 
-    def post(self, request, *args, **kwargs):
-        form = ChannelForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('channel_list')
+
+
+
+
+
+
+
+# ホーム画面
+class UserHome(TemplateView):
+    def get():
+
+        pass
+
+    def post():
+        pass  
+
+
+
+
+
+
+
+
+
+# 学ぶ・教える選択
+class RoleSelect(TemplateView):
+    def get():
+
+        pass
+
+    def post():
+        pass  
+
+
+
+
+
+
+
+
+
+
+
+# 初回スキル登録（学ぶ・教える共通）
+# View継承時はtemplate_nameでHTMLファイル指定できないので、render()関数でHTMLファイルの指定をする
+class ProfileCreate(View):
+    def get():
+
+        # return render(request, 'skill_registration.html', context)
+        pass
+
+    def post():
+        pass  
+
+
+
+
+
+
+
+
+
+
+# スキル作成
+# HTMLファイル確認
+class SkillCreate(View):
+    def get():
+
+        # return render(request, '.html', context)
+        pass
+
+    def post():
+        pass  
+
+
+
+
+
+
+
+
+
+
+# プロフィール作成(学ぶ・教える共通)
+class ProfileCreate(View):
+    def get():
+
+        # return render(request, 'profile_create.html', context)
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+#設定画面
+class Setting(TemplateView):
+    pass
+
+     
+
+
+
+
+
+
+
+
+
+
+
+# プロフィール編集
+class ProfileUpdate(UpdateView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+# 先生・生徒検索(学ぶ・教える共通)
+class SearchUsers(ListView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+# ユーザー詳細画面(学ぶ・教える共通)
+class UserDitail(DetailView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+# リクエスト送信(学ぶ・教える共通)
+class SendRequest(TemplateView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+# リクエスト一覧(学ぶ・教える共通)
+class RequestList(ListView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+# 承認・削除送信(学ぶ・教える共通)
+class RequestApproval(TemplateView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+# マッチング成立一覧(学ぶ・教える共通)
+class MatchingList(ListView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+# コンタクト
+class Contact(TemplateView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
+
+
+
+
+
+
+
+
+
+# 評価
+class Review(CreateView):
+    def get():
+
+        pass
+
+    def post():
+        pass
+
+
 
