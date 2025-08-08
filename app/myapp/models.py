@@ -65,3 +65,9 @@ class UserSkills(models.Model):
     is_teacher = models.BooleanField(blank=True, null=True)  # True: 先生, False: 生徒
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
+
+class Channel(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
