@@ -1,0 +1,88 @@
+# === Python cache ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# === Database files ===
+*.sqlite3
+*.db
+db.sqlite3
+db.sqlite3-journal
+
+# === Logs / temp files ===
+*.log
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+*.old
+*.save
+
+# === Environment variables ===
+.env
+.env.*
+!.env.example
+
+# === Django-specific ===
+*.pot
+local_settings.py
+staticfiles/
+media/
+
+# === IDE / editor files ===
+.vscode/
+
+# === macOS system files ===
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# === Linux system files ===
+*~
+.nfs*
+.directory
+.Trash-*
+.fuse_hidden*
+
+# === Windows system files ===
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# === Docker related ===
+**/mysql_data/
+**/postgres_data/
+*.tar
+*.img
+docker-compose.override.yml
+
+# === Web server / Gunicorn ===
+nginx/logs/
+nginx/cache/
+nginx/temp/
+gunicorn.pid
+gunicorn.log
+
+# === Testing / coverage ===
+.coverage
+htmlcov/
+.tox/
+.nox/
+.cache/
+pytest_cache/
+coverage.xml
+*.cover
+*.py,cover
+
+# === Type checking / lint cache ===
+.mypy_cache/
+.pyre/
+.pytype/
