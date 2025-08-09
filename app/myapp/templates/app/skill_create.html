@@ -5,25 +5,29 @@
 {% endblock header %}
 
 {% block content %}
-<p class="opening-title">
-    {{ page_title|safe }}
-    <!-- 学びたいスキルを
-    <br>
-    作りましょう！ -->
-</p>
+<main class="opening-main">
 
-<form method="post" action="">
-{% csrf_token %}
+    <p class="opening-title">
+        {{ page_title|safe }}
+        <!-- 学びたいスキルを
+        <br>
+        作りましょう！ -->
+    </p>
+    
+    <form method="post" action="">
+    {% csrf_token %}
+    
+        <div class="skill-form-wrapper">
+            <label class="input-skill-name" for="skill_name">スキル名入力</label>
+            <input class="skill-form" type="text" id="skill_name" name="skill_name">
+        </div>
+    
+        <div class="sticky-button-wrapper">
+            <hr />
+            {% include 'partials/sticky_button.html' with button_label='作成する' %}
+        </div>
+    
+    </form>
 
-    <div class="skill-form-wrapper">
-        <label class="input-skill-name" for="skill_name">スキル名入力</label>
-        <input class="skill-form" type="text" id="skill_name" name="skill_name">
-    </div>
-
-    <div class="sticky-button-wrapper">
-        <hr />
-        {% include 'partials/sticky_button.html' with button_label='作成する' %}
-    </div>
-
-</form>
+</main>
 {% endblock content %}

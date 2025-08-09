@@ -1,0 +1,10 @@
+<!-- 「ホーム画面」「探す画面」「ハンドシェイク画面」「設定画面」（フッターアイコンのある画面）のフッター -->
+<footer class="normal-footer">
+    <hr class="footer-border"/>
+    <ul class="footer-tabs">
+        <li><a href="{% url 'user_home' %}?role={{ role }}" class="{% if request.path == '/user/home/' %}active{% endif %}"><i class="fa-regular fa-house icon"></i></a></li>
+        <li><a href="{% url 'search' %}?role={{ role }}" class="{% if request.path == '/search/' %}active{% endif %}"><i class="fa-solid fa-magnifying-glass icon"></i></a></li>
+        <li><a href="{% url 'request_list' %}?role={{ role }}" class="{% if request.path == '/request/list/' %}active{% endif %}"><i class="fa-regular fa-handshake icon"></i></a></li>
+        <li><a href="{% url 'setting' %}?role={{ role }}" class="{% if request.path == '/setting/' %}active{% endif %}"><i class="fa-solid fa-gear icon"></i></a></li>
+    </ul>
+</footer>
