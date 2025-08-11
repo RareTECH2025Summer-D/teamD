@@ -88,6 +88,14 @@ if env == "local":
         }
     }
 
+elif env == "build_static":
+    #nginx用
+    SECRET_KEY = "dummy"
+    DEBUG = False
+    ALLOWED_HOSTS = ["*"]
+    DATABASES = {}
+    
+
 else:
     #本番
 

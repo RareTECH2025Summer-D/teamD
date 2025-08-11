@@ -1,51 +1,83 @@
-version: "3.9"
+##########################################
+# ▼ 切り替え方法 #
+##########################################
+# a) nginx を使わない場合
+#    ・app サービス：ports/runserver を有効化  
+#      → コメントアウト（#）されている①と②を解除  
+#    ・app サービス：gunicorn/nginx サービスを無効化  
+#      → ③に # を付与  
+#    ・nginx サービス全体をコメントアウト  
+#    ・http://localhost:8000/ 　でアクセスできます
 
+# b) nginx を使う場合  
+#    ・app サービス：ports/runserver を無効化  
+#      → ①と②に # を付与  
+#    ・app サービス：gunicorn と nginx サービスを有効化  
+#      → ③のコメントを解除  
+#    ・nginx サービス全体をアンコメント  
+#    ・http://localhost/ 　  でアクセスできます
+
+version: "3.9"
 services:
+
   app:
     build:
-      context: ./app
+      context: .
+      dockerfile: app/Dockerfile
     container_name: app
-# nginx使うならportsをコメントアウト
-    ports:  
+
+    ########## ① ports/runserver（nginx 無し用） ##########
+    # ↓ a で直接確認したいならアンコメント
+    ports:
       - "8000:8000"
-    expose:
-      - "8000"
+    # ↓ runserver を使うときはアンコメント
+    command: python manage.py runserver 0.0.0.0:8000
+
+    ########## ② expose/gunicorn（nginx 有り用） ##########
+    # ↓ b で nginx 経由ならアンコメント
+    # expose:
+    #   - "8000"
+    # ↓ b で使う gunicorn
+    # command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+
     depends_on:
-        db:
-          condition: service_healthy
+      db:
+        condition: service_healthy
     env_file:
-      - .env 
-    volumes: 
+      - .env
+    volumes:
       - ./app:/app
     working_dir: /app
-    entrypoint: ""  # ← ENTRYPOINT 無効化
-  # command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
-    command: python manage.py runserver 0.0.0.0:8000
+    entrypoint: ""  # ENTRYPOINT を無効化
 
   db:
     image: mysql:8.0
     container_name: mysql
     restart: always
     env_file:
-      - .env 
-    # ports:
-      # - "3306:3306"
-# データ永続化設定
+      - .env
+    # ports:  # MySQL にローカルから直繋ぎしたいときのみアンコメント
+    #   - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-
-    # DBのコンテナのヘルスチェックを行う
-    # mysqladmin(MySQLサーバーの管理を行うクライアントを使ってDBコンテナ自身(127.0.0.1)にpingを送ってヘルスチェックを行う
     healthcheck:
-      test: mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD
-      # ヘルスチェックのインターバルは10秒
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
       interval: 10s
-      # タイムアウト時間は10秒
       timeout: 10s
-      # リトライ回数は3回
       retries: 3
-      # ヘルスチェックが失敗しても無視する時間は30秒
       start_period: 30s
+
+  ########## ③ nginx サービス（nginx 有り用） ##########
+  # ↓ b で使うときはアンコメント
+  # nginx:
+  #   build:
+  #     context: .
+  #     dockerfile: nginx/Dockerfile
+  #   container_name: nginx
+  #   ports:
+  #     - "127.0.0.1:80:80"
+  #   depends_on:
+  #     - app
 
 volumes:
   mysql_data:
