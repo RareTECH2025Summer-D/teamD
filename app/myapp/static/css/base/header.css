@@ -39,7 +39,7 @@
 }
 
 
-/* ！ スキル登録・スキル作成・プロフィール作成画面ヘッダー ！ */
+/* ！ スキル登録・スキル作成・プロフィール作成画面ヘッダーの部分の指定 ！ */
 .opening-header {
     position: relative;
     height: 15vh;
@@ -55,3 +55,7 @@
     color: var(--charcoal_gray);
 }
 
+/* ホーム・探す・ハンドシェイク・設定画面（フッターアイコンの並ぶ画面）のヘッダー部分の指定 */
+.normal-header {
+    height: 15vh;
+}
