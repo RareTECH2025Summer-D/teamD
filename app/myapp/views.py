@@ -81,12 +81,23 @@ def profile_create_view(request):
 
 # ホーム画面
 class UserHome(TemplateView):
-    def get():
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-        pass
+        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+        role = self.request.GET.get("role", "student")
 
-    def post():
-        pass  
+
+        context["role"] = role
+
+        return context
+# エラーで画面表示がされないのを回避のためコメントアウト
+#     def get():
+
+#         pass
+
+#     def post():
+#         pass  
 
 
 
@@ -97,13 +108,14 @@ class UserHome(TemplateView):
 
 
 # 学ぶ・教える選択
-class RoleSelect(TemplateView):
-    def get():
+# class RoleSelect(TemplateView):
+#     pass
+#     # def get():
 
-        pass
+#     #     pass
 
-    def post():
-        pass  
+#     # def post():
+#     #     pass  
 
 
 
@@ -117,14 +129,14 @@ class RoleSelect(TemplateView):
 
 # 初回スキル登録（学ぶ・教える共通）
 # View継承時はtemplate_nameでHTMLファイル指定できないので、render()関数でHTMLファイルの指定をする
-class ProfileCreate(View):
-    def get():
+# class ProfileCreate(View):
+#     def get():
 
-        # return render(request, 'skill_registration.html', context)
-        pass
+#         # return render(request, 'skill_registration.html', context)
+#         pass
 
-    def post():
-        pass  
+#     def post():
+#         pass  
 
 
 
@@ -137,14 +149,14 @@ class ProfileCreate(View):
 
 # スキル作成
 # HTMLファイル確認
-class SkillCreate(View):
-    def get():
+# class SkillCreate(View):
+#     def get():
 
-        # return render(request, '.html', context)
-        pass
+#         # return render(request, '.html', context)
+#         pass
 
-    def post():
-        pass  
+#     def post():
+#         pass  
 
 
 
@@ -156,14 +168,14 @@ class SkillCreate(View):
 
 
 # プロフィール作成(学ぶ・教える共通)
-class ProfileCreate(View):
-    def get():
+# class ProfileCreate(View):
+#     def get():
 
-        # return render(request, 'profile_create.html', context)
-        pass
+#         # return render(request, 'profile_create.html', context)
+#         pass
 
-    def post():
-        pass
+#     def post():
+#         pass
 
 
 
@@ -179,7 +191,17 @@ class ProfileCreate(View):
 
 #設定画面
 class Setting(TemplateView):
-    pass
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+        role = self.request.GET.get("role", "student")
+
+
+        context["role"] = role
+
+        return context
 
      
 
@@ -194,13 +216,13 @@ class Setting(TemplateView):
 
 
 # プロフィール編集
-class ProfileUpdate(UpdateView):
-    def get():
+# class ProfileUpdate(UpdateView):
+#     def get():
 
-        pass
+#         pass
 
-    def post():
-        pass
+#     def post():
+#         pass
 
 
 
@@ -213,12 +235,25 @@ class ProfileUpdate(UpdateView):
 
 # 先生・生徒検索(学ぶ・教える共通)
 class SearchUsers(ListView):
-    def get():
+    model = UserProfile
 
-        pass
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    def post():
-        pass
+        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+        role = self.request.GET.get("role", "student")
+
+
+        context["role"] = role
+
+        return context
+
+#     def get():
+
+#         pass
+
+#     def post():
+#         pass
 
 
 
@@ -230,13 +265,13 @@ class SearchUsers(ListView):
 
 
 # ユーザー詳細画面(学ぶ・教える共通)
-class UserDitail(DetailView):
-    def get():
+# class UserDitail(DetailView):
+#     def get():
 
-        pass
+#         pass
 
-    def post():
-        pass
+#     def post():
+#         pass
 
 
 
@@ -248,13 +283,13 @@ class UserDitail(DetailView):
 
 
 # リクエスト送信(学ぶ・教える共通)
-class SendRequest(TemplateView):
-    def get():
+# class SendRequest(TemplateView):
+#     def get():
 
-        pass
+#         pass
 
-    def post():
-        pass
+#     def post():
+#         pass
 
 
 
@@ -267,30 +302,44 @@ class SendRequest(TemplateView):
 
 # リクエスト一覧(学ぶ・教える共通)
 class RequestList(ListView):
-    def get():
+    # Matchingにあとで変えてください（画面表示のため異なるテーブル名で記述）
+    model = UserProfile
 
-        pass
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    def post():
-        pass
-
-
-
-
+        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+        role = self.request.GET.get("role", "student")
 
 
+        context["role"] = role
+
+        return context
+        
+#     def get():
+
+#         pass
+
+#     def post():
+#         pass
 
 
 
 
-# 承認・削除送信(学ぶ・教える共通)
-class RequestApproval(TemplateView):
-    def get():
 
-        pass
 
-    def post():
-        pass
+
+
+
+
+# # 承認・削除送信(学ぶ・教える共通)
+# class RequestApproval(TemplateView):
+#     def get():
+
+#         pass
+
+#     def post():
+#         pass
 
 
 
@@ -302,13 +351,13 @@ class RequestApproval(TemplateView):
 
 
 # マッチング成立一覧(学ぶ・教える共通)
-class MatchingList(ListView):
-    def get():
+# class MatchingList(ListView):
+#     def get():
 
-        pass
+#         pass
 
-    def post():
-        pass
+#     def post():
+#         pass
 
 
 
@@ -320,13 +369,13 @@ class MatchingList(ListView):
 
 
 # コンタクト
-class Contact(TemplateView):
-    def get():
+# class Contact(TemplateView):
+#     def get():
 
-        pass
+#         pass
 
-    def post():
-        pass
+#     def post():
+#         pass
 
 
 
@@ -339,13 +388,10 @@ class Contact(TemplateView):
 
 
 # 評価
-class Review(CreateView):
-    def get():
+# class Review(CreateView):
+#     def get():
 
-        pass
+#         pass
 
-    def post():
-        pass
-
-
-
+#     def post():
+#         pass

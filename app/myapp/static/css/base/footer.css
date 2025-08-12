@@ -1,0 +1,48 @@
+/* 「ホーム画面」「探す画面」「ハンドシェイク画面」「設定画面」（フッターアイコンのある画面）のフッター */
+
+/* フッター部分の指定 */
+.normal-footer {
+    height: 12vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-border {
+    border: none;
+    border-bottom: 2.5px solid var(--gray);
+    width: 100%;
+    margin: 0;
+}
+
+.footer-tabs {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex: 1;
+}
+
+.footer-tabs li {
+    list-style: none;
+}
+
+.footer-tabs a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65px;
+    height: 57px;
+    text-decoration: none;
+    color: var(--gray);
+    border-radius: 20%;
+}
+/* アイコンをタップした際の色の変化 */
+.footer-tabs a.active {
+    background-color: var(--primary_color);
+    color: var(--white);
+}
+
+.icon {
+    font-size: 38px;
+}
+
+
