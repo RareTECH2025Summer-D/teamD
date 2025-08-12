@@ -7,7 +7,7 @@ urlpatterns = [
     path('login/',Login.as_view(template_name='registration/login.html'),name='login'),
     path('logout/',LogoutView.as_view(next_page='login'),name='logout'),                                 # DjangoのLogoutViewで完結
     path('select/role/',RoleSelect.as_view(template_name='settings.html'),name='select_role'),
-    path('user/home/',UserHome.as_view(template_name='home.html'),name='user_home'),
+    path('user/home/',UserHome.as_view(template_name='app/home.html'),name='user_home'),
     # path('user/setup/skill/',ProfileCreate.as_view(),name='user_setup_skill'),          # View継承のためtemplate_nameなし
     # path('user/create/skill',SkillCreate.as_view(),name='user_create_skill'),           # View継承のためtemplate_nameなし
     # path('user/setup/profile/',ProfileCreate.as_view(),name='user_setup_profile'),      # View継承のためtemplate_nameなし

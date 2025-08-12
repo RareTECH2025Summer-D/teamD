@@ -29,7 +29,7 @@ class Login(LoginView):
 
         # just_befre_statusの値を見て判断
         if self.request.user.just_before_status is None:
-            return reverse_lazy('setup_skill')
+            return reverse_lazy('user_home')
         elif self.request.user.just_before_status:
             # ホーム画面作成時user_homeに変更
             base_url = reverse_lazy('setup_skill')
