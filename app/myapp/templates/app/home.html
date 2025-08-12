@@ -6,7 +6,21 @@
 
 {% block content %}
 <main class="normal-main">
-    ホーム画面だよ！
+
+    <div class="role-button-wrapper">
+
+        <form action="" method="post">
+        {% csrf_token %}
+        <!-- type=submitにすると、動かなくなるため今はbuttonにしている -->
+            <button  class="student-button" name="user_role" value="student" type="button">学ぶ</button>
+        </form>
+        <form action="" method="post">
+        {% csrf_token %}
+            <button class="teacher-button" name="user_role" value="teacher" type="button">教える</button>
+        </form>
+
+    </div>
+
 </main>
 {% endblock content %}
 

@@ -6,5 +6,9 @@
 @import 'pages/registration.css';
 @import 'pages/skill_registration_create.css';
 @import 'pages/profile_create.css';
+@import 'pages/handshake.css';
+@import 'pages/home.css';
+@import 'pages/search.css';
+@import 'pages/settings.css';
 @import 'themes/student.css';
 @import 'themes/teacher.css';

@@ -1,0 +1,15 @@
+/* 検索窓の指定 */
+.search-wrapper {
+    padding-top: 50px;
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.user-box-wrapper {
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}

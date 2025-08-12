@@ -168,3 +168,182 @@
     font-weight: bold;
     margin: 4px 0;
 }
+
+
+/* !「ホーム画面」パーツ ! */
+
+.student-button {
+    width: 210px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--student_primary);
+    color: var(--white);
+    border-radius: 20px;
+    border: none;
+    font-size: 38px;
+    font-weight: bold;
+    padding-bottom: 3px; /* 微調整 */
+}
+
+
+.teacher-button {
+    width: 210px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--teacher_primary);
+    color: var(--white);
+    border-radius: 20px;
+    border: none;
+    font-size: 38px;
+    font-weight: bold;
+    padding-bottom: 3px; /* 微調整 */
+}
+
+
+/* ！「探す画面」パーツ！ */
+
+/* 検索窓のパーツ・"search.css"に位置の設定あり（いろんな画面で使い回し） */
+.search-form {
+    width: 100%;
+    height: 42px;
+    position: relative;
+    border-radius: 20px;
+    background-color: var(--form_gray);
+    border: none;
+    padding: 5px 75px 5px 29px; /* 上右下左 / ボタン分の余白を右に設定 */
+    outline: none;
+    font-size: 20px;
+}
+
+.search-btn {
+    width: 50px;
+    height: 42px;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    border-radius: 0 20px 20px 0;
+    background-color: var(--primary_color);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-icon {
+    font-size: 21px;
+    color: var(--white);
+}
+
+.user-box {
+    width: 89%;
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    box-shadow: 1px 1px 5px 1px var(--shadow_gray);
+    border-radius: 18px;
+    padding: 0 20px;
+}
+
+.search-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-user-info p {
+    font-size: 24px;
+    max-width: 90px;
+    white-space: nowrap; /* 折り返さない */
+    overflow: hidden; /* はみ出た部分隠す */
+    text-overflow: ellipsis; /* はみ出し部分「...」にする */
+}
+
+.request-button {
+    width: 130px;
+    height: 35px;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--button_color);
+    color: var(--white);
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* ！「ハンドシェイク画面」パーツ！ */
+
+.matching-button {
+    width: 140px;
+    height: 35px;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--button_color);
+    color: var(--white);
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.accept-button {
+    width: 70px;
+    height: 35px;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--button_color);
+    color: var(--white);
+    font-weight: bold;
+    font-size: 18px;
+    padding-bottom: 2px; /* ボタン内の文字の位置を微調整 */
+}
+
+.remove-button {
+    width: 70px;
+    height: 35px;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--gray);
+    color: var(--white);
+    font-weight: bold;
+    font-size: 18px;
+    padding-bottom: 2px; /* ボタン内の文字の位置を微調整 */
+}
+
+/* ！「設定画面」パーツ！ */
+.settings-box {
+    width: 89%;
+    height: 90px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 auto;
+    box-shadow: 1px 1px 5px 1px var(--shadow_gray);
+    border-radius: 18px;
+    padding: 0 20px;
+    gap: 20px;
+}
+
+.settings-box p {
+    font-size: 23px;
+}
+
+.people-icon {
+    font-size: 38px;
+}
+
+.logout-btn {
+    background: none;
+    color: var(--red);
+    font-size: 22px;
+    font-weight: bold;
+    border: none;
+    border-top: 3px solid var(--red);
+    border-bottom: 3px solid var(--red);
+    padding: 10px 0;
+    width: 90%;
+    margin: 0 auto;
+}

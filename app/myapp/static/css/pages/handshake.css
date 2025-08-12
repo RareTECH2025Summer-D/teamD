@@ -1,0 +1,7 @@
+.handshake-contents li {
+    display: none;
+}
+
+.handshake-contents li.active {
+    display: block;
+}

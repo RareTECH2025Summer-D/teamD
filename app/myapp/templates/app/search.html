@@ -6,7 +6,111 @@
 
 {% block content %}
 <main class="normal-main">
-    探す画面だよ！
+
+    <form method="get" action=""> <!-- 検索窓 -->
+        <div class="search-wrapper">
+            <input class="search-form" type="text" name="skill_name"> 
+            <button class="search-btn" type="submit">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </button>
+        </div>
+    </form>
+
+
+    <div class="user-box-wrapper">
+
+        <!-- バックエンドと連携する時はこんな感じになる？ -->
+        <!-- {% for user in users %}
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            <div class="user-box">
+
+                <div class="search-user-info">
+                    <div class="search-user-icon-circle">
+                        <i class="fa-regular fa-user search-user-icon"></i>
+                    </div>
+                    <p>{{ user.name }}</p>
+                </div>
+
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <button class="request-button" type="submit">リクエストする</button>
+                
+            </div>
+
+        </form>
+        {% endfor %} -->
+
+        <form method="post" action="">
+            {% csrf_token %}
+
+            <div class="user-box">
+
+                <div class="search-user-info">
+                    <div class="search-user-icon-circle">
+                        <i class="fa-regular fa-user search-user-icon"></i>
+                    </div>
+                    <p>MANA</p>
+                </div>
+
+                <button class="request-button" type="button">リクエストする</button>
+
+            </div>
+
+        </form>
+
+        <!-- UI確認用 -->
+            <div class="user-box">
+
+                <div class="search-user-info">
+                    <div class="search-user-icon-circle">
+                        <i class="fa-regular fa-user search-user-icon"></i>
+                    </div>
+                    <p>ひいろ</p>
+                </div>
+                <button class="request-button">リクエストする</button>
+
+            </div>
+
+            <div class="user-box">
+
+                <div class="search-user-info">
+                    <div class="search-user-icon-circle">
+                        <i class="fa-regular fa-user search-user-icon"></i>
+                    </div>
+                    <p>てつき</p>
+                </div>
+                <button class="request-button">リクエストする</button>
+
+            </div>
+
+            <div class="user-box">
+
+                <div class="search-user-info">
+                    <div class="search-user-icon-circle">
+                        <i class="fa-regular fa-user search-user-icon"></i>
+                    </div>
+                    <p>たな</p>
+                </div>
+                <button class="request-button">リクエストする</button>
+
+            </div>
+
+            <div class="user-box">
+
+                <div class="search-user-info">
+                    <div class="search-user-icon-circle">
+                        <i class="fa-regular fa-user search-user-icon"></i>
+                    </div>
+                    <p>My name is MANA</p>
+                </div>
+                <button class="request-button">リクエストする</button>
+
+            </div>
+        <!-- UI確認用ここまで -->
+
+    </div>
+
 </main>
 {% endblock content %}
 

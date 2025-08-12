@@ -243,8 +243,14 @@ class SearchUsers(ListView):
         # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
         role = self.request.GET.get("role", "student")
 
+        if role == "student":
+            page_title = "先生を探す"
+        elif role == "teacher":
+            page_title = "生徒を探す"
+
 
         context["role"] = role
+        context["page_title"] = page_title
 
         return context
 
