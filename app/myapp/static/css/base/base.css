@@ -14,10 +14,15 @@ html, body {
 }
 
 
-/* base_app_button.htmlのmainタグにかかる設定（後で画面によってmain部分の指定を変えたいなら、mainにクラスをつけて管理する） */
-main {
+/* 「スキル登録画面」「スキル作成画面」「プロフィール作成画面」のメイン部分の指定 */
+.opening-main {
     height: 85vh;
     overflow-y: auto;
     padding-bottom: 120px; /* ボタンの高さ分の余白を確保 */
     position: relative;
+}
+
+/* 「ホーム画面」「探す画面」「ハンドシェイク画面」「設定画面」（フッターアイコンの並ぶ画面）のメイン部分の指定 */
+.normal-main {
+    height: 73vh;
 }
