@@ -8,18 +8,23 @@
     <p>ログイン</p>
 
     <form method="post" action="">
-    {% csrf_token %}
+        {% csrf_token %}
 
         <div class="registration-piece">
+            <!--
             <input class="registration-form" type="email" name="email" placeholder="Email" required>
             <input class="registration-form" type="password" name="password" placeholder="パスワード" required>
+            -->
+            {{ form.non_field_errors }}
+            {{ form.username }}
+            {{ form.password }}
         </div>
 
         <div class="registration-button-piece">
             <button class="registration-submit" type="submit">ログイン</button>
             <a class="registration-back" href="{% url 'signup' %}">ユーザー登録</a>
         </div>
-    
+
     </form>
 
 </div>

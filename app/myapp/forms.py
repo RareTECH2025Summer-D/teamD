@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import * #,Channel
+from .models import *
 
 # Metaはモデルに存在するフィールドを、入力フォームにそのまま利用できる（12行目）
 # モデルにないものに関しては、Metaの外で定義する
@@ -25,6 +25,9 @@ class LoginForm(AuthenticationForm):
             'required': True,
         })
 
+        self.error_messages['invalid_login'] = 'メールアドレスまたはパスワードが間違っています。'
+
+        
 # サインアップ画面
 class SignupForm(forms.ModelForm):
     

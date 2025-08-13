@@ -6,6 +6,14 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+#---------------追記-----------------------
+# カスタムユーザーモデルのため追記
+AUTH_USER_MODEL = 'myapp.Users'
+AUTHENTICATION_BACKENDS = [
+    'myapp.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin
 # Create your models here.
 
 class MyUserManager(BaseUserManager):
@@ -24,7 +24,7 @@ class MyUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 # Usersテーブルの定義　AbstractBaseUserを継承しているためpasswordフィールドが自動的に追加される
-class Users(AbstractBaseUser):
+class Users(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(unique= True)
     just_before_status = models.BooleanField(blank=True, null=True)  # 初回登録時セッションを保持して登録できる？
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
@@ -37,6 +37,17 @@ class Users(AbstractBaseUser):
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+#---------------追記-----------------------
+    # AbstractBaseUserの場合、権限処理が必要
+    # 管理画面で必要となるメソッドを自分で実装 
+    def has_perm(self, perm, obj=None):
+        # is_superuserがTrueなら、全てのパーミッションを持つとみなす
+        return self.is_superuser
+    
+    def has_module_perms(self, app_label):
+        # is_superuserがTrueなら、全てのアプリの管理権限を持つとみなす
+        return self.is_superuser
 
 class UserProfile(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)

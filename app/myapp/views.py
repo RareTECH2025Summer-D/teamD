@@ -17,17 +17,28 @@ class UserSignup(CreateView):
         user.set_password(form.cleaned_data["password"])    # passwordをハッシュ化
         user.save()
         return super().form_valid(form)
-        
+
 
 # ログイン
 class Login(LoginView):
     model = Users
-    loginform = SignupForm
-    success_url = reverse_lazy('user_home')
+    # LoginViewのテンプレとして、formはclass_formを見ているので、form_classを定義
+    form_class = LoginForm
+    
+    def get_success_url(self):
 
-
-
-
+        # just_befre_statusの値を見て判断
+        if self.request.user.just_before_status is None:
+            return reverse_lazy('user_home')
+        elif self.request.user.just_before_status:
+            # ホーム画面作成時user_homeに変更
+            base_url = reverse_lazy('setup_skill')
+            return f"{base_url}?role=teacher"
+        else:
+            # ホーム画面作成時user_homeに変更
+            base_url = reverse_lazy('setup_skill')
+            return f"{base_url}?role=student"
+        
 
 
 # スキル登録画面
