@@ -6,7 +6,170 @@
 
 {% block content %}
 <main class="normal-main">
-    ハンドシェイク画面だよ！
+
+    <!-- このulタグの"handshake-contents"とliタグはタブ切り替えで必要なもの！（「マッチング成功」「リクエスト」のタブの中のコンテンツ） -->
+    <ul class="handshake-contents">
+
+        <!-- 「マッチング成功」のタブの中のコンテンツ -->
+        <li class="active">
+
+            <form method="get" action=""> <!-- 検索窓 -->
+                <div class="search-wrapper">
+                    <input class="search-form" type="text" name="skill_name"> 
+                    <button class="search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- ユーザ一覧 -->
+            <div class="user-box-wrapper">
+
+                <form method="post" action="">
+                    {% csrf_token %}
+            
+                    <div class="user-box">
+            
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <p>MANA</p>
+                        </div>
+            
+                        <button class="matching-button" type="button">コンタクトを取る</button>
+            
+                    </div>
+            
+                </form>
+            
+                <!-- UI確認用 -->
+                    <div class="user-box">
+            
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <p>ひいろ</p>
+                        </div>
+                        <button class="matching-button">コンタクトを取る</button>
+            
+                    </div>
+            
+                    <div class="user-box">
+            
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <p>てつき</p>
+                        </div>
+                        <button class="matching-button">コンタクトを取る</button>
+            
+                    </div>
+            
+                    <div class="user-box">
+            
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <p>たな</p>
+                        </div>
+                        <button class="matching-button">コンタクトを取る</button>
+            
+                    </div>
+            
+                    <div class="user-box">
+            
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <p>My name is MANA</p>
+                        </div>
+                        <button class="matching-button">コンタクトを取る</button>
+            
+                    </div>
+                <!-- UI確認用ここまで！ --> 
+            
+            </div>
+
+        </li>
+
+        <!-- 「リクエスト」の中のコンテンツ -->
+        <li>
+
+            <form method="get" action=""> <!-- 検索窓 -->
+                <div class="search-wrapper">
+                    <input class="search-form" type="text" name="skill_name"> 
+                    <button class="search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="user-box-wrapper">
+
+                <form method="post" action="">
+                    {% csrf_token %}
+            
+                    <div class="user-box">
+            
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <p>ひいろ</p>
+                        </div>
+
+                        <div class="handshake-btn-wrapper">
+                            <button class="accept-button" type="button">承認</button>
+                            <button class="remove-button" type="button">削除</button>
+                        </div>
+            
+                    </div>
+            
+                </form>
+            
+                <!-- UI確認用 -->
+                    <div class="user-box">
+            
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <p>てつき</p>
+                        </div>
+
+                        <div class="handshake-btn-wrapper">
+                            <button class="accept-button" type="button">承認</button>
+                            <button class="remove-button" type="button">削除</button>
+                        </div>
+            
+                    </div>
+            
+                    <div class="user-box">
+            
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <p>たなですよろく</p>
+                        </div>
+
+                        <div class="handshake-btn-wrapper">
+                            <button class="accept-button" type="button">承認</button>
+                            <button class="remove-button" type="button">削除</button>
+                        </div>
+            
+                    </div>
+                <!-- UI確認用ここまで -->
+
+        </li>
+
+    </ul>
+
 </main>
 {% endblock content %}
 

@@ -43,7 +43,6 @@
 .opening-header {
     position: relative;
     height: 15vh;
-    /* background: var(--student_primary_translucent); */
     background: var(--primary_translucent);
 }
 
@@ -55,7 +54,150 @@
     color: var(--charcoal_gray);
 }
 
-/* ホーム・探す・ハンドシェイク・設定画面（フッターアイコンの並ぶ画面）のヘッダー部分の指定 */
+/* ! ホーム・探す・ハンドシェイク・設定画面（フッターアイコンの並ぶ画面）のヘッダー部分の指定 ! */
 .normal-header {
+    background: var(--primary_translucent);
+}
+
+
+/* 「ホーム画面」ヘッダー */
+.home-header-wrapper {
     height: 15vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 38px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px; /* 微調整　*/
+}
+
+.home-user-icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2.5px solid var(--charcoal_gray);
+}
+
+.home-user-icon {
+    font-size: 40px;
+    color: var(--charcoal_gray);
+    padding-top: 12px;
+}
+
+.home-user-name {
+    font-size: 30px;
+    color: var(--black);
+    max-width: 160px; /* ニックネームが長かった場合隠れるようにする */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* ニックネームが長かったら「...」表示 */
+}
+
+.bell-icon {
+    font-size: 37px;
+    color: var(--charcoal_gray);
+    margin-top: 4px; /* 微調整 */
+    margin-right: -5px; /* 微調整 */
+}
+
+
+/* 「探す画面」ヘッダー */
+.search-header-wrapper {
+    height: 15vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 38px;
+}
+
+.search-title {
+    font-size: 33px;
+    /* font-weight: bold; */
+    color: var(--charcoal_gray);
+    margin-top: 4px; /* 微調整 */
+}
+
+.search-user-icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2.5px solid var(--charcoal_gray);
+    margin-top: 4px; /* 微調整 */
+}
+
+.search-user-icon {
+    font-size: 32px;
+    color: var(--charcoal_gray);
+    padding-top: 11px;
+}
+
+
+/* 「ハンドシェイク画面」ヘッダー */
+.handshake-header-wrapper {
+    height: 15vh;
+    display: flex;
+    align-items: flex-end;
+}
+
+.handshake-tabs {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.handshake-tabs li {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    font-weight: bold;
+    font-size: 21px;
+}
+
+.handshake-tabs a {
+    text-decoration: none;
+    color: var(--gray);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 57px;
+    width: 80%;
+    transition: 0.1s;
+}
+
+.handshake-tabs hr {
+    border: none;
+    border-bottom: 9px solid var(--gray);
+    border-radius: 10px;
+    margin: 0 auto;
+    transition: 0.1s;
+}
+
+.handshake-tabs li a.active {
+    color: var(--red);
+}
+
+.handshake-tabs li hr.active {
+    border-color: var(--red);
+}
+
+
+/* 「設定画面」ヘッダー */
+.settings-header-wrapper {
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.settings-header-wrapper p {
+    font-size: 25px;
+    color: var(--charcoal_gray);
+    margin-bottom: 5px; /* 微調整 */
 }

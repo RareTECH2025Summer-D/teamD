@@ -24,5 +24,8 @@ html, body {
 
 /* 「ホーム画面」「探す画面」「ハンドシェイク画面」「設定画面」（フッターアイコンの並ぶ画面）のメイン部分の指定 */
 .normal-main {
-    height: 73vh;
+    height: 73vh; /* それぞれの画面で指定するので、消すかも！ */
+    overflow-y: auto;
+    padding-bottom: 70px;
+    position: relative;
 }
