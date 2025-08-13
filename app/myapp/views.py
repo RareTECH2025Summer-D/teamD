@@ -41,14 +41,6 @@ class Login(LoginView):
         
 
 
-
-        
-
-
-
-
-
-
 # スキル登録画面
 def skill_setup_view(request):
     # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
