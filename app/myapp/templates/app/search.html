@@ -115,5 +115,9 @@
 {% endblock content %}
 
 {% block footer %}
-    {% include 'partials/footer.html' %}
+    {% if is_opening_home %}
+        {% include 'partials/footer.html' with disable_links=True %}
+    {% else %}
+        {% include 'partials/footer.html' %}
+    {% endif %}
 {% endblock footer %}

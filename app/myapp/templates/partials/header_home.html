@@ -1,16 +1,35 @@
 <header class="normal-header">
 
-    <div class="home-header-wrapper">
+    {% if is_opening_home %}
+        <!-- 「初期ホーム画面」ヘッダー -->
+        <div class="opening-home-header-wrapper">
 
-        <div class="user-info">
-            <div class="home-user-icon-circle">
-                <i class="fa-regular fa-user home-user-icon"></i>
+            <div class="opening-user-info">
+
+                <div class="opening-home-user-icon-circle">
+                    <i class="fa-regular fa-user opening-home-user-icon"></i>
+                </div>
+                <i class="fa-solid fa-bell opening-bell-icon"></i>
+                
             </div>
-            <p class="home-user-name">MANA</p>
+
+            <hr class="opening-header-border"/>
+
         </div>
+    {% else %}
+        <!-- 「通常ホーム画面」ヘッダー -->
+        <div class="home-header-wrapper">
 
-        <i class="fa-solid fa-bell bell-icon"></i>
+            <div class="user-info">
+                <div class="home-user-icon-circle">
+                    <i class="fa-regular fa-user home-user-icon"></i>
+                </div>
+                <p class="home-user-name">MANA</p>
+            </div>
 
-    </div>
+            <i class="fa-solid fa-bell bell-icon"></i>
+
+        </div>
+    {% endif %}
 
 </header>
