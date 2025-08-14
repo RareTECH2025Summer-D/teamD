@@ -94,6 +94,7 @@ elif env == "build_static":
     DEBUG = False
     ALLOWED_HOSTS = ["*"]
     DATABASES = {}
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
     
 
 else:
@@ -121,3 +122,23 @@ else:
             'PORT': '3306',
         }
     }
+
+    DATABASES["default"]["CONN_MAX_AGE"] = 60          #DBの接続を最大60秒間再利用する
+    DATABASES["default"]["CONN_HEALTH_CHECKS"] = True  #再利用前に接続が生きてるか確認する
+
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")     # HTTPSとして判定させる
+    USE_X_FORWARDED_HOST = True                                       # ホスト名を X-Forwarded-Host ヘッダから取得するように
+    SECURE_SSL_REDIRECT = False                                       # HTTPの場合HTTPSにリダイレクト(今はfalseリダイレクトしない)
+
+    SESSION_COOKIE_SECURE = True  #HTTPS通信にしかクッキーを送らないようになる
+    CSRF_COOKIE_SECURE = True     #CSRFトークンがHTTPSでしかブラウザから送られなくなる
+
+    CSRF_TRUSTED_ORIGINS = [           #このオリジンならCSRFトークンチェックを通すようになる
+        "https://skillmatching.net",
+        "https://*.skillmatching.net"
+    ]
+
+    SECURE_CONTENT_TYPE_NOSNIFF = True                          #Content-Typeをサーバーで指定(ブラウザが勝手に解釈しないように)
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin" # Referer(このページに来る直前にユーザーが見ていたページ)の情報の送り先設定
+    X_FRAME_OPTIONS = "DENY"                                   #<iframe>タグを使えないように
+

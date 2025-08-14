@@ -11,12 +11,12 @@ urlpatterns = [
     # functionbasedviewで記述があるため使わないかも path('user/setup/skill/',ProfileCreate.as_view(),name='user_setup_skill'),          # View継承のためtemplate_nameなし
     # functionbasedviewで記述があるため使わないかも path('user/create/skill',SkillCreate.as_view(),name='user_create_skill'),           # View継承のためtemplate_nameなし
     # functionbasedviewで記述があるため使わないかも path('user/setup/profile/',ProfileCreate.as_view(),name='user_setup_profile'),      # View継承のためtemplate_nameなし
-    path('setting/',Setting.as_view(template_name='setting.html'),name='setting'),
+    path('setting/',Setting.as_view(template_name='app/settings.html'),name='setting'),
     #path('user/update/profile/',ProfileUpdate.as_view(template_name='profile_edit.html'),name='user_update_profile'),
-    path('search/',SearchUsers.as_view(template_name='search.html'),name='search'),
+    path('search/',SearchUsers.as_view(template_name='app/search.html'),name='search'),
     #path('user/detail',UserDitail.as_view(template_name='user_profile.html'),name='user_detail'),
     #path('request/send',SendRequest.as_view(),name='request_send'),
-    path('request/list/',RequestList.as_view(template_name='handshake.html'),name='request_list'),
+    path('request/list/',RequestList.as_view(template_name='app/handshake.html'),name='request_list'),
     #path('request/approval/',RequestApproval.as_view(),name='request_approval'),
     #path('matching/list/',MatchingList.as_view(template_name='handshake.html'),name='matching_list'),
     #path('contact/user/',Contact.as_view(),name='contact_user'),                        # POPのみ
