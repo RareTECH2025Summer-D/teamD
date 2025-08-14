@@ -5,25 +5,40 @@
 {% endblock header %}
 
 {% block content %}
-<main class="normal-main">
+<main class="home-normal-main">
 
-    <div class="role-button-wrapper">
+    {% if is_opening_home %}
+        <!-- 「初期ホーム画面」 -->
+        <div class="role-button-wrapper">
 
-        <form action="" method="post">
-        {% csrf_token %}
-        <!-- type=submitにすると、動かなくなるため今はbuttonにしている -->
-            <button  class="student-button" name="user_role" value="student" type="button">学ぶ</button>
-        </form>
-        <form action="" method="post">
-        {% csrf_token %}
-            <button class="teacher-button" name="user_role" value="teacher" type="button">教える</button>
-        </form>
+            <a href="{% url 'setup_skill' %}?role=student" class="opening-student-button">学ぶ</a>
+            <a href="{% url 'setup_skill' %}?role=teacher" class="opening-teacher-button">教える</a>
 
-    </div>
+        </div>
+    {% else %}
+        <!-- 「通常ホーム画面」 -->
+        <div class="role-button-wrapper">
+
+            <form action="" method="post">
+            {% csrf_token %}
+            <!-- type=submitにすると、動かなくなるため今はbuttonにしている -->
+                <button  class="student-button" name="user_role" value="student" type="button">学ぶ</button>
+            </form>
+            <form action="" method="post">
+            {% csrf_token %}
+                <button class="teacher-button" name="user_role" value="teacher" type="button">教える</button>
+            </form>
+
+        </div>
+    {% endif %}
 
 </main>
 {% endblock content %}
 
 {% block footer %}
-    {% include 'partials/footer.html' %}
+    {% if is_opening_home %}
+        {% include 'partials/footer.html' with disable_links=True %}
+    {% else %}
+        {% include 'partials/footer.html' %}
+    {% endif %}
 {% endblock footer %}

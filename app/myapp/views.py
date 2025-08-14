@@ -94,14 +94,29 @@ def profile_create_view(request):
 class UserHome(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # roleが設定されていない場合 → 初期ホーム画面
+        role = self.request.GET.get("role")
 
-        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
-        role = self.request.GET.get("role", "student")
-
+        if role not in ["student", "teacher"]:
+            context["is_opening_home"] = True
+            # role = "guest" # 今はguestとしてCSSで制御しているわけではないのでコメントアウト
+        else:
+            context["is_opening_home"] = False
 
         context["role"] = role
-
         return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+
+    #     # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+    #     role = self.request.GET.get("role", "student")
+
+
+    #     context["role"] = role
+
+    #     return context
 # エラーで画面表示がされないのを回避のためコメントアウト
 #     def get():
 
