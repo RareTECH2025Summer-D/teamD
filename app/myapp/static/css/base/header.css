@@ -1,4 +1,5 @@
 /* ！　ユーザー登録・ログイン画面のヘッダー ！ */
+
 .circle-wrapper {
     display: flex;
     justify-content: center;
@@ -40,6 +41,7 @@
 
 
 /* ！ スキル登録・スキル作成・プロフィール作成画面ヘッダーの部分の指定 ！ */
+
 .opening-header {
     position: relative;
     height: 15vh;
@@ -55,12 +57,57 @@
 }
 
 /* ! ホーム・探す・ハンドシェイク・設定画面（フッターアイコンの並ぶ画面）のヘッダー部分の指定 ! */
+
 .normal-header {
     background: var(--primary_translucent);
 }
 
 
-/* 「ホーム画面」ヘッダー */
+/* !「ホーム画面」ヘッダー ! */
+
+/* 「初期ホーム画面」ヘッダー */
+.opening-home-header-wrapper {
+    height: 15vh;
+    display: flex;
+    flex-direction: column;
+}
+.opening-user-info {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 38px;
+    margin-top: 4px; /* 微調整　*/
+}
+
+.opening-home-user-icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2.5px solid var(--gray);
+}
+
+.opening-home-user-icon {
+    font-size: 40px;
+    color: var(--gray);
+    padding-top: 12px;
+}
+
+.opening-bell-icon {
+    font-size: 37px;
+    color: var(--gray);
+    margin-top: 4px; /* 微調整 */
+    margin-right: -5px; /* 微調整 */
+}
+
+.opening-header-border {
+    border: none;
+    border-bottom: 1.5px solid var(--gray);
+    width: 90%;
+    margin: 0 auto;
+}
+
+/* 「通常ホーム」ヘッダー */
 .home-header-wrapper {
     height: 15vh;
     display: flex;
@@ -106,7 +153,8 @@
 }
 
 
-/* 「探す画面」ヘッダー */
+/* !「探す画面」ヘッダー ! */
+
 .search-header-wrapper {
     height: 15vh;
     display: flex;
@@ -137,7 +185,8 @@
 }
 
 
-/* 「ハンドシェイク画面」ヘッダー */
+/* !「ハンドシェイク画面」ヘッダー ! */
+
 .handshake-header-wrapper {
     height: 15vh;
     display: flex;
@@ -188,7 +237,8 @@
 }
 
 
-/* 「設定画面」ヘッダー */
+/* !「設定画面」ヘッダー ! */
+
 .settings-header-wrapper {
     height: 15vh;
     display: flex;

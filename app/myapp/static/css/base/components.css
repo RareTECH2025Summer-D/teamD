@@ -1,4 +1,5 @@
 /* ！　ユーザー登録・ログイン画面のパーツ ！ */
+
 /* フォーム入力のパーツ */
 .registration-form {
     width: 305px;
@@ -46,7 +47,9 @@
     color: var(--charcoal_gray);
 }
 
+
 /* ！「スキル登録・作成画面」「プロフィール作成画面」のパーツ ！ */
+
 /* 「下部固定ボタン」のパーツ */
 .sticky-button {
     width: 175px;
@@ -96,6 +99,7 @@
 
 
 /* ！ 「スキル登録画面」のパーツ ！ */
+
 /* 虫眼鏡ボタン */
 .skill-search-btn {
     width: 35px;
@@ -172,6 +176,38 @@
 
 /* !「ホーム画面」パーツ ! */
 
+/* 初期ホーム画面のボタン */
+.opening-student-button {
+    width: 210px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--student_primary);
+    color: var(--white);
+    border-radius: 20px;
+    font-size: 38px;
+    font-weight: bold;
+    padding-bottom: 3px; /* 微調整 */
+    text-decoration: none;
+}
+
+.opening-teacher-button {
+    width: 210px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--teacher_primary);
+    color: var(--white);
+    border-radius: 20px;
+    font-size: 38px;
+    font-weight: bold;
+    padding-bottom: 3px; /* 微調整 */
+    text-decoration: none;
+}
+
+/* 通常ホームボタン */
 .student-button {
     width: 210px;
     height: 75px;
@@ -259,7 +295,7 @@
 
 .search-user-info p {
     font-size: 24px;
-    max-width: 90px;
+    max-width: 85px;
     white-space: nowrap; /* 折り返さない */
     overflow: hidden; /* はみ出た部分隠す */
     text-overflow: ellipsis; /* はみ出し部分「...」にする */
@@ -276,6 +312,7 @@
     font-size: 15px;
 }
 
+
 /* ！「ハンドシェイク画面」パーツ！ */
 
 .matching-button {
@@ -290,7 +327,7 @@
 }
 
 .accept-button {
-    width: 70px;
+    width: 67px;
     height: 35px;
     border: none;
     border-radius: 25px;
@@ -302,7 +339,7 @@
 }
 
 .remove-button {
-    width: 70px;
+    width: 67px;
     height: 35px;
     border: none;
     border-radius: 25px;
@@ -313,7 +350,9 @@
     padding-bottom: 2px; /* ボタン内の文字の位置を微調整 */
 }
 
+
 /* ！「設定画面」パーツ！ */
+
 .settings-box {
     width: 89%;
     height: 90px;
