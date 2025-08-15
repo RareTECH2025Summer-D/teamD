@@ -30,24 +30,35 @@ class Login(LoginView):
         if self.request.user.just_before_status is None:
             return reverse_lazy('user_home')
         elif self.request.user.just_before_status:
-            # ホーム画面作成時user_homeに変更
-            base_url = reverse_lazy('setup_skill')
+            # ホーム画面作成時user_homeに変更 →　setup_skillからuserhomeに変更
+            base_url = reverse_lazy('user_home')
             return f"{base_url}?role=teacher"
         else:
-            # ホーム画面作成時user_homeに変更
-            base_url = reverse_lazy('setup_skill')
+            # ホーム画面作成時user_homeに変更 →　setup_skillからuserhomeに変更
+            base_url = reverse_lazy('user_home')
             return f"{base_url}?role=student"
         
 
 
 # スキル登録画面
 def skill_setup_view(request):
-    # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
-    role = request.GET.get("role", "student")
+    # 開発用にURLパラメータでroleを取得。　デフォルトstudent消去
+    role = request.GET.get("role")
+    #usersにjust_before_statusを登録するためにインスタンスを作成
+    user = Users.objects.get(id=request.user.id)
 
     if role == "student":
+        # GETリクエストroleがstudentのときUsersモデルのjust_before_statusに設定
+        user.just_before_status = False
+        user.save() # Usersモデル書き込み
+        # 新たにust_before_statusセッションを作成 以後セッションで状態を確認できる
+        request.session['just_before_status'] = 'student'  
         page_title = "学びたいスキルを<br>選択してください！"
+        
     elif role == "teacher":
+        user.just_before_status = True
+        user.save()
+        request.session['just_before_status'] = 'teacher'
         page_title = "教えたいスキルを<br>選択してください！"
     
     return render(request, 'app/skill_registration.html', {
@@ -94,9 +105,10 @@ class UserHome(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # roleが設定されていない場合 → 初期ホーム画面
-        role = self.request.GET.get("role")
-
+        #just_before_statusセッションを取得してroleに保存
+        # roleが設定されていない場合=セッションがない場合 → 初期ホーム画面
+        role = self.request.session.get("just_before_status") 
+        
         if role not in ["student", "teacher"]:
             context["is_opening_home"] = True
             # role = "guest" # 今はguestとしてCSSで制御しているわけではないのでコメントアウト
