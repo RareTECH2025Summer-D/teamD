@@ -3,7 +3,6 @@ from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import reverse_lazy
 from .forms import *
 from django.shortcuts import redirect, render
-# from django.http import HttpResponse
 
 # サインアップ
 class UserSignup(CreateView):
