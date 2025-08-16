@@ -1,5 +1,6 @@
 body.student {
     --primary_color: var(--student_primary);
     --primary_translucent: var(--student_primary_translucent);
-    --button_color: var(--student_button)
+    --button_color: var(--student_button);
+    --switch_color: var(--teacher_primary); /* 生徒モードだけど、先生モードの色を出したい時 */
 }

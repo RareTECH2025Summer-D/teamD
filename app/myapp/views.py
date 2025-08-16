@@ -296,6 +296,28 @@ class SearchUsers(ListView):
 
 
 # ユーザー詳細画面(学ぶ・教える共通)
+
+#フロント画面作成用
+class UserDetail(TemplateView):
+    template_name = 'app/user_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+        role = self.request.GET.get("role", "student")
+
+        if role == "student":
+            sub_text = "教えたいもの："
+        elif role == "teacher":
+            sub_text = "学びたいもの："
+
+
+        context["role"] = role
+        context["sub_text"] = sub_text
+
+        return context
+
 # class UserDitail(DetailView):
 #     def get():
 

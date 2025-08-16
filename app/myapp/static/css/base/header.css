@@ -251,3 +251,18 @@
     color: var(--charcoal_gray);
     margin-bottom: 5px; /* 微調整 */
 }
+
+
+/* !「ユーザープロフィール画面」ヘッダー ! */
+.profile-header {
+    height: 15vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;  /* 微調整 */
+}
+
+.back-icon {
+    font-size: 35px;
+    color: var(--charcoal_gray);
+}

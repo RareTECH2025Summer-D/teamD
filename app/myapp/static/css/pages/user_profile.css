@@ -1,0 +1,64 @@
+/* .user-profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
+
+.user-icon-name-piece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.skills-list {
+    width: 78%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 35px;
+}
+
+.skills-list p {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--charcoal_gray);
+    padding-left: 6px; /* 微調整 */
+}
+
+.skills-list ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    list-style: none;
+}
+
+.skill-tag {
+    display: inline-block;
+    color: var(--white);
+    background-color: var(--switch_color);
+    border-radius: 20px;
+    padding: 2px 15px;
+    font-weight: bold;
+    margin: 3px 2px;
+    font-size: 16px;
+}
+
+.user-introduction {
+    width: 82%;
+    margin: 0 auto;
+    min-height: 200px; /* デフォルトの高さ指定 */
+    height: auto;      /* 自己紹介文の長さによって自動で高さ調整 */
+    background-color: var(--light_gray);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.user-introduction p {
+    font-size: 17px;
+    display: block;
+    text-align: left;
+}
