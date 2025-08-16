@@ -38,7 +38,7 @@
             <input class="skill-checkbox" type="checkbox" id="skill_id" name="skill_name[]">
             <label class="skill-name-selection" for="skill_id">CSS</label>
     
-            <!-- バックと連携するときは将来的にこんな感じにする
+            <!-- バックと連携するときは将来的にこんな感じにする -->
             {% for skill in skills %}
             <input class="skill-checkbox" type="checkbox" id="{{ skill.id }}" name="skill_name[]" value="{{ skill.name }}">
             <label class="skill-name-selection" for="{{ skill.id }}">{{ skill.display_name }}</label>
