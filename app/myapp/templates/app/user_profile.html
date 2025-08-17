@@ -1,0 +1,45 @@
+{% extends 'base/base_app_button.html' %}
+
+{% block header %}
+    {% include 'partials/header_back.html' %}
+{% endblock header %}
+
+{% block content %}
+<main class="normal-main">
+
+    <div class="user-icon-name-piece">
+
+        <!-- プロフィール画像 -->
+        <div class="user-icon-circle">
+            <i class="fa-regular fa-user user-icon"></i>
+        </div>
+
+        <!-- ニックネーム -->
+        <h1 class="profile-user-name">ひいろ</h1>
+
+    </div>
+
+    <!-- スキル一覧 -->
+    <div class="skills-list">
+        <p>{{ sub_text|safe }}</p>
+        <ul>
+            <li><span class="skill-tag">AWS</span></li>
+            <li><span class="skill-tag">Docker</span></li>
+        </ul>
+    </div>
+
+    <!-- 自己紹介文 -->
+    <div class="user-introduction">
+        <!-- <p>こんにちは！</p> -->
+        <p>初めまして、ひいろと申します！最近ハッカソンでDockerとAWSについて学んでいます。その中で僕もつまづいたことがたくさんあったので、その経験からの気づきを皆さんとシェアできたらとても嬉しいです。僕も人に教えながらさらに学んで成長していきたいと思っています。一緒に成長してくれる方はいませんか？</p>
+    </div>
+
+</main>
+{% endblock content %}
+
+{% block footer %}
+<div class="sticky-button-wrapper">
+    <hr />
+    {% include 'partials/sticky_button.html' with button_label='リクエストする' %}
+</div>
+{% endblock footer %}

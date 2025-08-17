@@ -2,4 +2,5 @@ body.teacher {
     --primary_color: var(--teacher_primary);
     --primary_translucent: var(--teacher_primary_translucent);
     --button_color: var(--teacher_button);
+    --switch_color: var(--student_primary); /* 先生モードだけど、生徒モードの色を出したい時 */
 }

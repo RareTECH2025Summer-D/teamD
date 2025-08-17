@@ -4,7 +4,6 @@
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    /* margin: 20px 0; */
     padding: 20px 0;
     background: var(--white);
 }

@@ -52,8 +52,11 @@
 
 /* 「下部固定ボタン」のパーツ */
 .sticky-button {
-    width: 175px;
-    height: 55px;
+    min-width: 175px;
+    min-height: 55px;
+    width: auto;
+    height: auto;
+    padding: 0 18px;
     border-radius: 30px;
     border: hidden;
     background-color: var(--button_color);
