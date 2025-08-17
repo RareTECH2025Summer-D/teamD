@@ -26,33 +26,48 @@ class Login(LoginView):
     
     def get_success_url(self):
 
-        # just_befre_statusの値を見て判断
-        if self.request.user.just_before_status is None:
+        # just_befre_statusのセッションを見て判断
+        role = self.request.session.get("just_before_status")
+        if role is None:
             return reverse_lazy('user_home')
-        elif self.request.user.just_before_status:
-            # ホーム画面作成時user_homeに変更
-            base_url = reverse_lazy('setup_skill')
+        elif role == "teacher":
+            # ホーム画面作成時user_homeに変更 →　setup_skillからuserhomeに変更
+            base_url = reverse_lazy('user_home')
             return f"{base_url}?role=teacher"
         else:
-            # ホーム画面作成時user_homeに変更
-            base_url = reverse_lazy('setup_skill')
+            # ホーム画面作成時user_homeに変更 →　setup_skillからuserhomeに変更
+            base_url = reverse_lazy('user_home')
             return f"{base_url}?role=student"
         
 
 
 # スキル登録画面
 def skill_setup_view(request):
-    # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
-    role = request.GET.get("role", "student")
+    # 開発用にURLパラメータでroleを取得。　デフォルトstudent消去
+    role = request.GET.get("role")
+    #usersにjust_before_statusを登録するためにインスタンスを作成
+    user = Users.objects.get(id=request.user.id)
+    #デフォルトで表示するスキルはskill_countの値に応じて変える
+    # skills = Skills.objects.all() 
 
     if role == "student":
+        # GETリクエストroleがstudentのときUsersモデルのjust_before_statusに設定
+        user.just_before_status = False
+        user.save() # Usersモデル書き込み
+        # 新たにust_before_statusセッションを作成 以後セッションで状態を確認できる
+        request.session['just_before_status'] = 'student'  
         page_title = "学びたいスキルを<br>選択してください！"
+        
     elif role == "teacher":
+        user.just_before_status = True
+        user.save()
+        request.session['just_before_status'] = 'teacher'
         page_title = "教えたいスキルを<br>選択してください！"
     
     return render(request, 'app/skill_registration.html', {
         "role": role,
         "page_title": page_title,
+        # "skills": skills
     })
 
 # スキル作成画面
@@ -94,9 +109,11 @@ class UserHome(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # roleが設定されていない場合 → 初期ホーム画面
-        role = self.request.GET.get("role")
-
+        # Loginviewから受け取るroleを確認　roleがある場合はFalse、ない場合はtrueに分岐
+        # セッションの有無はLoginviewで確認しているのでここではGETリクエストの確認でOKでした
+        
+        role = self.request.GET.get('role') 
+        
         if role not in ["student", "teacher"]:
             context["is_opening_home"] = True
             # role = "guest" # 今はguestとしてCSSで制御しているわけではないのでコメントアウト
