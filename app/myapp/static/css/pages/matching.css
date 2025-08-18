@@ -1,0 +1,146 @@
+.matching-words {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--red);
+    margin: 5px 0 40px 0; /* 微調整 */
+}
+
+.modal-contact-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 32px 0 50px 0;
+}
+
+/* 「連絡先を見る」ボタン */
+.modal-open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    width: 174px;
+    height: 57px;
+    border: 2px solid var(--red);
+    background-color: var(--white);
+    color: var(--red);
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--black);
+    z-index: 1000;
+    pointer-events: none;  /* 背面操作を通す */
+    opacity: 0;
+}
+
+.mask.active {
+    opacity: 0.3;
+    pointer-events: auto;
+}
+
+
+/* モーダル部分全体 */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--charcoal_gray);
+    border-radius: 20px;
+    padding: 30px;
+    z-index: 1001;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal.active {
+    opacity: 0.97;
+    pointer-events: auto;
+}
+
+
+/* 「x」ボタン */
+.modal-close {
+    display: flex;
+    justify-content: flex-end;
+    border: none;
+    color: var(--black);
+    background-color: var(--charcoal_gray);
+    font-size: 22px;
+}
+
+/* 「連絡先：」と「連絡先アドレス」の要素 */
+.contact-address-piece {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* 「連絡先：」の部分 */
+.modal-text {
+    font-size: 23px;
+    color: var(--white);
+    margin-left: 6px; /* 微調整 */
+}
+
+/* 「連絡先アドレス」の部分 */
+.contact-address {
+    display: flex;
+    justify-content: center;
+    width: 225px;
+    min-height: 45px;
+    border-radius: 12px;
+    background-color: var(--white);
+    color: var(--charcoal_gray);
+    font-size: 22px;
+    font-weight: bold;
+    word-break: break-all;   /* 連絡先が長すぎても強制改行 */
+    overflow-wrap: anywhere;  /* どこでも折り返して良い */
+    text-align: left;  /* 左揃え */
+    padding: 5px 15px; 
+}
+
+/* 「連絡しました」の部分 */
+.confirmation-text {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: var(--white);
+    margin: 45px 0 5px 7px; /* 微調整 */
+}
+
+
+/* チェックボックス完全カスタム */
+.contact-confirmation {
+    appearance: none;
+    width: 23px;
+    height: 23px;
+    border: 2.5px solid var(--white);
+    border-radius: 4px;
+    background-color: var(--charcoal_gray);
+    position: relative;
+}
+
+.contact-confirmation:checked {
+    border-color: var(--white);
+}
+
+.contact-confirmation:checked::after {
+    content: "✔";
+    color: white;
+    font-size: 17px;
+    position: absolute;
+    top: -3px;
+    left: 2px;
+}

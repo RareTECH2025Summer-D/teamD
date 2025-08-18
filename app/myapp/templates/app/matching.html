@@ -1,11 +1,13 @@
 {% extends 'base/base_app_button.html' %}
 
 {% block header %}
-    {% include 'partials/header_back.html' with back_url_name='search' %}
+    {% include 'partials/header_back.html' with back_url_name='request_list' %}
 {% endblock header %}
 
 {% block content %}
-<main class="normal-main">
+<main class="normal-main no-footer">
+
+    <p class="matching-words">マッチング成功<br>おめでとうございます！</p>
 
     <div class="user-icon-name-piece">
 
@@ -18,6 +20,34 @@
         <h1 class="profile-user-name">ひいろ</h1>
 
     </div>
+
+    <div class="modal-contact-wrapper">
+
+        <a href="" id="modalOpen" class="modal-open">連絡先を見る</a>
+
+        <div id="mask" class="mask"></div>
+
+        <div id="modal" class="modal">
+            <div class="modal-contents">
+
+                <div id="modalClose" class="modal-close"><i class="fa-solid fa-xmark"></i></div>
+
+                <div class="contact-address-piece">
+                    <p class="modal-text">連絡先：</p>
+                    <p class="contact-address">aaaaaa@gmail.com</p>
+                </div>
+
+                <label class="confirmation-text" for="checkbox">
+                    <input class="contact-confirmation" type="checkbox" name="" id="checkbox">
+                    連絡しました
+                </label>
+
+            </div>
+        </div>
+
+    </div>
+
+
 
     <!-- スキル一覧 -->
     <div class="skills-list">
@@ -36,10 +66,3 @@
 
 </main>
 {% endblock content %}
-
-{% block footer %}
-<div class="sticky-button-wrapper">
-    <hr />
-    {% include 'partials/sticky_button.html' with button_label='リクエストする' %}
-</div>
-{% endblock footer %}
