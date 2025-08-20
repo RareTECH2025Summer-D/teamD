@@ -1,7 +1,7 @@
 {% extends 'base/base_app_button.html' %}
 
 {% block header %}
-    {% include 'partials/header_settings.html' %}
+{% include 'partials/header_settings.html' %}
 {% endblock header %}
 
 {% block content %}
@@ -12,26 +12,26 @@
         <div class="settings-box-wrapper">
 
             <div class="settings-box">
-    
+
                 <div class="search-user-icon-circle">
                     <i class="fa-regular fa-user search-user-icon"></i>
                 </div>
                 <p>アカウントの管理</p>
-    
+
             </div>
-    
+
             <div class="settings-box">
-    
+
                 <div class="people-icon-piece">
                     <i class="fa-solid fa-user-group people-icon"></i>
                 </div>
                 <p>送信済みリクエスト</p>
-    
+
             </div>
-    
+
         </div>
-    
-        <a href="" class="logout-btn">ログアウト</a>
+
+        <a href="{% url 'logout' %}" class="logout-btn">ログアウト</a>
 
     </div>
 
@@ -39,9 +39,9 @@
 {% endblock content %}
 
 {% block footer %}
-    {% if is_opening_home %}
-        {% include 'partials/footer.html' with disable_links=True %}
-    {% else %}
-        {% include 'partials/footer.html' %}
-    {% endif %}
+{% if is_opening_home %}
+{% include 'partials/footer.html' with disable_links=True %}
+{% else %}
+{% include 'partials/footer.html' %}
+{% endif %}
 {% endblock footer %}
