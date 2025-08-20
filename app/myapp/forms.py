@@ -103,25 +103,21 @@ class RoleForm(forms.ModelForm):
     
 
 # スキル選択画面（作成中）
-class SkillSelectForm(forms.ModelForm):
+# モデルの作成更新は行わないため、forms.Formを利用
+class SkillSelectForm(forms.Form):
 
     # skillsよりスキル一覧を取得
-    def __init__(self,*args, **kwargs):
+    # filter(skill_count__=10)→count が指定された値 (10) 以上 (greater than or equal to) である」という条件を指定するフィールドルックアップ
+    skills = forms.ModelMultipleChoiceField(
+        queryset = Skills.objects.filter(skill_count__gte=10),
+        widget = forms.CheckboxSelectMultiple(
+            attrs = {'class':'skill-checkbox'}
+        ),
+        required=False,
+    )
+
+    def __ini__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        skill_choices = [(skill.name, skill.name) for skill in Skills.objects.all()] # スキル名をタプル型にし、List形式で格納
-
-        self.fields['selected_skills'] = forms.MultipleChoiceField(
-            choices=skill_choices
-            , widget=forms.CheckboxSelectMultiple(
-                attrs={
-                    'class': 'skill-checkbox'
-                    , 'id': {{ skill.id }}
-                    , 'name': 'skill_name[]'
-                }
-            )
-            , required=False
-        )
-
 
 # スキル作成
 class SkillCreationForm(forms.ModelForm):

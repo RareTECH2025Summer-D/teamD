@@ -1,8 +1,9 @@
 from django.views.generic import ListView, DetailView,CreateView,UpdateView,TemplateView,View
 from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import reverse_lazy
-from .forms import *
 from django.shortcuts import redirect, render
+from .forms import *
+from .models import *
 
 # サインアップ
 class UserSignup(CreateView):
@@ -28,6 +29,7 @@ class Login(LoginView):
 
         # just_befre_statusのセッションを見て判断
         role = self.request.session.get("just_before_status")
+        print('■ROLE：',role)
         if role is None:
             return reverse_lazy('user_home')
         elif role == "teacher":
@@ -43,12 +45,12 @@ class Login(LoginView):
 
 # スキル登録画面
 def skill_setup_view(request):
-    # 開発用にURLパラメータでroleを取得。　デフォルトstudent消去
+    
+    # 開発用にURLパラメータでroleを取得
     role = request.GET.get("role")
     #usersにjust_before_statusを登録するためにインスタンスを作成
     user = Users.objects.get(id=request.user.id)
-    #デフォルトで表示するスキルはskill_countの値に応じて変える
-    # skills = Skills.objects.all() 
+    form = SkillSelectForm()
 
     if role == "student":
         # GETリクエストroleがstudentのときUsersモデルのjust_before_statusに設定
@@ -67,7 +69,7 @@ def skill_setup_view(request):
     return render(request, 'app/skill_registration.html', {
         "role": role,
         "page_title": page_title,
-        # "skills": skills
+        "form":form
     })
 
 # スキル作成画面
@@ -93,6 +95,7 @@ def profile_create_view(request):
         "role": role,
     })
 
+# プロフィール画面表示
 def requester_profile_view(request):
     role = request.GET.get("role", "student")
 
