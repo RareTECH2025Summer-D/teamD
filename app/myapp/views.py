@@ -93,6 +93,20 @@ def profile_create_view(request):
         "role": role,
     })
 
+def requester_profile_view(request):
+    role = request.GET.get("role", "student")
+
+    if role == "student":
+        sub_text = "教えたいもの："
+    elif role == "teacher":
+        sub_text = "学びたいもの："
+    
+    return render(request, 'app/requester_profile.html', {
+        "role": role,
+        "sub_text": sub_text
+    })
+
+
 
 
 
@@ -439,7 +453,22 @@ class RequestList(ListView):
 
 
 # コンタクト
-# class Contact(TemplateView):
+class Contact(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+        role = self.request.GET.get("role", "student")
+
+        if role == "student":
+            sub_text = "教えたいもの："
+        elif role == "teacher":
+            sub_text = "学びたいもの："
+
+        context["role"] = role
+        context["sub_text"] = sub_text
+
+        return context
 #     def get():
 
 #         pass

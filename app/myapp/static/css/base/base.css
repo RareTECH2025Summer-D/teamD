@@ -9,6 +9,7 @@
 
 html, body {
     width: 100vw;
+    /* min-height: 100vh; */
     height: 100vh;
     text-align: center;
 }
@@ -33,4 +34,8 @@ html, body {
     overflow-y: auto;
     padding-bottom: 70px;
     position: relative;
+}
+
+.no-footer {
+    height: 85vh;
 }

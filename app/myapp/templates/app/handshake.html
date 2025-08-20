@@ -29,13 +29,15 @@
                     {% csrf_token %}
             
                     <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
+
+                        <a href="{% url 'contact_user' %}?role={{ role }}"> <!-- formの中に<a>とか<button>とか置いちゃったけど、form送信する時にバッティングしない？　-->
+                            <div class="search-user-info">
+                                <div class="search-user-icon-circle">
+                                    <i class="fa-regular fa-user search-user-icon"></i>
+                                </div>
+                                <p>MANA</p>
                             </div>
-                            <p>MANA</p>
-                        </div>
+                        </a>
             
                         <button class="matching-button" type="button">コンタクトを取る</button>
             
@@ -115,13 +117,15 @@
                     {% csrf_token %}
             
                     <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
+
+                        <a href="{% url 'requester_profile' %}?role={{ role }}">
+                            <div class="search-user-info">
+                                <div class="search-user-icon-circle">
+                                    <i class="fa-regular fa-user search-user-icon"></i>
+                                </div>
+                                <p>ひいろ</p>
                             </div>
-                            <p>ひいろ</p>
-                        </div>
+                        </a>
 
                         <div class="handshake-btn-wrapper">
                             <button class="accept-button" type="button">承認</button>

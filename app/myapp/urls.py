@@ -15,12 +15,13 @@ urlpatterns = [
     #path('user/update/profile/',ProfileUpdate.as_view(template_name='profile_edit.html'),name='user_update_profile'),
     path('search/',SearchUsers.as_view(template_name='app/search.html'),name='search'),
     path('user/detail/', UserDetail.as_view(), name='user_detail'), 
-    #path('user/detail',UserDitail.as_view(template_name='user_profile.html'),name='user_detail'),    #フロント画面作成のため、一旦17行目のpathを使う
+    #path('user/detail',UserDitail.as_view(template_name='user_profile.html'),name='user_detail'),    # フロント画面作成のため、一旦17行目のpathを使う
     #path('request/send',SendRequest.as_view(),name='request_send'),
     path('request/list/',RequestList.as_view(template_name='app/handshake.html'),name='request_list'),
+    path('request/list/user/profile', views.requester_profile_view, name='requester_profile'),           #新しい画面MANA追記
     #path('request/approval/',RequestApproval.as_view(),name='request_approval'),
     #path('matching/list/',MatchingList.as_view(template_name='handshake.html'),name='matching_list'),
-    #path('contact/user/',Contact.as_view(),name='contact_user'),                        # POPのみ
+    path('contact/user/',Contact.as_view(template_name='app/matching.html'),name='contact_user'),                        # POPのみ
     #path('reviewt/user/',Review.as_view(template_name='matching.html'),name='reviewt_user'),
     path('user/setup/skill', views.skill_setup_view, name='setup_skill'),
     path('user/create/skill', views.skill_create_view, name='user_create_skill'),
