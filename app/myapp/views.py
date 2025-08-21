@@ -1,8 +1,9 @@
 from django.views.generic import ListView, DetailView,CreateView,UpdateView,TemplateView,View
-from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.auth.views import LoginView,LogoutView,FormView
 from django.urls import reverse_lazy
 from .forms import *
 from django.shortcuts import redirect, render
+from django.db import transaction
 
 # サインアップ
 class UserSignup(CreateView):
@@ -276,31 +277,96 @@ class Setting(TemplateView):
 
 
 # 先生・生徒検索(学ぶ・教える共通)
-class SearchUsers(ListView):
-    model = UserProfile
+class SearchUsers(TemplateView):
+    template_name = 'app/search.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
-        role = self.request.GET.get("role", "student")
+        # ログイン時にセッションを取得してroleをURLに組み込むのでGETメソッドでOK
+        role = self.request.GET.get("role")
+        is_request = Machings.objects.filter(requester_user_id=self.request.user.id, ).values_list('requester_user_id', flat=True)
+        is_requested = Machings.objects.filter(requested_user_id=self.request.user.id).values_list('requested_user_id', flat=True)
+        #　リクエストしたユーザー一覧とリクエストされたユーザー一覧をリスト化して除外するユーザーIDをリストで作成
+        excluded_users_ids = list(is_request) + list(is_requested)
 
         if role == "student":
             page_title = "先生を探す"
+            # ログイン中のroleに紐づくユーザーのスキル一覧を取得 skill_idフィールドのみが欲しいのでvalue_listを使用する
+            user_skills = UserSkills.objects.filter(user_id=self.request.user.id, is_teacher=False).values_list('skill_id', flat=True)
+            # role=teacherでかつログイン中のユーザーに合致するユーザーidを取得する⇒.filter(skill_id__in=login_user_skills)はWHERE skill_id IN (LoginUserSkills)のSQL文に相当
+            users = UserProfile.objects.filter(user_id__userskills__skill_id__in=user_skills,
+    user_id__userskills__is_teacher=True).exclude(user_id__in=excluded_users_ids).distinct()
+                  
         elif role == "teacher":
             page_title = "生徒を探す"
-
-
+            user_skills = UserSkills.objects.filter(user_id=self.request.user.id, is_teacher=True).values_list('skill_id', flat=True)
+            users = UserSkills.objects.filter(user_skills__skill_id__in=user_skills, user_skills__is_teacher=False).exclude(user_id__in=excluded_users_ids).distinct()
+            
+        else:
+            users = UserProfile.objects.none()
+        
+        # users=ログイン中のユーザーが持つスキルに合致する場合のUserProfile情報
+        # ※usersはexcludeですでにリクエスとした、リクエストされたユーザーを除外している
+        # not_maching_listで条件に合致したニックネーム一覧とボタンに表示する文言のcontextを作成する
+        not_maching_list = []
+        for user in users:
+            not_maching_list.append({
+                "nickname": user.nickname,
+                "status": "リクエストする"
+            })
+            
         context["role"] = role
         context["page_title"] = page_title
+        context["users"] = not_maching_list
 
         return context
-
-#     def get():
-
-#         pass
-
-#     def post():
+    
+    def post(self, request, *args, **kwargs):
+        form_type = request.POST.get('form_type')
+        if form_type == 'send_request':
+            try:
+                requester_user_id = request.user.id  # リクエストを送信するユーザーのID=ログイン中のユーザー
+                # リクエストを受け取るユーザーのID　HTMLのフォームで表示されているユーザーを取得できるようにする
+                requested_user_id = request.POST.get('requested_user_id')
+                requester_user_role = request.POST.get('role')
+                
+                 # ここにデバッグ用のprint文を追加
+                print(f"requester_user_id: {requester_user_id}")
+                print(f"requested_user_id: {requested_user_id}")
+                print(f"requester_user_role: {requester_user_role}")
+                
+                with transaction.atomic():
+                    # マッチングの作成
+                    Machings.objects.create(
+                        requester_user_id_id = requester_user_id,
+                        requested_user_id_id = requested_user_id,
+                        requester_user_role = requester_user_role,
+                        requester_status = 'リクエスト中',
+                        requested_status = '承認する'
+                    )
+                return redirect(f"{reverse_lazy('search')}?role={requester_user_role}")
+            except Exception as e:
+                # エラーハンドリング
+                print(f"リクエスト中にエラーが発生しました: {e}")
+                return redirect(f"{reverse_lazy('user_home')}?role={requester_user_role}")
+            
+        else:
+             return redirect(f"{reverse_lazy('user_home')}?role={requester_user_role}")
+            
+        
+        
+        
+        # POSTリクエストの処理
+        # ここではリクエストを送信するためのロジックを実装することができます
+        # 例えば、リクエストされたユーザーIDを取得し、マッチングを作成するなど
+        # リクエストの送信後は、適切なリダイレクトやレスポンスを返すことができます
+        
+        # 例: リクエストされたユーザーIDを取得
+        requested_user_id = request.POST.get('requested_user_id')
+        
+        # マッチングの作成処理などをここに実装
 #         pass
 
 
@@ -352,14 +418,14 @@ class UserDetail(TemplateView):
 
 
 
-# リクエスト送信(学ぶ・教える共通)
-# class SendRequest(TemplateView):
-#     def get():
+#リクエスト送信(学ぶ・教える共通)
+class SendRequest(FormView):
+    def get():
 
-#         pass
+        pass
 
-#     def post():
-#         pass
+    def post():
+        pass
 
 
 

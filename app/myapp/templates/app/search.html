@@ -41,26 +41,36 @@
         </form>
         {% endfor %} -->
 
-        <form method="post" action="">
-            {% csrf_token %}
+        <!-- <form method="post" action=""> -->
+            <!-- {% csrf_token %} -->
 
-            <div class="user-box">
+            {% for user in users %}
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="user-box">
 
-                <div class="search-user-info">
-                    <div class="search-user-icon-circle">
-                        <i class="fa-regular fa-user search-user-icon"></i>
+                    <div class="search-user-info">
+                        <div class="search-user-icon-circle">
+                            <i class="fa-regular fa-user search-user-icon"></i>
+                        </div>
+                        <!-- <p>MANA</p> -->
+                        <p>{{ user.nickname }}</p>
+                        <!-- user.nicknameを押すとユーザープロフィールに遷移する？ -->
                     </div>
-                    <p>MANA</p>
+
+                    <input type="hidden" name="form_type" value="send_request">
+                    <input type="hidden" name="requested_user_id" value="{{ user.id }}">
+                    <input type="hidden" name="requester_user_role" value="{{ user.role }}">
+                    <button class="request-button" type="submit">{{user.status}}</button>
+
                 </div>
+            </form>
+            {% endfor %}
 
-                <button class="request-button" type="button">リクエストする</button>
-
-            </div>
-
-        </form>
+        <!-- </form> -->
 
         <!-- UI確認用 -->
-            <div class="user-box">
+            <!-- <div class="user-box">
 
                 <div class="search-user-info">
                     <div class="search-user-icon-circle">
@@ -107,7 +117,7 @@
                 <button class="request-button">リクエストする</button>
 
             </div>
-        <!-- UI確認用ここまで -->
+        UI確認用ここまで -->
 
     </div>
 
