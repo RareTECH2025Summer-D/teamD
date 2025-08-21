@@ -61,6 +61,10 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
     
+    def __str__(self):
+        return self.nickname if self.nickname else f"User {self.user_id.id}"
+    
+    
 class Skills(models.Model):
     skill_name = models.CharField(max_length = 100)
     serch_tag1 = models.CharField(max_length=100, blank=True, null=True)
@@ -69,6 +73,9 @@ class Skills(models.Model):
     skill_count = models.IntegerField(default=0)  # スキルの登録数
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.skill_name if self.skill_name else f"Skill {self.id}"
 
 class UserSkills(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -76,7 +83,20 @@ class UserSkills(models.Model):
     is_teacher = models.BooleanField(blank=True, null=True)  # True: 先生, False: 生徒
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
+    
 
+
+class Machings(models.Model):
+    requester_user_id = models.ForeignKey(Users, related_name='requester', on_delete=models.CASCADE)
+    requested_user_id = models.ForeignKey(Users, related_name='requested', on_delete=models.CASCADE)
+    requester_user_role = models.BooleanField(blank=True, null=True)  # True: 先生, False: 生徒
+    requester_status = models.CharField(max_length=20, default='pending')  # リクエストのステータス
+    requested_status = models.CharField(max_length=20, default='pending')  # リクエストのステータス
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+
+    
 class Channel(models.Model):
     name = models.CharField(max_length=100)
 
