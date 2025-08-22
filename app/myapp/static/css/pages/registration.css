@@ -2,6 +2,7 @@
 
 /* ヘッダーを抜いたメイン部分（画面全体の78%をメインにしますという意味） */
 .registration-container {
+    /* min-height: 78dvh; */
     height: 78%;
 }
 
@@ -9,6 +10,7 @@
 .registration-container p {
     margin-top: 1em;
     font-size: 28px;
+    color: var(--light_black);
 }
 
 /* フォーム入力部分の単位 */

@@ -226,6 +226,9 @@
     padding-bottom: 3px; /* 微調整 */
 }
 
+.student-button.active {
+    background-color: #c7a62f;
+}
 
 .teacher-button {
     width: 210px;
@@ -240,6 +243,10 @@
     font-size: 38px;
     font-weight: bold;
     padding-bottom: 3px; /* 微調整 */
+}
+
+.teacher-button.active {
+    background-color: #4978AE;
 }
 
 
@@ -292,7 +299,6 @@
 
 .user-box a {
     text-decoration: none; 
-    color: var(--black);
 }
 
 .search-user-info {
@@ -302,6 +308,7 @@
 }
 
 .search-user-info p {
+    color: var(--black);
     font-size: 24px;
     max-width: 85px;
     white-space: nowrap; /* 折り返さない */
@@ -309,6 +316,7 @@
     text-overflow: ellipsis; /* はみ出し部分「...」にする */
 }
 
+/* 「リクエストする」ボタン */
 .request-button {
     width: 130px;
     height: 35px;
@@ -320,11 +328,20 @@
     font-size: 15px;
 }
 
+/* 「リクエスト済み」ボタン */
+.requested {
+    background-color: var(--gray);
+}
+
 
 /* ！「ハンドシェイク画面」パーツ！ */
 
 .matching-button {
-    width: 140px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 143px;
     height: 35px;
     border: none;
     border-radius: 25px;
