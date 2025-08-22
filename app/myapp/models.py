@@ -85,7 +85,7 @@ class UserSkills(models.Model):
     
 
 
-class Machings(models.Model):
+class Matchings(models.Model):
     requester_user_id = models.ForeignKey(Users, related_name='requester', on_delete=models.CASCADE)
     requested_user_id = models.ForeignKey(Users, related_name='requested', on_delete=models.CASCADE)
     requester_user_role = models.BooleanField(blank=True, null=True)  # True: 先生, False: 生徒
