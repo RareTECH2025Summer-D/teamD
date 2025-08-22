@@ -49,14 +49,16 @@
                 {% csrf_token %}
                 <div class="user-box">
 
-                    <div class="search-user-info">
-                        <div class="search-user-icon-circle">
-                            <i class="fa-regular fa-user search-user-icon"></i>
-                        </div>
-                        <!-- <p>MANA</p> -->
+                <a href="{% url 'user_detail' %}?role={{ role }}"> <!-- formの中に<a>とか<button>とか置いちゃったけど、form送信する時にバッティングしない？　-->
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <!-- <p>MANA</p> -->
                         <p>{{ user.nickname }}</p>
-                        <!-- user.nicknameを押すとユーザープロフィールに遷移する？ -->
+                            <!-- user.nicknameを押すとユーザープロフィールに遷移する？ -->
                     </div>
+                </a>
 
                     <input type="hidden" name="form_type" value="send_request">
                     <input type="hidden" name="requested_user_id" value="{{ user.id }}">

@@ -1,7 +1,7 @@
 {% extends 'base/base_app_button.html' %}
 
 {% block header %}
-    {% include 'partials/header_back.html' with back_url_name='search' %}
+    {% include 'partials/header_back.html' with back_url_name='request_list' %}
 {% endblock header %}
 
 {% block content %}
@@ -40,6 +40,6 @@
 {% block footer %}
 <div class="sticky-button-wrapper">
     <hr />
-    {% include 'partials/sticky_button.html' with button_label='リクエストする' %}
+    {% include 'partials/sticky_button.html' with button_label='承認する' %}
 </div>
 {% endblock footer %}

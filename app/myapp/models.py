@@ -60,10 +60,9 @@ class UserProfile(models.Model):
     star_rating_average = models.DecimalField(max_digits=1,decimal_places=1)  # 星の平均値
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
-        return self.nickname if self.nickname else f"User {self.user_id.id}"
-    
+        return self.nickname # adminの管理画面でデータを文字列として表示させる処理（migrateなど不要）
     
 class Skills(models.Model):
     skill_name = models.CharField(max_length = 100)
@@ -75,7 +74,7 @@ class Skills(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return self.skill_name if self.skill_name else f"Skill {self.id}"
+        return self.skill_name
 
 class UserSkills(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
