@@ -22,11 +22,11 @@
             <form action="" method="post">
             {% csrf_token %}
             <!-- type=submitにすると、動かなくなるため今はbuttonにしている -->
-                <button  class="student-button" name="user_role" value="student" type="button">学ぶ</button>
+                <button class="student-button {% if role == 'student' %}active{% endif %}" name="user_role" value="student" type="button">学ぶ</button>
             </form>
             <form action="" method="post">
             {% csrf_token %}
-                <button class="teacher-button" name="user_role" value="teacher" type="button">教える</button>
+                <button class="teacher-button {% if role == 'teacher' %}active{% endif %}" name="user_role" value="teacher" type="button">教える</button>
             </form>
 
         </div>
