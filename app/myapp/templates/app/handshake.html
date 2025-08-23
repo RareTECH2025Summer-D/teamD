@@ -30,16 +30,14 @@
             
                     <div class="user-box">
 
-                        <a href="{% url 'contact_user' %}?role={{ role }}"> <!-- formの中に<a>とか<button>とか置いちゃったけど、form送信する時にバッティングしない？　-->
-                            <div class="search-user-info">
-                                <div class="search-user-icon-circle">
-                                    <i class="fa-regular fa-user search-user-icon"></i>
-                                </div>
-                                <p>MANA</p>
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
                             </div>
-                        </a>
+                            <p>MANA</p>
+                        </div>
             
-                        <button class="matching-button" type="button">コンタクトを取る</button>
+                        <a href="{% url 'contact_user' %}?role={{ role }}" class="matching-button">コンタクトを取る</a>
             
                     </div>
             
@@ -112,9 +110,6 @@
             </form>
 
             <div class="user-box-wrapper">
-
-                <form method="post" action="">
-                    {% csrf_token %}
             
                     <div class="user-box">
 
@@ -127,14 +122,15 @@
                             </div>
                         </a>
 
-                        <div class="handshake-btn-wrapper">
-                            <button class="accept-button" type="button">承認</button>
-                            <button class="remove-button" type="button">削除</button>
-                        </div>
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="handshake-btn-wrapper">
+                                <button class="accept-button" type="button">承認</button>
+                                <button class="remove-button" type="button">削除</button>
+                            </div>
+                        </form>
             
                     </div>
-            
-                </form>
             
                 <!-- UI確認用 -->
                     <div class="user-box">

@@ -3,15 +3,19 @@
 .circle-wrapper {
     display: flex;
     justify-content: center;
+    /* min-height: 22dvh; */
     height: 22%;
     overflow: hidden;
     position: relative;
 }
 
 .app-name {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 23px;
     align-self: center;
     color: var(--white);
-    margin-right: 15em;
+    margin-right: 12em;
     z-index: 1;
 }
 
@@ -49,6 +53,9 @@
 }
 
 .opening-app-name {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 22px;
     position: absolute;
     left: 0;
     bottom: 0;
