@@ -110,38 +110,3 @@
     padding: 5px 15px; 
 }
 
-/* 「連絡しました」の部分 */
-.confirmation-text {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
-    font-size: 18px;
-    color: var(--white);
-    margin: 45px 0 5px 7px; /* 微調整 */
-}
-
-
-/* チェックボックス完全カスタム */
-.contact-confirmation {
-    appearance: none;
-    width: 23px;
-    height: 23px;
-    border: 2.5px solid var(--white);
-    border-radius: 4px;
-    background-color: var(--charcoal_gray);
-    position: relative;
-}
-
-.contact-confirmation:checked {
-    border-color: var(--white);
-}
-
-.contact-confirmation:checked::after {
-    content: "✔";
-    color: white;
-    font-size: 17px;
-    position: absolute;
-    top: -3px;
-    left: 2px;
-}
