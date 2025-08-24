@@ -82,7 +82,20 @@ class UserSkills(models.Model):
     is_teacher = models.BooleanField(blank=True, null=True)  # True: 先生, False: 生徒
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
+    
 
+
+class Matchings(models.Model):
+    requester_user_id = models.ForeignKey(Users, related_name='requester', on_delete=models.CASCADE)
+    requested_user_id = models.ForeignKey(Users, related_name='requested', on_delete=models.CASCADE)
+    requester_user_role = models.BooleanField(blank=True, null=True)  # True: 先生, False: 生徒
+    requester_status = models.CharField(max_length=20, default='pending')  # リクエストのステータス
+    requested_status = models.CharField(max_length=20, default='pending')  # リクエストのステータス
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+
+    
 class Channel(models.Model):
     name = models.CharField(max_length=100)
 
