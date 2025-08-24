@@ -2,8 +2,8 @@
 
 /* ヘッダーを抜いたメイン部分（画面全体の78%をメインにしますという意味） */
 .registration-container {
-    /* min-height: 78dvh; */
-    height: 78%;
+    height: 78dvh;
+    overflow: hidden;  /* 将来的にフォームが増えたりしたら、消す（今はスクロールを隠すため） */
 }
 
 /* 「ユーザー登録」「ログイン」の題名の文字 */

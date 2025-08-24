@@ -1,3 +1,8 @@
 <header class="opening-header">
     <p class="opening-app-name">Skima</p>
+    {% if show_back_button %}
+        <a href="{% url 'setup_skill' %}?role={{ role }}">
+            <i class="fa-solid fa-chevron-left skill-back-icon"></i>
+        </a>
+    {% endif %}
 </header>
