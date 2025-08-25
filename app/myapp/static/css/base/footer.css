@@ -2,7 +2,7 @@
 
 /* フッター部分の指定 */
 .normal-footer {
-    height: 12vh;
+    height: 12dvh;
     display: flex;
     flex-direction: column;
 }
