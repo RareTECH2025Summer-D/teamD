@@ -41,26 +41,40 @@
         </form>
         {% endfor %} -->
 
+        <!-- 検証用 -->
+        <p>ログイン中ユーザー: {{ login_user.id }}</p>
+        {% for excludeed in excluded_users_ids %}
+            <p >除外ユーザーID: {{ excludeed }}</p>
+        {% endfor %}
 
-        <div class="user-box">
 
-            <a href="{% url 'user_detail' %}?role={{ role }}"> <!-- formの中に<a>とか<button>とか置いちゃったけど、form送信する時にバッティングしない？　-->
-                <div class="search-user-info">
-                    <div class="search-user-icon-circle">
-                        <i class="fa-regular fa-user search-user-icon"></i>
-                    </div>
-                    <p>MANA</p>
-                </div>
-            </a>
-
+        {% for user in users %}
             <form method="post" action="">
                 {% csrf_token %}
-                <!-- {% if requested %} --> <!-- 将来的にこんな感じにする？ -->
-                <!-- <button class="request-button requested" type="button">リクエスト済み</button> -->
-                <!-- {% else %} -->
-                    <button class="request-button" type="button">リクエストする</button>
-                <!-- {% endif %} -->
+                <div class="user-box">
+
+                <!-- <a href="{% url 'user_detail' %}?role={{ role }}"> formの中に<a>とか<button>とか置いちゃったけど、form送信する時にバッティングしない？　 -->
+                        <div class="search-user-info">
+                            <div class="search-user-icon-circle">
+                                <i class="fa-regular fa-user search-user-icon"></i>
+                            </div>
+                            <!-- <p>MANA</p> -->
+                        <p>{{ user.requeted_nickname }}</p>
+                        
+                            <!-- user.nicknameを押すとユーザープロフィールに遷移する？ -->
+                    </div>
+                </a>
+
+                    <input type="hidden" name="form_type" value="send_request">
+                    <input type="hidden" name="requested_user_id" value="{{ user.requested_id }}">
+                    <input type="hidden" name="requester_user_role" value="{{ user.requester_role }}">
+                    <input type="hidden" name="get_role" value="{{ role }}">
+                    <button class="request-button" type="submit">{{user.request_status}}</button>
+
+                </div>
             </form>
+        {% endfor %}
+
 
         </div>
 
