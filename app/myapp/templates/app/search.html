@@ -69,7 +69,7 @@
                     <input type="hidden" name="requested_user_id" value="{{ user.requested_id }}">
                     <input type="hidden" name="requester_user_role" value="{{ user.requester_role }}">
                     <input type="hidden" name="get_role" value="{{ role }}">
-                    <button class="request-button" type="submit">{{user.request_status}}</button>
+                    <button class="request-button {% if user.request_status == 'リクエスト済み' %}requested{% endif %}" type="submit">{{user.request_status}}</button>
 
                 </div>
             </form>
