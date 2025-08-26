@@ -78,9 +78,9 @@ def skill_create_view(request):
     role = request.GET.get("role", "student")
 
     if role == "student":
-        page_title = "学びたいスキルを<br>作りましょう！"
+        page_title = "学びたいスキルを<br>追加しましょう！"
     elif role == "teacher":
-        page_title = "教えたいスキルを<br>作りましょう！"
+        page_title = "教えたいスキルを<br>追加しましょう！"
 
     return render(request, 'app/skill_create.html', {
         "role": role,

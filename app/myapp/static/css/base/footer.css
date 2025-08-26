@@ -34,6 +34,7 @@
     text-decoration: none;
     color: var(--gray);
     border-radius: 20%;
+    -webkit-tap-highlight-color: transparent;  
 }
 
 /* アイコンをタップした際の色の変化 */

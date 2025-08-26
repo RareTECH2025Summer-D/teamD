@@ -14,12 +14,14 @@
     <div class="search-line-wrapper">
 
         <form method="get" action=""> <!-- 検索窓 -->
-            <button class="skill-search-btn" type="submit">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-            <input class="skill-search-form" type="text" name="skill_name">
-            <!-- valueで検索しても消えないようにするには、value="{{ request.GET.skill_name }}" -->
+            <div class="skill-search-wrapper">
+                <input class="skill-search-form" type="text" name="skill_name"> 
+                <button class="skill-search-btn" type="submit">
+                    <i class="fa-solid fa-magnifying-glass skill-search-icon"></i>
+                </button>
+            </div>
         </form>
+
 
         <div class="plus-btn-circle"> <!-- プラスボタン -->
             <a href="{% url 'user_create_skill' %}?role={{ role }}"> <!-- roleをそのまま引き継ぐための記述 -->

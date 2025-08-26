@@ -233,6 +233,7 @@
     height: 57px;
     width: 80%;
     transition: 0.1s;
+    -webkit-tap-highlight-color: transparent;  
 }
 
 .handshake-tabs hr {
@@ -275,6 +276,10 @@
     align-items: center;
     justify-content: flex-start;
     padding-left: 20px;  /* 微調整 */
+}
+
+.profile-header a {
+    -webkit-tap-highlight-color: transparent;  
 }
 
 .back-icon {
