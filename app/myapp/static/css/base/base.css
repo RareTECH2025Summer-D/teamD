@@ -18,7 +18,7 @@ html, body {
 .opening-main {
     height: 85dvh;
     overflow-y: auto;
-    padding-bottom: 120px; /* ボタンの高さ分の余白を確保 */
+    padding-bottom: 140px; /* ボタンの高さ分の余白を確保 */
     position: relative;
 }
 
