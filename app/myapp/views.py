@@ -304,19 +304,21 @@ class SearchUsers(TemplateView):
         # ログイン時にセッションを取得してroleをURLに組み込むのでGETメソッドでOK
         role = self.request.GET.get("role")
         # Matchingsテーブルからログイン中のユーザーがリクエストしたユーザーIDを取得
-        is_requested = Matchings.objects.filter(requester_user_id=self.request.user.id).values_list('requested_user_id__id', flat=True)
-        #　リクエストしたユーザー一覧とリクエストされたユーザー一覧をリスト化して除外するユーザーIDをリストで作成
-        excluded_users_ids = list(is_requested)
+        is_requested = Matchings.objects.filter(
+            requested_user_id=self.request.user.id).values_list('requested_user_id__id', flat=True)
+        
+        is_request = Matchings.objects.filter(requester_user_id=self.request.user.id).values_list('requested_user_id__id', flat=True)
 
         if role == "student":
             page_title = "先生を探す"
             login_user =Users.objects.get(id=self.request.user.id)
             login_user_role = login_user.just_before_status #モデルに書き込む必要があるためFalseで取得する
             # ログイン中のroleに紐づくユーザーのスキル一覧を取得 skill_idフィールドのみが欲しいのでvalue_listを使用する
-            login_user_skills = UserSkills.objects.filter(user_id=self.request.user.id, is_teacher=False).values_list('skill_id', flat=True)
+            login_user_skills = UserSkills.objects.filter(
+                user_id=self.request.user.id, is_teacher=False).values_list('skill_id', flat=True)
             # userprofilesからrole=teacherでかつログイン中のユーザーが学びたいスキルを登録していユーザーid一覧を取得する
-            serch_users = UserProfile.objects.filter(user_id__userskills__skill_id__in=login_user_skills,
-    user_id__userskills__is_teacher=True).exclude(user_id__in=excluded_users_ids).distinct()
+            serch_users = UserProfile.objects.filter(
+                user_id__userskills__skill_id__in=login_user_skills,user_id__userskills__is_teacher=True).exclude(user_id__in=is_requested).distinct()
             
                   
         elif role == "teacher":
@@ -324,8 +326,8 @@ class SearchUsers(TemplateView):
             login_user =Users.objects.get(id=self.request.user.id)
             login_user_role = login_user.just_before_status
             login_user_skills = UserSkills.objects.filter(user_id=self.request.user.id, is_teacher=True).values_list('skill_id', flat=True)
-            serch_users = UserProfile.objects.filter(user_id__userskills__skill_id__in=login_user_skills,
-    user_id__userskills__is_teacher=False).exclude(user_id__in=excluded_users_ids).distinct()
+            serch_users = UserProfile.objects.filter(
+                user_id__userskills__skill_id__in=login_user_skills,user_id__userskills__is_teacher=False).exclude(user_id__in=is_requested).distinct()
             
         else:
             serch_users = UserProfile.objects.none()
@@ -334,19 +336,31 @@ class SearchUsers(TemplateView):
         # users=ログイン中のユーザーが持つスキルに合致する場合のUserProfile情報
         # ※usersはexcludeですでにリクエスとした、リクエストされたユーザーを除外している
         # not_maching_listで条件に合致したニックネーム一覧とボタンに表示する文言のcontextを作成する
+        
         request_list = []
+        
+        # requester_status = Matchings.objects.filter(
+        #     requester_user_id=self.request.user.id,requested_user_id=serch_users.user_id.id).values_list('requester_status', flat=True)
+        
         for user in serch_users:
+            if user.user_id.id in is_request:
+                request_status = "リクエスト中"
+            else:
+                request_status = "リクエストする"
+                
             request_list.append({
                 "requested_id": user.user_id.id,
                 "requeted_nickname": user.nickname,
-                "request_status": "リクエストする",
+                "request_status": request_status,
                 "requester_role": login_user_role, # True: 先生, False: 生徒
             })
+
+
             
         context["role"] = role #GETリクエストで受け取ったrole,teacher or student
         context["page_title"] = page_title
         context["users"] = request_list
-        context["excluded_users_ids"] = excluded_users_ids
+        context["excluded_users_ids"] = is_requested 
         context["login_user"] = login_user # ログイン中のユーザーのjust_before_status
 
         return context
