@@ -1,1 +1,5 @@
-<button class="sticky-button" type="submit">{{ button_label }}</button>
+{% if button_label == 'リクエスト済み' %}
+    <button class="sticky-button requested" type="button" disabled>{{ button_label }}</button>
+{% else %}
+    <button class="sticky-button" type="submit">{{ button_label }}</button>
+{% endif %}
