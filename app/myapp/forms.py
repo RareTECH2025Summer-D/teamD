@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q, F
 from .models import *
 
 # Metaはモデルに存在するフィールドを、入力フォームにそのまま利用できる（12行目）
@@ -99,87 +100,81 @@ class RoleForm(forms.ModelForm):
     ]
     
 
-# スキル選択画面
-# モデルの作成更新は行わないため、forms.Formを利用
-class SkillSelectForm(forms.Form):
 
-    # skillsよりスキル一覧を取得
-    # filter(skill_count__=10)→count が指定された値 (10) 以上 (greater than or equal to) である」という条件を指定するフィールドルックアップ
+# ===============================
+# スキル選択フォーム
+# ===============================
+class SkillSelectForm(forms.Form):
     skills = forms.ModelMultipleChoiceField(
-        queryset = Skills.objects.filter(skill_count__gte=10),
-        widget = forms.CheckboxSelectMultiple(
-            attrs = {'class':'skill-checkbox'}
-        ),
+        queryset=Skills.objects.filter(skill_count__gte=10),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'skill-checkbox'}),
         required=False,
     )
 
-    def __ini__(self, *args, **kwargs):
+    def __init__(self, *args, created_skills_ids=None, **kwargs):
         super().__init__(*args, **kwargs)
+        # 10人以上の既存スキル + 作成スキル（ID指定）を表示
+        qs = Skills.objects.filter(skill_count__gte=10)
+        if created_skills_ids:
+            qs = Skills.objects.filter(Q(skill_count__gte=10) | Q(id__in=created_skills_ids))
+        self.fields['skills'].queryset = qs
 
 
-# スキル作成
+# ===============================
+# スキル作成フォーム
+# ===============================
 class SkillCreationForm(forms.ModelForm):
     class Meta:
         model = Skills
         fields = ['skill_name']
         widgets = {
-            'skill_name':forms.TextInput(
-                attrs={
-                    'class':'skill-form'
-                    , 'name':'skill_name'
-                    , 'required': True
-                }
-            )
+            'skill_name': forms.TextInput(attrs={
+                'class': 'skill-form',
+                'name': 'skill_name',
+                'required': True
+            })
+        }
+        labels = {
+            'skill_name': ''
         }
 
-        labels = {
-            'skill_name':''
-        }
-    # スキル名がSkillsに存在するかチェック
     def clean_skill_name(self):
         skill_name = self.cleaned_data.get("skill_name")
         if Skills.objects.filter(skill_name=skill_name).exists():
-            raise forms.ValidationError("このスキルはすで登録されています")
-        else:
-            return skill_name
+            raise forms.ValidationError("このスキルはすでに登録されています")
+        return skill_name
 
 
-
-# プロフィール作成・編集
+# ===============================
+# プロフィール作成フォーム
+# ===============================
 class ProfileForm(forms.ModelForm):
-    # forms.py
     class Meta:
         model = UserProfile
         fields = ["nickname", "self_introduction", "contact_info"]
         widgets = {
-                "nickname": forms.TextInput(
-                    attrs={
-                        "class": "profile-form",
-                        "id": "user_name",
-                        "type": "text",   # 明示
-                        "name": "user_name",  # 明示（通常は自動でnicknameになる）
-                    }
-                ),
-                "contact_info": forms.TextInput(
-                    attrs={
-                        "class": "profile-form",
-                        "id": "contact_info",
-                        "type": "text",
-                        "name": "contact_info",
-                    }
-                ),
-                "self_introduction": forms.Textarea(
-                    attrs={
-                        "class": "introduction-form",
-                        "id": "self_introduction",
-                        "maxlength": "255",
-                    }
-                ),
-            }
+            "nickname": forms.TextInput(attrs={
+                "class": "profile-form",
+                "id": "user_name",
+                "type": "text",
+                "name": "user_name",
+            }),
+            "contact_info": forms.TextInput(attrs={
+                "class": "profile-form",
+                "id": "contact_info",
+                "type": "text",
+                "name": "contact_info",
+            }),
+            "self_introduction": forms.Textarea(attrs={
+                "class": "introduction-form",
+                "id": "self_introduction",
+                "maxlength": "255",
+            }),
+        }
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-        if user:
-            if not self.data:
-                self.fields["contact_info"].initial = self.instance.contact_info or user.email
+        if user and not self.data:
+            self.fields["contact_info"].initial = self.instance.contact_info or user.email
+            

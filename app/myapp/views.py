@@ -1,12 +1,12 @@
 from django.views.generic import ListView, DetailView,CreateView,UpdateView,TemplateView,View
-from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.auth.views import LoginView,LogoutView,FormView
+from django.db.models import Q, F
 from django.urls import reverse_lazy,reverse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib import messages
 from .forms import *
 from .models import *
 from django.db import transaction
-from django.shortcuts import get_object_or_404
 
 # サインアップ
 class UserSignup(CreateView):
@@ -50,33 +50,45 @@ class Login(LoginView):
 def skill_setup_view(request):
     user = Users.objects.get(id=request.user.id)
     role = request.GET.get("role")
+    save_flag = request.GET.get("save")
 
-    # 選択済みスキル + 作成済みスキルをセッションから取得
+    # セッションから選択済みスキルと作成済みスキルを取得
     selected_skills = request.session.get("selected_skills", [])
     created_skills = request.session.get("created_skills", [])
-
+    
     # 作成済みスキルをDBに保存してID取得
     created_skill_ids = []
     for skill_name in created_skills:
         skill_obj, _ = Skills.objects.get_or_create(skill_name=skill_name)
         created_skill_ids.append(skill_obj.id)
 
-    # 選択済みスキルと作成スキルを統合
+    # 選択済みスキル + 作成済みスキルを統合
     all_selected_ids = list(set(selected_skills + created_skill_ids))
     request.session["selected_skills"] = all_selected_ids
     request.session["created_skill_ids"] = created_skill_ids
-    request.session.modified = True
 
-    # 初期値用 QuerySet（作成スキルも含める）
-    initial_qs = Skills.objects.filter(Q(skill_count__gte=10) | Q(id__in=created_skill_ids))
+    # role に応じたタイトルと just_before_status の設定
+    if role == "student":
+        user.just_before_status = False
+        page_title = "学びたいスキルを<br>選択してください！"
+    else:
+        user.just_before_status = True
+        page_title = "教えたいスキルを<br>選択してください！"
+    user.save()
+    request.session["just_before_status"] = role
+
+    # ---------------- GET: save=1 の場合 ----------------
+    if save_flag == "1":
+        # GET の場合でもセッションに保存（作成画面に遷移する前提）
+        # 既存のセッション情報をそのまま保持するだけ
+        request.session.modified = True
+        return redirect(f"{reverse('user_create_skill')}?role={role}")
 
     # ---------------- POST ----------------
     if request.method == "POST":
-        created_skill_ids = request.session.get("created_skill_ids", [])
         form = SkillSelectForm(request.POST, created_skills_ids=created_skill_ids)
-
         if form.is_valid():
-            # 選択済みスキルをセッションに保存
+            # 選択内容をセッションに保存
             request.session["selected_skills"] = list(
                 form.cleaned_data["skills"].values_list("id", flat=True)
             )
@@ -85,22 +97,12 @@ def skill_setup_view(request):
 
     # ---------------- GET ----------------
     else:
+        # 初期値用 QuerySet（戻ったときにチェックを復元）
+        initial_qs = Skills.objects.filter(id__in=all_selected_ids)
         form = SkillSelectForm(
             initial={"skills": initial_qs},
             created_skills_ids=created_skill_ids
         )
-
-    # roleに応じてUsersモデルとページタイトルを設定
-    if role == "student":
-        user.just_before_status = False
-        page_title = "学びたいスキルを<br>選択してください！"
-        request.session['just_before_status'] = 'student'
-    elif role == "teacher":
-        user.just_before_status = True
-        page_title = "教えたいスキルを<br>選択してください！"
-        request.session['just_before_status'] = 'teacher'
-
-    user.save()
 
     return render(request, 'app/skill_registration.html', {
         "role": role,
@@ -192,6 +194,7 @@ def profile_create_view(request):
     })
 
 
+
 # プロフィール画面表示
 def requester_profile_view(request):
     role = request.GET.get("role", "student")
@@ -207,8 +210,6 @@ def requester_profile_view(request):
     })
 
 
-
-# ---------------------------作成中---------------------------
 # ホーム画面
 class UserHome(TemplateView):
     def get_context_data(self, **kwargs):
