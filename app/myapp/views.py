@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from .forms import *
 from .models import *
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 # サインアップ
 class UserSignup(CreateView):
@@ -418,34 +419,50 @@ class SearchUsers(TemplateView):
 
 # ユーザー詳細画面(学ぶ・教える共通)
 
-#フロント画面作成用
 class UserDetail(TemplateView):
     template_name = 'app/user_profile.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self,**kwargs):
 
-        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
-        role = self.request.GET.get("role", "student")
+        user_id = self.request.GET.get("requested_user_id")
+        request_status = self.request.GET.get("request_status")
+        role = self.request.GET.get("role")
 
-        if role == "student":
-            sub_text = "教えたいもの："
-        elif role == "teacher":
-            sub_text = "学びたいもの："
+        if role == "teacher":
+            is_teacher = False
+            requester_user_role = "True"
+        else:
+            is_teacher = True
+            requester_user_role = "False"
 
 
-        context["role"] = role
-        context["sub_text"] = sub_text
+        obj = get_object_or_404(UserProfile, user_id=user_id, is_teacher=is_teacher)
 
-        return context
 
-# class UserDitail(DetailView):
-#     def get():
+        # 自分のロールがteacher
+        if role == "teacher":
+            skills = list(
+                UserSkills.objects
+                .filter(user_id=obj.user_id, is_teacher=False)
+                .values_list('skill_id__skill_name', flat=True)
+            )
+        # 自分のロールがstudent
+        else:
+            skills = list(
+                UserSkills.objects
+                .filter(user_id=obj.user_id, is_teacher=True)
+                .values_list('skill_id__skill_name', flat=True)
+            )
 
-#         pass
-
-#     def post():
-#         pass
+        return {
+            "requested_user_id" : obj.user_id_id,
+            "nickname" : obj.nickname,
+            "self_introduction" : obj.self_introduction,
+            "role" : role,
+            "skills" : skills,
+            "request_status" : request_status,
+            "requester_user_role" : requester_user_role,
+        }
 
 
 

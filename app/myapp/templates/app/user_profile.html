@@ -6,6 +6,7 @@
 
 {% block content %}
 <main class="normal-main">
+    
 
     <div class="user-icon-name-piece">
 
@@ -15,23 +16,28 @@
         </div>
 
         <!-- ニックネーム -->
-        <h1 class="profile-user-name">ひいろ</h1>
+        <h1 class="profile-user-name">{{ nickname }}</h1>
 
     </div>
 
     <!-- スキル一覧 -->
     <div class="skills-list">
-        <p>{{ sub_text|safe }}</p>
+        {% if role == "student" %}
+        <p>教えたいもの</p>
+        {% else %}
+        <p>学びたいもの</p>
+        {% endif %}
+
         <ul>
-            <li><span class="skill-tag">AWS</span></li>
-            <li><span class="skill-tag">Docker</span></li>
+            {% for skill in skills %}
+            <li><span class="skill-tag">{{ skill }}</span></li>
+            {% endfor %}
         </ul>
     </div>
 
     <!-- 自己紹介文 -->
     <div class="user-introduction">
-        <!-- <p>こんにちは！</p> -->
-        <p>初めまして、ひいろと申します！最近ハッカソンでDockerとAWSについて学んでいます。その中で僕もつまづいたことがたくさんあったので、その経験からの気づきを皆さんとシェアできたらとても嬉しいです。僕も人に教えながらさらに学んで成長していきたいと思っています。一緒に成長してくれる方はいませんか？</p>
+        <p>{{ self_introduction|linebreaksbr }}</p>
     </div>
 
 </main>
@@ -40,6 +46,14 @@
 {% block footer %}
 <div class="sticky-button-wrapper">
     <hr />
-    {% include 'partials/sticky_button.html' with button_label='リクエストする' %}
+        <form method="post" action="{% url 'search' %}">
+            {% csrf_token %}
+
+            <input type="hidden" name="form_type" value="send_request">
+            <input type="hidden" name="requested_user_id" value="{{ requested_user_id }}">
+            <input type="hidden" name="requester_user_role" value="{{ requester_user_role }}">
+            <input type="hidden" name="get_role" value="{{ role }}">
+            {% include 'partials/sticky_button.html' with button_label=request_status %}
+        </form>
 </div>
 {% endblock footer %}
