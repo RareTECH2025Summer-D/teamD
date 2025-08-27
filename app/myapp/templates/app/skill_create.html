@@ -10,20 +10,26 @@
     <p class="opening-title">
         {{ page_title|safe }}
     </p>
-    
+
     <form method="post" action="">
-    {% csrf_token %}
-    
+        {% csrf_token %}
+
         <div class="skill-form-wrapper">
+            {{ form.skill_name.errors.0 }}
             <label class="input-skill-name" for="skill_name">スキル名入力</label>
+            {{ form.skill_name }}
+            <!--
             <input class="skill-form" type="text" id="skill_name" name="skill_name">
+            -->
+
+
         </div>
-    
+
         <div class="sticky-button-wrapper">
             <hr />
             {% include 'partials/sticky_button.html' with button_label='追加する' %}
         </div>
-    
+
     </form>
 
 </main>

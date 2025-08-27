@@ -83,11 +83,8 @@ class SignupForm(forms.ModelForm):
         
         return cleaned_data
 
-    
-    
 
-
-# 学ぶ教える選択画面（作成中）
+# 学ぶ教える選択画面
 class RoleForm(forms.ModelForm):
     
     class Meta:
@@ -102,7 +99,7 @@ class RoleForm(forms.ModelForm):
     ]
     
 
-# スキル選択画面（作成中）
+# スキル選択画面
 # モデルの作成更新は行わないため、forms.Formを利用
 class SkillSelectForm(forms.Form):
 
@@ -119,14 +116,70 @@ class SkillSelectForm(forms.Form):
     def __ini__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+
 # スキル作成
 class SkillCreationForm(forms.ModelForm):
-    skill_name = forms.CharField(max_length=100)
+    class Meta:
+        model = Skills
+        fields = ['skill_name']
+        widgets = {
+            'skill_name':forms.TextInput(
+                attrs={
+                    'class':'skill-form'
+                    , 'name':'skill_name'
+                    , 'required': True
+                }
+            )
+        }
+
+        labels = {
+            'skill_name':''
+        }
+    # スキル名がSkillsに存在するかチェック
+    def clean_skill_name(self):
+        skill_name = self.cleaned_data.get("skill_name")
+        if Skills.objects.filter(skill_name=skill_name).exists():
+            raise forms.ValidationError("このスキルはすで登録されています")
+        else:
+            return skill_name
+
 
 
 # プロフィール作成・編集
 class ProfileForm(forms.ModelForm):
-    nickname = forms.CharField(max_length=50)
-    contact_info = forms.EmailField
-    self_introduction = forms.CharField
+    # forms.py
+    class Meta:
+        model = UserProfile
+        fields = ["nickname", "self_introduction", "contact_info"]
+        widgets = {
+                "nickname": forms.TextInput(
+                    attrs={
+                        "class": "profile-form",
+                        "id": "user_name",
+                        "type": "text",   # 明示
+                        "name": "user_name",  # 明示（通常は自動でnicknameになる）
+                    }
+                ),
+                "contact_info": forms.TextInput(
+                    attrs={
+                        "class": "profile-form",
+                        "id": "contact_info",
+                        "type": "text",
+                        "name": "contact_info",
+                    }
+                ),
+                "self_introduction": forms.Textarea(
+                    attrs={
+                        "class": "introduction-form",
+                        "id": "self_introduction",
+                        "maxlength": "255",
+                    }
+                ),
+            }
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
+        super().__init__(*args, **kwargs)
+        if user:
+            if not self.data:
+                self.fields["contact_info"].initial = self.instance.contact_info or user.email

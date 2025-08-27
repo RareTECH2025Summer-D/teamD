@@ -1,44 +1,46 @@
 {% extends 'base/base_app_button.html' %}
 
 {% block header %}
-    {% include 'partials/header_home.html' %}
+{% include 'partials/header_home.html' %}
 {% endblock header %}
 
 {% block content %}
 <main class="home-normal-main">
 
     {% if is_opening_home %}
-        <!-- 「初期ホーム画面」 -->
-        <div class="role-button-wrapper">
+    <!-- 「初期ホーム画面」 -->
+    <div class="role-button-wrapper">
 
-            <a href="{% url 'setup_skill' %}?role=student" class="opening-student-button">学ぶ</a>
-            <a href="{% url 'setup_skill' %}?role=teacher" class="opening-teacher-button">教える</a>
+        <a href="{% url 'setup_skill' %}?role=student" class="opening-student-button">学ぶ</a>
+        <a href="{% url 'setup_skill' %}?role=teacher" class="opening-teacher-button">教える</a>
 
-        </div>
+    </div>
     {% else %}
-        <!-- 「通常ホーム画面」 -->
-        <div class="role-button-wrapper">
+    <!-- 「通常ホーム画面」 -->
+    <div class="role-button-wrapper">
 
-            <form action="" method="post">
+        <form action="" method="post">
             {% csrf_token %}
             <!-- type=submitにすると、動かなくなるため今はbuttonにしている -->
-                <button class="student-button {% if role == 'student' %}active{% endif %}" name="user_role" value="student" type="button">学ぶ</button>
-            </form>
-            <form action="" method="post">
+            <button class="student-button {% if role == 'student' %}active{% endif %}" name="user_role" value="student"
+                type="button">学ぶ</button>
+        </form>
+        <form action="" method="post">
             {% csrf_token %}
-                <button class="teacher-button {% if role == 'teacher' %}active{% endif %}" name="user_role" value="teacher" type="button">教える</button>
-            </form>
+            <button class="teacher-button {% if role == 'teacher' %}active{% endif %}" name="user_role" value="teacher"
+                type="button">教える</button>
+        </form>
 
-        </div>
+    </div>
     {% endif %}
 
 </main>
 {% endblock content %}
 
 {% block footer %}
-    {% if is_opening_home %}
-        {% include 'partials/footer.html' with disable_links=True %}
-    {% else %}
-        {% include 'partials/footer.html' %}
-    {% endif %}
+{% if is_opening_home %}
+{% include 'partials/footer.html' with disable_links=True %}
+{% else %}
+{% include 'partials/footer.html' %}
+{% endif %}
 {% endblock footer %}

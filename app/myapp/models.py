@@ -57,7 +57,7 @@ class UserProfile(models.Model):
     self_introduction = models.TextField(blank=True, null=True)
     star_rating_sum = models.IntegerField(default=0)  # 星の合計
     star_rating_count = models.IntegerField(default=0)
-    star_rating_average = models.DecimalField(max_digits=1,decimal_places=1)  # 星の平均値
+    star_rating_average = models.DecimalField(max_digits=1,decimal_places=1,default=0.0)  # 星の平均値
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
 
