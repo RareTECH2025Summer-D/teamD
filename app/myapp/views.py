@@ -344,7 +344,7 @@ class SearchUsers(TemplateView):
         
         for user in serch_users:
             if user.user_id.id in is_request:
-                request_status = "リクエスト中"
+                request_status = "リクエスト済み"
             else:
                 request_status = "リクエストする"
                 
