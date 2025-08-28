@@ -359,6 +359,10 @@
     font-size: 15px;
 }
 
+.matching-button:hover {
+    cursor: default;
+}
+
 .accept-button {
     width: 67px;
     height: 35px;

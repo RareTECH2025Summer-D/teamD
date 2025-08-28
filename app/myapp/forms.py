@@ -26,7 +26,7 @@ class LoginForm(AuthenticationForm):
             'required': True,
         })
 
-        self.error_messages['invalid_login'] = 'メールアドレスまたはパスワードが間違っています。'
+        self.error_messages['invalid_login'] = 'メールアドレスまたはパスワードが間違っています'
 
         
 # サインアップ画面

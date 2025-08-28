@@ -13,6 +13,34 @@
     color: var(--light_black);
 }
 
+/* エラーメッセージ */
+.login-error-message {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6px;
+    width: 320px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--error);
+    margin: 10px auto;
+    padding: 10px 13px;
+    border-radius: 6px;
+    background-color: var(--error_background);
+    margin-bottom: -30px; /* 微調整 */
+    text-align: left;
+}
+
+.login-error-message i {
+    font-size: 18px;
+    padding-top: 3px; /* 微調整 */
+}
+
+.login-error-message ul {
+    list-style: none;
+}
+
+
 /* フォーム入力部分の単位 */
 .registration-piece {
     display: flex;
