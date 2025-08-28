@@ -48,17 +48,16 @@ class Login(LoginView):
         if created_profile:
             if is_teacher:
                 # 先生
-                base_url = reverse_lazy('user_home')
-                return redirect(f"{base_url}?role=teacher")
+                base_url = reverse('user_home')
+                return f"{base_url}?role=teacher"
             else:
                 # 生徒
-                base_url = reverse_lazy('user_home')
-                return redirect(f"{base_url}?role=student")
+                base_url = reverse('user_home')
+                return f"{base_url}?role=student"
         else:
             # プロフィール作成
-            return reverse_lazy('user_home')
-
-
+            base_url = reverse('user_home')
+            return base_url
 
 # ===============================
 # ホーム画面
