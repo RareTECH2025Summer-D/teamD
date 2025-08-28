@@ -8,7 +8,9 @@ from .forms import *
 from .models import *
 from django.db import transaction
 
+# ===============================
 # サインアップ
+# ===============================
 class UserSignup(CreateView):
     model = Users
     form_class = SignupForm
@@ -22,26 +24,101 @@ class UserSignup(CreateView):
         return super().form_valid(form)
 
 
+# ===============================
 # ログイン
+# ===============================
 class Login(LoginView):
     model = Users
     # LoginViewのテンプレとして、formはclass_formを見ているので、form_classを定義
     form_class = LoginForm
     
-    def get_success_url(self):
 
-        # just_befre_statusのセッションを見て判断
-        role = self.request.session.get("just_before_status")
-        if role is None:
-            return reverse_lazy('user_home')
-        elif role == "teacher":
-            # ホーム画面作成時user_homeに変更 →　setup_skillからuserhomeに変更
-            base_url = reverse_lazy('user_home')
-            return f"{base_url}?role=teacher"
+    def get_success_url(self):
+        user = self.request.user    # ログインした Users モデルのインスタンス
+        is_teacher = user.just_before_status
+        user_id = user.id
+
+        # UserProfileの確認
+        # 条件合致：True　不一致：False
+        created_profile = has_profile = UserProfile.objects.filter(
+            user_id=user_id,
+            is_teacher = is_teacher
+        ).exists()
+
+        if created_profile:
+            if is_teacher:
+                # 先生
+                base_url = reverse('user_home')
+                return f"{base_url}?role=teacher"
+            else:
+                # 生徒
+                base_url = reverse('user_home')
+                return f"{base_url}?role=student"
         else:
-            # ホーム画面作成時user_homeに変更 →　setup_skillからuserhomeに変更
-            base_url = reverse_lazy('user_home')
-            return f"{base_url}?role=student"
+            # プロフィール作成
+            base_url = reverse('user_home')
+            return base_url
+
+# ===============================
+# ホーム画面
+# ===============================
+class UserHome(TemplateView):
+
+    def post(self, request, *args, **kwargs):
+        role = request.POST.get("user_role")  # "teacher" or "student"
+        user = self.request.user    # ログインした Users モデルのインスタンス
+        user_id = user.id
+
+        if role == "teacher":
+            is_teacher = True
+        else:
+            is_teacher= False
+        
+        
+        # UserProfileの確認
+        # 条件合致：True　不一致：False
+        created_profile = UserProfile.objects.filter(
+            user_id=user_id,
+            is_teacher = is_teacher
+        ).exists()
+
+        if created_profile:
+            # Users.just_before_status を更新
+            user.just_before_status = is_teacher
+            user.save()
+            
+            if is_teacher:
+                # 先生
+                base_url = reverse_lazy('user_home')
+                return redirect(f"{base_url}?role=teacher")
+            else:
+                # 生徒
+                base_url = reverse_lazy('user_home')
+                return redirect(f"{base_url}?role=student")
+        else:
+            # UserProfile なし → setup_skill にリダイレクト
+            base_url = reverse_lazy("setup_skill")
+            return redirect(f"{base_url}?role={role}")
+            
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Loginviewから受け取るroleを確認　roleがある場合はFalse、ない場合はtrueに分岐
+        # セッションの有無はLoginviewで確認しているのでここではGETリクエストの確認でOKでした
+        
+        role = self.request.GET.get('role') 
+        
+        if role not in ["student", "teacher"]:
+            context["is_opening_home"] = True
+            # role = "guest" # 今はguestとしてCSSで制御しているわけではないのでコメントアウト
+        else:
+            context["is_opening_home"] = False
+
+        context["role"] = role
+        return context
+
+
 
 
 # ===============================
@@ -209,25 +286,6 @@ def requester_profile_view(request):
         "sub_text": sub_text
     })
 
-
-# ホーム画面
-class UserHome(TemplateView):
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        # Loginviewから受け取るroleを確認　roleがある場合はFalse、ない場合はtrueに分岐
-        # セッションの有無はLoginviewで確認しているのでここではGETリクエストの確認でOKでした
-        
-        role = self.request.GET.get('role') 
-        
-        if role not in ["student", "teacher"]:
-            context["is_opening_home"] = True
-            # role = "guest" # 今はguestとしてCSSで制御しているわけではないのでコメントアウト
-        else:
-            context["is_opening_home"] = False
-
-        context["role"] = role
-        return context
 
 
 #設定画面
