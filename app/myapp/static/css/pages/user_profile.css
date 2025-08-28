@@ -36,6 +36,7 @@
 
 .skills-list ul {
     display: flex;
+    gap: 4px;
     flex-wrap: wrap;
     justify-content: flex-start;
     list-style: none;
@@ -46,7 +47,7 @@
     color: var(--white);
     background-color: var(--switch_color);
     border-radius: 20px;
-    padding: 2px 15px;
+    padding: 3px 15px;
     font-weight: bold;
     margin: 3px 2px;
     font-size: 16px;

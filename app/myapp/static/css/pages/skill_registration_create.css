@@ -40,6 +40,22 @@ hr {
     margin: 0 0 5px 13px; /*　上・右・下・左 */
 }
 
+.error-message {
+    width: 300px;
+    margin: 15px auto;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--caution);
+    padding: 10px 13px;
+    border-radius: 6px;
+    background-color: var(--caution_background);
+    margin-bottom: -20px;
+}
+
+.error-message i {
+    font-size: 16px;
+}
+
 
 /* スキル登録画面 */
 .search-line-wrapper {

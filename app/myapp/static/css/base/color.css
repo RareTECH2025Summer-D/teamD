@@ -16,4 +16,8 @@
     --black: #2d2b2b;
     --light_black: #6A6767;
     --red: #FF3F0C;
+    --caution: #f59e0b;
+    --caution_background: #fff4dc;
+    --error: #e74c3c;
+    --error_background: #fff5f5;
 }

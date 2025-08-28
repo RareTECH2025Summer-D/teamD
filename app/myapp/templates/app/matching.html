@@ -1,4 +1,5 @@
 {% extends 'base/base_app_button.html' %}
+{% load static %}
 
 {% block header %}
     {% include 'partials/header_back.html' with back_url_name='request_list' %}
@@ -61,3 +62,8 @@
 
 </main>
 {% endblock content %}
+
+
+{% block extra_js %}
+    <script src="{% static 'javascript/modal.js' %}"></script>
+{% endblock extra_js %}

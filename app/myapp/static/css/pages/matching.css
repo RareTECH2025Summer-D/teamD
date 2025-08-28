@@ -26,7 +26,6 @@
     border-radius: 10px;
     font-weight: bold;
     font-size: 18px;
-    -webkit-tap-highlight-color: transparent;  /* スマホのタップ時の一瞬だけ出現する四角を消す */
 }
 
 .mask {
