@@ -1,11 +1,12 @@
 from django.views.generic import ListView, DetailView,CreateView,UpdateView,TemplateView,View
 from django.contrib.auth.views import LoginView,LogoutView,FormView
-from django.urls import reverse_lazy
-from django.shortcuts import redirect, render
+from django.db.models import Q, F
+from django.urls import reverse_lazy,reverse
+from django.shortcuts import redirect, render,get_object_or_404
+from django.contrib import messages
 from .forms import *
 from .models import *
 from django.db import transaction
-from django.shortcuts import get_object_or_404
 
 # サインアップ
 class UserSignup(CreateView):
@@ -31,7 +32,6 @@ class Login(LoginView):
 
         # just_befre_statusのセッションを見て判断
         role = self.request.session.get("just_before_status")
-        print('■ROLE：',role)
         if role is None:
             return reverse_lazy('user_home')
         elif role == "teacher":
@@ -42,65 +42,163 @@ class Login(LoginView):
             # ホーム画面作成時user_homeに変更 →　setup_skillからuserhomeに変更
             base_url = reverse_lazy('user_home')
             return f"{base_url}?role=student"
-        
 
 
+# ===============================
 # スキル登録画面
+# ===============================
 def skill_setup_view(request):
-    
-    # 開発用にURLパラメータでroleを取得
-    role = request.GET.get("role")
-    #usersにjust_before_statusを登録するためにインスタンスを作成
     user = Users.objects.get(id=request.user.id)
-    form = SkillSelectForm()
+    role = request.GET.get("role")
+    save_flag = request.GET.get("save")
 
-    if role == "student":
-        # GETリクエストroleがstudentのときUsersモデルのjust_before_statusに設定
-        user.just_before_status = False
-        user.save() # Usersモデル書き込み
-        # 新たにust_before_statusセッションを作成 以後セッションで状態を確認できる
-        request.session['just_before_status'] = 'student'  
-        page_title = "学びたいスキルを<br>選択してください！"
-        
-    elif role == "teacher":
-        user.just_before_status = True
-        user.save()
-        request.session['just_before_status'] = 'teacher'
-        page_title = "教えたいスキルを<br>選択してください！"
+    # セッションから選択済みスキルと作成済みスキルを取得
+    selected_skills = request.session.get("selected_skills", [])
+    created_skills = request.session.get("created_skills", [])
     
+    # 作成済みスキルをDBに保存してID取得
+    created_skill_ids = []
+    for skill_name in created_skills:
+        skill_obj, _ = Skills.objects.get_or_create(skill_name=skill_name)
+        created_skill_ids.append(skill_obj.id)
+
+    # 選択済みスキル + 作成済みスキルを統合
+    all_selected_ids = list(set(selected_skills + created_skill_ids))
+    request.session["selected_skills"] = all_selected_ids
+    request.session["created_skill_ids"] = created_skill_ids
+
+    # role に応じたタイトルと just_before_status の設定
+    if role == "student":
+        user.just_before_status = False
+        page_title = "学びたいスキルを<br>選択してください！"
+    else:
+        user.just_before_status = True
+        page_title = "教えたいスキルを<br>選択してください！"
+    user.save()
+    request.session["just_before_status"] = role
+
+    # ---------------- GET: save=1 の場合 ----------------
+    if save_flag == "1":
+        # GET の場合でもセッションに保存（作成画面に遷移する前提）
+        # 既存のセッション情報をそのまま保持するだけ
+        request.session.modified = True
+        return redirect(f"{reverse('user_create_skill')}?role={role}")
+
+    # ---------------- POST ----------------
+    if request.method == "POST":
+        form = SkillSelectForm(request.POST, created_skills_ids=created_skill_ids)
+        if form.is_valid():
+            # 選択内容をセッションに保存
+            request.session["selected_skills"] = list(
+                form.cleaned_data["skills"].values_list("id", flat=True)
+            )
+            request.session.modified = True
+            return redirect(f"{reverse('user_setup_profile')}?role={role}")
+
+    # ---------------- GET ----------------
+    else:
+        # 初期値用 QuerySet（戻ったときにチェックを復元）
+        initial_qs = Skills.objects.filter(id__in=all_selected_ids)
+        form = SkillSelectForm(
+            initial={"skills": initial_qs},
+            created_skills_ids=created_skill_ids
+        )
+
     return render(request, 'app/skill_registration.html', {
         "role": role,
         "page_title": page_title,
-        "form":form
+        "form": form
     })
 
+
+# ===============================
 # スキル作成画面
+# ===============================
 def skill_create_view(request):
     role = request.GET.get("role", "student")
 
-    if role == "student":
-        page_title = "学びたいスキルを<br>追加しましょう！"
-    elif role == "teacher":
-        page_title = "教えたいスキルを<br>追加しましょう！"
+    if request.method == "POST":
+        form = SkillCreationForm(request.POST)
+        if form.is_valid():
+            skill_name = form.cleaned_data.get('skill_name')
+            skills = request.session.get('created_skills', [])
+            if skill_name not in skills:
+                skills.append(skill_name)
+            request.session['created_skills'] = skills
+            request.session.modified = True
+            return redirect(f"{reverse('setup_skill')}?role={role}")
+    else:
+        form = SkillCreationForm()
+
+    page_title = "学びたいスキルを<br>追加しましょう！" if role == "student" else "教えたいスキルを<br>追加しましょう！"
 
     return render(request, 'app/skill_create.html', {
         "role": role,
-        "page_title": page_title
+        "page_title": page_title,
+        "form": form
     })
 
+
+# ===============================
 # プロフィール作成画面
+# ===============================
 def profile_create_view(request):
-    # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
+    user = request.user
     role = request.GET.get("role", "student")
-    
-    return render(request, 'app/profile_create.html', {
-        "role": role,
+    is_teacher = True if role == 'teacher' else False
+
+    # UserProfile がすでに存在する場合はエラー
+    if UserProfile.objects.filter(user_id=user, is_teacher=user.just_before_status).exists():
+        messages.error(request, "すでに存在します。")
+        return redirect(f"{reverse('user_home')}?role={role}")
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user_id = user
+            profile.contact_info = user.email
+            profile.is_teacher = is_teacher
+            profile.save()
+
+            # UserSkills 保存
+            selected_skills = request.session.get("selected_skills", [])
+            created_skills = request.session.get("created_skills", [])
+
+            for skill_name in created_skills:
+                new_skill, _ = Skills.objects.get_or_create(skill_name=skill_name)
+                if new_skill.id not in selected_skills:
+                    selected_skills.append(new_skill.id)
+
+            for skill_id in selected_skills:
+                skill_obj = Skills.objects.get(id=skill_id)
+                UserSkills.objects.create(
+                    user_id=user,
+                    skill_id=skill_obj,
+                    is_teacher=is_teacher
+                )
+                Skills.objects.filter(id=skill_id).update(skill_count=F("skill_count") + 1)
+
+            # セッション削除
+            request.session.pop("selected_skills", None)
+            request.session.pop("created_skills", None)
+            request.session.modified = True
+
+            return redirect(f"{reverse('user_home')}?role={role}")
+    else:
+        form = ProfileForm(initial={"contact_info": user.email})
+
+    return render(request, "app/profile_create.html", {
+        "form": form,
+        "role": role
     })
+
+
 
 # プロフィール画面表示
 def requester_profile_view(request):
     role = request.GET.get("role", "student")
-
+    
     if role == "student":
         sub_text = "教えたいもの："
     elif role == "teacher":
@@ -110,17 +208,6 @@ def requester_profile_view(request):
         "role": role,
         "sub_text": sub_text
     })
-
-
-
-
-
-
-
-
-
-
-
 
 
 # ホーム画面
@@ -142,113 +229,6 @@ class UserHome(TemplateView):
         context["role"] = role
         return context
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-
-    #     # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
-    #     role = self.request.GET.get("role", "student")
-
-
-    #     context["role"] = role
-
-    #     return context
-# エラーで画面表示がされないのを回避のためコメントアウト
-#     def get():
-
-#         pass
-
-#     def post():
-#         pass  
-
-
-
-
-
-
-
-
-
-# 学ぶ・教える選択
-# class RoleSelect(TemplateView):
-#     pass
-#     # def get():
-
-#     #     pass
-
-#     # def post():
-#     #     pass  
-
-
-
-
-
-
-
-
-
-
-
-# 初回スキル登録（学ぶ・教える共通）
-# View継承時はtemplate_nameでHTMLファイル指定できないので、render()関数でHTMLファイルの指定をする
-# class ProfileCreate(View):
-#     def get():
-
-#         # return render(request, 'skill_registration.html', context)
-#         pass
-
-#     def post():
-#         pass  
-
-
-
-
-
-
-
-
-
-
-# スキル作成
-# HTMLファイル確認
-# class SkillCreate(View):
-#     def get():
-
-#         # return render(request, '.html', context)
-#         pass
-
-#     def post():
-#         pass  
-
-
-
-
-
-
-
-
-
-
-# プロフィール作成(学ぶ・教える共通)
-# class ProfileCreate(View):
-#     def get():
-
-#         # return render(request, 'profile_create.html', context)
-#         pass
-
-#     def post():
-#         pass
-
-
-
-
-
-
-
-
-
-
-
-
 
 #設定画面
 class Setting(TemplateView):
@@ -263,9 +243,6 @@ class Setting(TemplateView):
         context["role"] = role
 
         return context
-
-     
-
 
 
 
@@ -419,6 +396,9 @@ class SearchUsers(TemplateView):
 
 # ユーザー詳細画面(学ぶ・教える共通)
 
+
+# ユーザー詳細画面(学ぶ・教える共通)
+# フロント画面作成用
 class UserDetail(TemplateView):
     template_name = 'app/user_profile.html'
 

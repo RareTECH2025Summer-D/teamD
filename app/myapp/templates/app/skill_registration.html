@@ -15,16 +15,17 @@
 
         <form method="get" action=""> <!-- 検索窓 -->
             <div class="skill-search-wrapper">
-                <input class="skill-search-form" type="text" name="skill_name"> 
+                <input class="skill-search-form" type="text" name="skill_name">
                 <button class="skill-search-btn" type="submit">
                     <i class="fa-solid fa-magnifying-glass skill-search-icon"></i>
                 </button>
             </div>
         </form>
 
-
+        <!-- 追記 -->
+        <!-- スキル選択したあとにスキル作成画面遷移でもSessionにデータを保存させるため、roleのあとに&seve=1を追記 -->
         <div class="plus-btn-circle"> <!-- プラスボタン -->
-            <a href="{% url 'user_create_skill' %}?role={{ role }}"> <!-- roleをそのまま引き継ぐための記述 -->
+            <a href="{% url 'setup_skill' %}?role={{ role }}&save=1"> <!-- roleをそのまま引き継ぐための記述 -->
                 <i class="fa-solid fa-plus plus-btn"></i>
             </a>
         </div>
@@ -34,15 +35,6 @@
     <form method="post" action="">
         {% csrf_token %}
         <div class="skill-selection-wrapper">
-
-            <!-- inputの"id"とlabelの"for"で選択が関連付けられているので、ここはfor文で回してそれぞれを一意の値にする！ -->
-            <!-- バックと連携するときは将来的にこんな感じにする
-            {% for skill in skills %}
-            <input class="skill-checkbox" type="checkbox" id="{{ skill.id }}" name="skill_name[]"
-                value="{{ skill.name }}">
-            <label class="skill-name-selection" for="{{ skill.id }}">{{ skill.display_name }}</label>
-            {% endfor %} -->
-
             <!-- 追記 -->
             <!-- バックエンド側でskill登録者数10人以上のスキルに絞って表示 -->
             {% for skill in form.skills %}
@@ -51,77 +43,6 @@
                 {{ skill.choice_label }}
             </label>
             {% endfor %}
-
-
-            <!-- 以下はUI確認用  
-            <input class="skill-checkbox" type="checkbox" id="skill_id" name="skill_name[]">
-            <label class="skill-name-selection" for="skill_id">CSS</label>
-
-            <input class="skill-checkbox" type="checkbox" id="Docker" name="skill_name">
-            <label class="skill-name-selection" for="Docker">Docker</label>
-
-            <input class="skill-checkbox" type="checkbox" id="JavaScript" name="skill_name">
-            <label class="skill-name-selection" for="JavaScript">JavaScript</label>
-
-            <input class="skill-checkbox" type="checkbox" id="french" name="skill_name">
-            <label class="skill-name-selection" for="french">フランス語</label>
-
-            <input class="skill-checkbox" type="checkbox" id="piano" name="skill_name">
-            <label class="skill-name-selection" for="piano">ピアノ</label>
-
-            <input class="skill-checkbox" type="checkbox" id="boki" name="skill_name">
-            <label class="skill-name-selection" for="boki">簿記</label>
-
-            <input class="skill-checkbox" type="checkbox" id="toeic" name="skill_name">
-            <label class="skill-name-selection" for="toeic">TOEIC</label>
-
-            <input class="skill-checkbox" type="checkbox" id="azure" name="skill_name">
-            <label class="skill-name-selection" for="azure">Azure</label>
-
-            <input class="skill-checkbox" type="checkbox" id="gcp" name="skill_name">
-            <label class="skill-name-selection" for="gcp">GCP</label>
-
-            <input class="skill-checkbox" type="checkbox" id="delf" name="skill_name">
-            <label class="skill-name-selection" for="delf">DELF</label>
-
-            <input class="skill-checkbox" type="checkbox" id="kihon" name="skill_name">
-            <label class="skill-name-selection" for="kihon">基本情報技術者試験</label>
-
-            <input class="skill-checkbox" type="checkbox" id="pyhon" name="skill_name">
-            <label class="skill-name-selection" for="pyhon">Python</label>
-
-            <input class="skill-checkbox" type="checkbox" id="go" name="skill_name">
-            <label class="skill-name-selection" for="go">Go</label>
-
-            <input class="skill-checkbox" type="checkbox" id="c" name="skill_name">
-            <label class="skill-name-selection" for="c">C#</label>
-
-            <input class="skill-checkbox" type="checkbox" id="zeirisi" name="skill_name">
-            <label class="skill-name-selection" for="zeirisi">税理士</label>
-
-            <input class="skill-checkbox" type="checkbox" id="it" name="skill_name">
-            <label class="skill-name-selection" for="it">ITパスポート</label>
-
-            <input class="skill-checkbox" type="checkbox" id="bengosi" name="skill_name">
-            <label class="skill-name-selection" for="bengosi">弁護士</label>
-
-            <input class="skill-checkbox" type="checkbox" id="oyo" name="skill_name">
-            <label class="skill-name-selection" for="oyo">応用情報技術者試験</label>
-
-            <input class="skill-checkbox" type="checkbox" id="care" name="skill_name">
-            <label class="skill-name-selection" for="care">ケアマネージャー</label>
-
-            <input class="skill-checkbox" type="checkbox" id="fp" name="skill_name">
-            <label class="skill-name-selection" for="fp">ファイナンシャルプランナー</label>
-
-            <input class="skill-checkbox" type="checkbox" id="korean" name="skill_name">
-            <label class="skill-name-selection" for="korean">韓国語</label>
-
-            <input class="skill-checkbox" type="checkbox" id="1" name="skill_name">
-            <label class="skill-name-selection" for="1">インテリアコーディネーター</label>
-        </div>
-         -->
-
             <div class="sticky-button-wrapper">
                 <hr />
                 {% include 'partials/sticky_button.html' with button_label='登録する' %}
