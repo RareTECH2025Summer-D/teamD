@@ -1,4 +1,4 @@
-// <head>でスクリプトを読み込んでいた場合は、"DOM ~"は必要にならないが、<body>に置いていた場合は必要になる。
+// <head>でスクリプトを読み込んでいた場合は、"DOM ~"の記述は必要になるが、<body>で読み込んでいた場合は不要。
 
 
 document.addEventListener("DOMContentLoaded", function () {
