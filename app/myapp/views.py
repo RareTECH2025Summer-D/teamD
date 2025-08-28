@@ -341,9 +341,12 @@ class SearchUsers(TemplateView):
         role = self.request.GET.get("role")
         # Matchingsテーブルからログイン中のユーザーがリクエストしたユーザーIDを取得
         is_requested = Matchings.objects.filter(
-            requested_user_id=self.request.user.id).values_list('requested_user_id__id', flat=True)
+            requested_user_id=self.request.user.id
+            ).values_list('requested_user_id__id', flat=True)
         
-        is_request = Matchings.objects.filter(requester_user_id=self.request.user.id).values_list('requested_user_id__id', flat=True)
+        is_request = Matchings.objects.filter(
+            requester_user_id=self.request.user.id
+            ).values_list('requested_user_id__id', flat=True)
 
         if role == "student":
             page_title = "先生を探す"
@@ -351,19 +354,26 @@ class SearchUsers(TemplateView):
             login_user_role = login_user.just_before_status #モデルに書き込む必要があるためFalseで取得する
             # ログイン中のroleに紐づくユーザーのスキル一覧を取得 skill_idフィールドのみが欲しいのでvalue_listを使用する
             login_user_skills = UserSkills.objects.filter(
-                user_id=self.request.user.id, is_teacher=False).values_list('skill_id', flat=True)
+                user_id=self.request.user.id, is_teacher=False
+                ).values_list('skill_id', flat=True)
             # userprofilesからrole=teacherでかつログイン中のユーザーが学びたいスキルを登録していユーザーid一覧を取得する
             serch_users = UserProfile.objects.filter(
-                user_id__userskills__skill_id__in=login_user_skills,user_id__userskills__is_teacher=True).exclude(user_id__in=is_requested).distinct()
+                user_id__userskills__skill_id__in=login_user_skills,
+                user_id__userskills__is_teacher=True,is_teacher=True
+                ).exclude(user_id__in=is_requested).distinct()
             
                   
         elif role == "teacher":
             page_title = "生徒を探す"
             login_user =Users.objects.get(id=self.request.user.id)
             login_user_role = login_user.just_before_status
-            login_user_skills = UserSkills.objects.filter(user_id=self.request.user.id, is_teacher=True).values_list('skill_id', flat=True)
+            login_user_skills = UserSkills.objects.filter(
+                user_id=self.request.user.id, is_teacher=True
+                ).values_list('skill_id', flat=True)
             serch_users = UserProfile.objects.filter(
-                user_id__userskills__skill_id__in=login_user_skills,user_id__userskills__is_teacher=False).exclude(user_id__in=is_requested).distinct()
+                user_id__userskills__skill_id__in=login_user_skills,
+                user_id__userskills__is_teacher=False,is_teacher=False
+                ).exclude(user_id__in=is_requested).distinct()
             
         else:
             serch_users = UserProfile.objects.none()
@@ -502,31 +512,14 @@ class UserDetail(TemplateView):
             "requester_user_role" : requester_user_role,
         }
 
+# #リクエスト送信(学ぶ・教える共通)
+# class SendRequest(FormView):
+#     def get():
 
+#         pass
 
-
-
-
-
-
-
-
-#リクエスト送信(学ぶ・教える共通)
-class SendRequest(FormView):
-    def get():
-
-        pass
-
-    def post():
-        pass
-
-
-
-
-
-
-
-
+#     def post():
+#         pass
 
 
 # リクエスト一覧(学ぶ・教える共通)
@@ -541,24 +534,106 @@ class RequestList(ListView):
         role = self.request.GET.get("role")
         # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
         context["role"] = role
+
+        login_user_id = self.request.user.id
+        
+        #マッチングリストの表示
+        if role == "student":
+            matching_ids = Matchings.objects.filter(
+                Q(requester_user_id=login_user_id) | Q(requested_user_id=login_user_id),
+                Q(requester_status='マッチング') | Q(requested_status='マッチング')
+            ).filter(
+                Q(requester_user_id__userprofile__is_teacher=True) | Q(requested_user_id__userprofile__is_teacher=True)
+            ).values_list('requester_user_id', 'requested_user_id')
+            
+            matching_user_ids = set()
+            for req_id, res_id in matching_ids:
+                if req_id != login_user_id:
+                    matching_user_ids.add(req_id)
+                if res_id != login_user_id:
+                    matching_user_ids.add(res_id)
+
+            matching_list = UserProfile.objects.filter(
+                user_id__in=list(matching_user_ids), is_teacher=True)
+            
+        else: # role == "teacher"
+            # 自分とマッチングした生徒のIDを効率的に取得
+            matching_ids = Matchings.objects.filter(
+                Q(requester_user_id=login_user_id) | Q(requested_user_id=login_user_id),
+                Q(requester_status='マッチング') | Q(requested_status='マッチング')
+            ).filter(
+                Q(requester_user_id__userprofile__is_teacher=False) | Q(requested_user_id__userprofile__is_teacher=False)
+            ).values_list('requester_user_id', 'requested_user_id')
+            
+            # マッチング相手のIDを抽出
+            matching_user_ids = set()
+            for req_id, res_id in matching_ids:
+                if req_id != login_user_id:
+                    matching_user_ids.add(req_id)
+                if res_id != login_user_id:
+                    matching_user_ids.add(res_id)
+
+            matching_list = UserProfile.objects.filter(
+                user_id__in=list(matching_user_ids), is_teacher=False)
+
+        # リクエストリストの取得 (サブクエリを使用して最適化)
+        if role == "student":
+            request_requesters = Matchings.objects.filter(
+                requested_user_id=login_user_id,
+                requested_status='承認する',
+                requester_user_role=True
+                ).values_list('requester_user_id', flat=True)
+
+            request_list = UserProfile.objects.filter(user_id__in=request_requesters,is_teacher=True)
+
+        else: # role == "teacher"
+            request_requesters = Matchings.objects.filter(
+                requested_user_id=login_user_id,
+                requested_status='承認する',
+                requester_user_role=False
+            ).values_list('requester_user_id', flat=True)
+            
+            request_list = UserProfile.objects.filter(user_id__in=request_requesters,is_teacher=False)
+            
+        context['matching_list'] = matching_list
+        context['request_list'] = request_list
+
         return context
     
+    # ListViewのget_querysetは未使用
     def get_queryset(self):
-        queryset = super().get_queryset()
-        role = self.request.GET.get("role")
-        if role == "student":
-            # filterで指定した条件に合致するレコードをすべて取得
-            request_list = queryset.filter(requester_user_id=self.request.user.id,requester_user_role=True)
-            requested_list = queryset.filter(requested_user_id=self.request.user.id,requester_user_role=True)
-            full_list = request_list | requested_list
-            return full_list
-        elif role == "teacher":
-            request_list = queryset.filter(requester_user_id=self.request.user.id,requester_user_role=False)
-            requested_list = queryset.filter(requested_user_id=self.request.user.id,requester_user_role=False)
-            full_list = request_list | requested_list
-            return full_list
+        return Matchings.objects.none()            
+    
+    
+    def post(self, request, *args, **kwargs):
+        form_type = request.POST.get('form_type')
+        role = self.request.GET.get('role')
+        login_user_id = request.user.id
+        if form_type == 'approval_request':
+            try:# HTMLフォームからリクエスト元のユーザーIDを取得する
+            
+                target_user_id = request.POST.get('target_user_id')
+
+                # 既存のマッチングレコードを検索
+                matching = Matchings.objects.get(
+                    requested_user_id=login_user_id,
+                    requester_user_id=target_user_id
+                    )
+
+                with transaction.atomic():
+                    matching.requested_status = 'マッチング'
+                    matching.requester_status = 'マッチング'
+
+                    matching.save()
+                
+                return redirect(f"{reverse_lazy('request_list')}?role={role}")
+            except Exception as e:
+                # エラーハンドリング
+                print(f"リクエスト中にエラーが発生しました: {e}")
+                return redirect(f"{reverse_lazy('request_list')}?role={role}")
+    
         else:
-            return queryset.none()
+             return redirect(f"{reverse_lazy('user_home')}?role={role}")
         
         
         
