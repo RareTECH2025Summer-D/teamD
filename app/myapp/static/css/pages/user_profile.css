@@ -8,7 +8,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 16px;
+}
+
+.profile-user-name {
+    font-size: 33px;
+    max-width: 280px;
+    width: 100%;
 }
 
 .skills-list {
@@ -18,7 +24,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
-    margin-top: 35px;
+    margin-top: 36px;
 }
 
 .skills-list p {

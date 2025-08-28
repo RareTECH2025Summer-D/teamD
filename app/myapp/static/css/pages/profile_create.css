@@ -18,13 +18,13 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    border: 2.5px solid var(--charcoal_gray);
+    border: 3.5px solid var(--charcoal_gray);
     /* margin-left: 15px; アイコンが真ん中になるように微調整（泣） */
 }
 .user-icon {
     font-size: 60px;
     color: var(--charcoal_gray);
-    padding-top: 9px;
+    padding-top: 7.5px;
 }
 
 .plus-icon-circle {

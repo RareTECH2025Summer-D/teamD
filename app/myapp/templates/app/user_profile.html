@@ -16,16 +16,16 @@
         </div>
 
         <!-- ニックネーム -->
-        <h1 class="profile-user-name">{{ nickname }}</h1>
+        <p class="profile-user-name">{{ nickname }}</p>
 
     </div>
 
     <!-- スキル一覧 -->
     <div class="skills-list">
         {% if role == "student" %}
-        <p>教えたいもの</p>
+        <p>教えたいもの：</p>
         {% else %}
-        <p>学びたいもの</p>
+        <p>学びたいもの：</p>
         {% endif %}
 
         <ul>
