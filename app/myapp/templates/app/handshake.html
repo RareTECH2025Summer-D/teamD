@@ -26,8 +26,6 @@
             <!-- ユーザ一覧 -->
             <div class="user-box-wrapper">
 
-                <form method="post" action="">
-                    {% csrf_token %}
                     {% for match_user in matching_list %}
                         <div class="user-box">
 
@@ -38,12 +36,17 @@
                                 <p>{{match_user.nickname}}</p>
                             </div>
                 
-                            <a href="{% url 'contact_user' %}?role={{ role }}" class="matching-button">コンタクトを取る</a>
-                
+                            <form method="post" action="{% url 'contact_user' %}">
+                                {% csrf_token %}
+                                <div class="handshake-btn-wrapper">
+                                    <input type="hidden" name="role" value="{{ role }}">
+                                    <input type="hidden" name="requested_user_id" value="{{ match_user.user_id_id }}">
+                                    <button class="accept-button" type="submit">コンタクトを取る</button>
+                                </div>
+                            </form>
                         </div>
                     {% endfor %}
             
-                </form>
             
                 <!-- UI確認用 -->
                     <!-- <div class="user-box">
@@ -115,7 +118,8 @@
                 {% for request_user in request_list %}
                     <div class="user-box">
 
-                        <a href="{% url 'requester_profile' %}?role={{ role }}">
+                        <a href="{% url 'requester_profile' %}?role={{ role }}&requested_user_id={{ request_user.user_id.id }}">
+                        
                             <div class="search-user-info">
                                 <div class="search-user-icon-circle">
                                     <i class="fa-regular fa-user search-user-icon"></i>

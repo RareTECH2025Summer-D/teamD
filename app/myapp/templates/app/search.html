@@ -18,13 +18,6 @@
 
 
     <div class="user-box-wrapper">
-
-        <!-- 検証用 -->
-        <p>ログイン中ユーザー: {{ login_user.id }}</p>
-        {% for excludeed in excluded_users_ids %}
-            <p >除外ユーザーID: {{ excludeed }}</p>
-        {% endfor %}
-
         {% for user in users %}
             <div class="user-box">
 
