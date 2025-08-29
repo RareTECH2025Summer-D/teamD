@@ -96,6 +96,7 @@
 .contact-address {
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 225px;
     min-height: 45px;
     border-radius: 12px;
