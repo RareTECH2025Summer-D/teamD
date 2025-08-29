@@ -7,7 +7,7 @@ from django.contrib import messages
 from .forms import *
 from .models import *
 from django.db import transaction
-
+from itertools import chain
 # ===============================
 # サインアップ
 # ===============================
@@ -272,23 +272,11 @@ def profile_create_view(request):
 
 
 
-# プロフィール画面表示
-def requester_profile_view(request):
-    role = request.GET.get("role", "student")
-    
-    if role == "student":
-        sub_text = "教えたいもの："
-    elif role == "teacher":
-        sub_text = "学びたいもの："
-    
-    return render(request, 'app/requester_profile.html', {
-        "role": role,
-        "sub_text": sub_text
-    })
 
 
-
+# ===============================
 #設定画面
+# ===============================
 class Setting(TemplateView):
 
     def get_context_data(self, **kwargs):
@@ -307,29 +295,7 @@ class Setting(TemplateView):
 
 
 
-
-
-
-
-# プロフィール編集
-# class ProfileUpdate(UpdateView):
-#     def get():
-
-#         pass
-
-#     def post():
-#         pass
-
-
-
-
-
-
-
-
-
-
-# 先生・生徒検索(学ぶ・教える共通)
+# 先生・生徒検索(学ぶ・教える共通)＋リクエスト送信
 class SearchUsers(TemplateView):
     template_name = 'app/search.html'
 
@@ -463,10 +429,6 @@ class SearchUsers(TemplateView):
 
 
 # ユーザー詳細画面(学ぶ・教える共通)
-
-
-# ユーザー詳細画面(学ぶ・教える共通)
-# フロント画面作成用
 class UserDetail(TemplateView):
     template_name = 'app/user_profile.html'
 
@@ -512,17 +474,101 @@ class UserDetail(TemplateView):
             "requester_user_role" : requester_user_role,
         }
 
-# #リクエスト送信(学ぶ・教える共通)
-# class SendRequest(FormView):
-#     def get():
 
-#         pass
+# プロフィール画面表示
+class Requester_profile(TemplateView):
+    template_name='app/requester_profile.html'
 
-#     def post():
-#         pass
+    def get_context_data(self,**kwargs):
+
+        user_id = self.request.GET.get("requested_user_id")
+        role = self.request.GET.get("role")
+        request_status = self.request.GET.get("request_status")
+
+        if role == "teacher":
+            is_teacher = False
+            requester_user_role = "True"
+        else:
+            is_teacher = True
+            requester_user_role = "False"
 
 
-# リクエスト一覧(学ぶ・教える共通)
+        obj = get_object_or_404(UserProfile, user_id=user_id, is_teacher=is_teacher)
+
+
+        # 自分のロールがteacher
+        if role == "teacher":
+            skills = list(
+                UserSkills.objects
+                .filter(user_id=obj.user_id, is_teacher=False)
+                .values_list('skill_id__skill_name', flat=True)
+            )
+        # 自分のロールがstudent
+        else:
+            skills = list(
+                UserSkills.objects
+                .filter(user_id=obj.user_id, is_teacher=True)
+                .values_list('skill_id__skill_name', flat=True)
+            )
+
+        return {
+            "requested_user_id" : obj.user_id_id,
+            "nickname" : obj.nickname,
+            "self_introduction" : obj.self_introduction,
+            "role" : role,
+            "skills" : skills,
+            "requester_user_role" : requester_user_role,
+        }
+
+        
+
+
+# コンタクト
+class Contact(TemplateView):
+
+    template_name = "app/matching.html"
+
+    def post(self, request, *args, **kwargs):
+        role = request.POST.get("role")
+        target_user_id = request.POST.get("requested_user_id")
+
+        # 自分のロールによって検索条件を決定
+        if role == "teacher":
+            is_teacher = False
+        else:
+            is_teacher = True
+            
+        obj = get_object_or_404(UserProfile, user_id_id=target_user_id, is_teacher=is_teacher)
+
+        # 相手のスキルを取得
+        if role == "teacher":
+            skills = list(
+                UserSkills.objects
+                .filter(user_id=obj.user_id_id, is_teacher=False)
+                .values_list('skill_id__skill_name', flat=True)
+            )
+        else:
+            skills = list(
+                UserSkills.objects
+                .filter(user_id=obj.user_id_id, is_teacher=True)
+                .values_list('skill_id__skill_name', flat=True)
+            )
+        
+        context = {
+            "role": role,
+            "nickname": getattr(obj, "nickname", ""),
+            "self_introduction": getattr(obj, "self_introduction", ""),
+            "skills": skills,
+            "contact_info": getattr(obj, "contact_info", ""),
+        }
+
+        return render(request, self.template_name, context)
+
+
+
+
+
+# マッチング成立一覧＋リクエスト一覧(学ぶ・教える共通)+承認機能
 class RequestList(ListView):
     # Matchingにあとで変えてください（画面表示のため異なるテーブル名で記述）
     model = Matchings
@@ -539,42 +585,47 @@ class RequestList(ListView):
         
         #マッチングリストの表示
         if role == "student":
-            matching_ids = Matchings.objects.filter(
-                Q(requester_user_id=login_user_id) | Q(requested_user_id=login_user_id),
-                Q(requester_status='マッチング') | Q(requested_status='マッチング')
-            ).filter(
-                Q(requester_user_id__userprofile__is_teacher=True) | Q(requested_user_id__userprofile__is_teacher=True)
-            ).values_list('requester_user_id', 'requested_user_id')
+                # 自分→相手（自分は生徒として申請）
+                me_to_them = Matchings.objects.filter(
+                        requester_user_id=login_user_id,
+                        requester_status='マッチング',
+                        requester_user_role=False   # ← 自分が「生徒」で申請した
+                ).values_list('requested_user_id', flat=True)
+
+                # 相手→自分（相手は先生として申請）
+                them_to_me = Matchings.objects.filter(
+                        requested_user_id=login_user_id,
+                        requested_status='マッチング',
+                        requester_user_role=True    # ← 相手が「先生」で申請した
+                ).values_list('requester_user_id', flat=True)
+
+                matching_user_ids = set(chain(me_to_them, them_to_me))
+
+                matching_list = UserProfile.objects.filter(
+                        user_id__in=matching_user_ids,
+                        is_teacher=True  # 先生プロフのみ
+                )
+
             
-            matching_user_ids = set()
-            for req_id, res_id in matching_ids:
-                if req_id != login_user_id:
-                    matching_user_ids.add(req_id)
-                if res_id != login_user_id:
-                    matching_user_ids.add(res_id)
+        else:  # role == "teacher"
+            me_to_them = Matchings.objects.filter(
+                requester_user_id=login_user_id,
+                requester_status='マッチング',
+                requester_user_role=True    # ← 自分が「先生」で申請した
+            ).values_list('requested_user_id', flat=True)
+
+            them_to_me = Matchings.objects.filter(
+                requested_user_id=login_user_id,
+                requested_status='マッチング',
+                requester_user_role=False   # ← 相手が「生徒」で申請した
+            ).values_list('requester_user_id', flat=True)
+
+            matching_user_ids = set(chain(me_to_them, them_to_me))
 
             matching_list = UserProfile.objects.filter(
-                user_id__in=list(matching_user_ids), is_teacher=True)
-            
-        else: # role == "teacher"
-            # 自分とマッチングした生徒のIDを効率的に取得
-            matching_ids = Matchings.objects.filter(
-                Q(requester_user_id=login_user_id) | Q(requested_user_id=login_user_id),
-                Q(requester_status='マッチング') | Q(requested_status='マッチング')
-            ).filter(
-                Q(requester_user_id__userprofile__is_teacher=False) | Q(requested_user_id__userprofile__is_teacher=False)
-            ).values_list('requester_user_id', 'requested_user_id')
-            
-            # マッチング相手のIDを抽出
-            matching_user_ids = set()
-            for req_id, res_id in matching_ids:
-                if req_id != login_user_id:
-                    matching_user_ids.add(req_id)
-                if res_id != login_user_id:
-                    matching_user_ids.add(res_id)
-
-            matching_list = UserProfile.objects.filter(
-                user_id__in=list(matching_user_ids), is_teacher=False)
+                user_id__in=matching_user_ids,
+                is_teacher=False  # 生徒プロフのみ
+                )
 
         # リクエストリストの取得 (サブクエリを使用して最適化)
         if role == "student":
@@ -634,27 +685,11 @@ class RequestList(ListView):
     
         else:
              return redirect(f"{reverse_lazy('user_home')}?role={role}")
-        
-        
-        
-        
-#     def get():
-
-#         pass
-
-#     def post():
-#         pass
 
 
 
 
-
-
-
-
-
-
-# # 承認・削除送信(学ぶ・教える共通)
+# # 削除送信(学ぶ・教える共通)
 # class RequestApproval(TemplateView):
 #     def get():
 
@@ -667,12 +702,7 @@ class RequestList(ListView):
 
 
 
-
-
-
-
-
-# マッチング成立一覧(学ぶ・教える共通)
+# マッチング成立一覧(学ぶ・教える共通)(追加機能)
 # class MatchingList(ListView):
 #     def get():
 
@@ -685,28 +715,8 @@ class RequestList(ListView):
 
 
 
-
-
-
-
-
-# コンタクト
-class Contact(TemplateView):
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # 開発用にURLパラメータでroleを取得。なければデフォルトをstudentにする
-        role = self.request.GET.get("role", "student")
-
-        if role == "student":
-            sub_text = "教えたいもの："
-        elif role == "teacher":
-            sub_text = "学びたいもの："
-
-        context["role"] = role
-        context["sub_text"] = sub_text
-
-        return context
+# プロフィール編集(追加機能)
+# class ProfileUpdate(UpdateView):
 #     def get():
 
 #         pass
@@ -718,13 +728,7 @@ class Contact(TemplateView):
 
 
 
-
-
-
-
-
-
-# 評価
+# 評価(追加機能)
 # class Review(CreateView):
 #     def get():
 

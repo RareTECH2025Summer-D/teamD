@@ -15,23 +15,28 @@
         </div>
 
         <!-- ニックネーム -->
-        <p class="profile-user-name">ひいろ</p>
+        <p class="profile-user-name">{{ nickname }}</p>
 
     </div>
 
     <!-- スキル一覧 -->
     <div class="skills-list">
-        <p>{{ sub_text|safe }}</p>
+        {% if role == "student" %}
+        <p>教えたいもの：</p>
+        {% else %}
+        <p>学びたいもの：</p>
+        {% endif %}
+
         <ul>
-            <li><span class="skill-tag">AWS</span></li>
-            <li><span class="skill-tag">Docker</span></li>
+            {% for skill in skills %}
+            <li><span class="skill-tag">{{ skill }}</span></li>
+            {% endfor %}
         </ul>
     </div>
 
     <!-- 自己紹介文 -->
     <div class="user-introduction">
-        <!-- <p>こんにちは！</p> -->
-        <p>初めまして、ひいろと申します！最近ハッカソンでDockerとAWSについて学んでいます。その中で僕もつまづいたことがたくさんあったので、その経験からの気づきを皆さんとシェアできたらとても嬉しいです。僕も人に教えながらさらに学んで成長していきたいと思っています。一緒に成長してくれる方はいませんか？</p>
+        <p>{{ self_introduction|linebreaksbr }}</p>
     </div>
 
 </main>
@@ -40,6 +45,14 @@
 {% block footer %}
 <div class="sticky-button-wrapper">
     <hr />
-    {% include 'partials/sticky_button.html' with button_label='承認する' %}
+        <form method="post" action="{% url 'request_list' %}?role={{ role }}">
+            {% csrf_token %}
+
+            <div class="handshake-btn-wrapper">
+                <input type="hidden" name="form_type" value="approval_request">
+                <input type="hidden" name="target_user_id" value="{{ requested_user_id }}">
+                {% include 'partials/sticky_button.html' with button_label='承認する' %}
+            </div>
+       </form>
 </div>
 {% endblock footer %}
