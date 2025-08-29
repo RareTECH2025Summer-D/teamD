@@ -1,9 +1,11 @@
 from django.urls import path
 from .views import *
+from django.views.generic import RedirectView
 from . import views
 
 urlpatterns = [
     path('signup/',UserSignup.as_view(template_name='registration/signup.html'),name='signup'),
+    path('', RedirectView.as_view(pattern_name='login', permanent=False)),  # ルートでアクセスしたら login にリダイレクト
     path('login/',Login.as_view(template_name='registration/login.html'),name='login'),
     path('logout/',LogoutView.as_view(next_page='login'),name='logout'),                                 # DjangoのLogoutViewで完結
     #path('select/role/',RoleSelect.as_view(template_name='settings.html'),name='select_role'),
