@@ -339,11 +339,11 @@ class SearchUsers(TemplateView):
         # 本番用にURLパラメータでroleを取得。なければデフォルトをstudentにする
         # ログイン時にセッションを取得してroleをURLに組み込むのでGETメソッドでOK
         role = self.request.GET.get("role")
-        # Matchingsテーブルからログイン中のユーザーがリクエストしたユーザーIDを取得
+        # 除外用　ログインしたユーザーリクエストされたものは除く
         is_requested = Matchings.objects.filter(
             requested_user_id=self.request.user.id
-            ).values_list('requested_user_id__id', flat=True)
-        
+            ).values_list('requester_user_id__id', flat=True)
+         # Matchingsテーブルからログイン中のユーザーがリクエストしたユーザーIDを取得
         is_request = Matchings.objects.filter(
             requester_user_id=self.request.user.id
             ).values_list('requested_user_id__id', flat=True)
@@ -360,7 +360,7 @@ class SearchUsers(TemplateView):
             serch_users = UserProfile.objects.filter(
                 user_id__userskills__skill_id__in=login_user_skills,
                 user_id__userskills__is_teacher=True,is_teacher=True
-                ).exclude(user_id__in=is_requested).distinct()
+                ).exclude(Q(user_id__in=is_requested) | Q(user_id=self.request.user.id)).distinct()
             
                   
         elif role == "teacher":
@@ -373,7 +373,7 @@ class SearchUsers(TemplateView):
             serch_users = UserProfile.objects.filter(
                 user_id__userskills__skill_id__in=login_user_skills,
                 user_id__userskills__is_teacher=False,is_teacher=False
-                ).exclude(user_id__in=is_requested).distinct()
+                ).exclude(Q(user_id__in=is_requested) | Q(user_id=self.request.user.id)).distinct()
             
         else:
             serch_users = UserProfile.objects.none()
