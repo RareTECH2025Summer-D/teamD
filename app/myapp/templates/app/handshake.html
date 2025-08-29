@@ -28,24 +28,25 @@
 
                 <form method="post" action="">
                     {% csrf_token %}
-            
-                    <div class="user-box">
+                    {% for match_user in matching_list %}
+                        <div class="user-box">
 
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
+                            <div class="search-user-info">
+                                <div class="search-user-icon-circle">
+                                    <i class="fa-regular fa-user search-user-icon"></i>
+                                </div>
+                                <p>{{match_user.nickname}}</p>
                             </div>
-                            <p>MANA</p>
+                
+                            <a href="{% url 'contact_user' %}?role={{ role }}" class="matching-button">コンタクトを取る</a>
+                
                         </div>
-            
-                        <a href="{% url 'contact_user' %}?role={{ role }}" class="matching-button">コンタクトを取る</a>
-            
-                    </div>
+                    {% endfor %}
             
                 </form>
             
                 <!-- UI確認用 -->
-                    <div class="user-box">
+                    <!-- <div class="user-box">
             
                         <div class="search-user-info">
                             <div class="search-user-icon-circle">
@@ -91,7 +92,7 @@
                         </div>
                         <button class="matching-button">コンタクトを取る</button>
             
-                    </div>
+                    </div> -->
                 <!-- UI確認用ここまで！ --> 
             
             </div>
@@ -111,7 +112,7 @@
             </form>
 
             <div class="user-box-wrapper">
-            
+                {% for request_user in request_list %}
                     <div class="user-box">
 
                         <a href="{% url 'requester_profile' %}?role={{ role }}">
@@ -119,22 +120,24 @@
                                 <div class="search-user-icon-circle">
                                     <i class="fa-regular fa-user search-user-icon"></i>
                                 </div>
-                                <p>ひいろ</p>
+                                <p>{{request_user.nickname}}</p>
                             </div>
                         </a>
 
                         <form method="post" action="">
                             {% csrf_token %}
                             <div class="handshake-btn-wrapper">
-                                <button class="accept-button" type="button">承認</button>
+                                <input type="hidden" name="form_type" value="approval_request">
+                                <input type="hidden" name="target_user_id" value="{{ request_user.user_id.id }}">
+                                <button class="accept-button" type="submit">承認</button>
                                 <button class="remove-button" type="button">削除</button>
                             </div>
                         </form>
             
                     </div>
-            
+                {% endfor %}
                 <!-- UI確認用 -->
-                    <div class="user-box">
+                    <!-- <div class="user-box">
             
                         <div class="search-user-info">
                             <div class="search-user-icon-circle">
@@ -164,7 +167,7 @@
                             <button class="remove-button" type="button">削除</button>
                         </div>
             
-                    </div>
+                    </div> -->
                 <!-- UI確認用ここまで -->
 
         </li>
