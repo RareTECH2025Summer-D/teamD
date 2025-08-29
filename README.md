@@ -5,7 +5,7 @@
 - Python 3.12  
 - Django  
 - Docker / Docker Compose  
-- SQLite（開発用 DB）
+- MySQL（開発用 DB）
 
 ---
 
@@ -34,22 +34,7 @@ docker compose exec app python manage.py createsuperuser
 🧪 動作確認
 URL	説明
 ```bash
-http://localhost:8000/	チャンネル一覧（仮ビュー）
+http://localhost:8000/	ログイン画面
 http://localhost:8000/admin/	Django 管理画面（ログイン必要）
 ```
-📁 ディレクトリ構成
-```bash
-.
-├── .env　　               # 環境変数
-├── .env.example　　       # 共有用テンプレ
-├── .gitignore          
-├── README.md　　　　　　　  # ← このファイル
-├── app
-│   ├── Dockerfile
-│   ├── manage.py
-│   ├── requirements.txt
-│   ├── myapp/　　　　　　　# アプリケーション
-│   └── myproject/　　　　 # プロジェクト設定
-└── docker-compose.yml
 
-```
