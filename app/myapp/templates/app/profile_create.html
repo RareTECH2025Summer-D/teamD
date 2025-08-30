@@ -12,12 +12,12 @@
         <br>
         作成しましょう！
     </p>
-    
+
     <form method="post" action="">
         {% csrf_token %}
-    
+
         <div class="profile-form-wrapper">
-    
+
             <div class="user-icon-piece">
                 <div class="user-icon-circle">
                     <i class="fa-regular fa-user user-icon"></i>
@@ -26,30 +26,32 @@
                     <i class="fa-solid fa-plus plus-icon"></i>
                 </div>
             </div>
-    
+
             <div class="username-piece">
                 <label class="input-username" for="user_name">ニックネーム：</label>
-                <input class="profile-form" type="text" id="user_name" name="user_name">
+                {{ form.nickname }}
+                <!--<input class="profile-form" type="text" id="user_name" name="user_name">-->
             </div>
-    
+
             <div class="contact-info-piece">
                 <label class="input-contact-info" for="contact_info">マッチングした際の連絡先：</label>
-                <input class="profile-form" type="text" id="contact_info" name="contact_info">
+                {{ form.contact_info }}
+                <!--<input class="profile-form" type="text" id="contact_info" name="contact_info">-->
             </div>
-    
+
             <div class="introduction-piece">
                 <label class="input-introduction" for="self_introduction">自己紹介文：</label>
-                <textarea class="introduction-form" type="text" id="self_introduction" name="self_introduction" maxlength="255"></textarea>
+                {{ form.self_introduction }}
+                <!--<textarea class="introduction-form" type="text" id="self_introduction" name="self_introduction" maxlength="255"></textarea>-->
             </div>
         </div>
-    
+
         <div class="sticky-button-wrapper">
             <hr />
             {% include 'partials/sticky_button.html' with button_label='決定する' %}
         </div>
-    
+
     </form>
 
 </main>
 {% endblock content %}
-

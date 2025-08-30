@@ -1,12 +1,11 @@
 {% extends 'base/base_app_button.html' %}
 
 {% block header %}
-    {% include 'partials/header_back.html' with back_url_name='search' %}
+    {% include 'partials/header_back.html' with back_url_name='request_list' %}
 {% endblock header %}
 
 {% block content %}
 <main class="normal-main">
-    
 
     <div class="user-icon-name-piece">
 
@@ -46,14 +45,14 @@
 {% block footer %}
 <div class="sticky-button-wrapper">
     <hr />
-        <form method="post" action="{% url 'search' %}">
+        <form method="post" action="{% url 'request_list' %}?role={{ role }}">
             {% csrf_token %}
 
-            <input type="hidden" name="form_type" value="send_request">
-            <input type="hidden" name="requested_user_id" value="{{ requested_user_id }}">
-            <input type="hidden" name="requester_user_role" value="{{ requester_user_role }}">
-            <input type="hidden" name="get_role" value="{{ role }}">
-            {% include 'partials/sticky_button.html' with button_label=request_status %}
-        </form>
+            <div class="handshake-btn-wrapper">
+                <input type="hidden" name="form_type" value="approval_request">
+                <input type="hidden" name="target_user_id" value="{{ requested_user_id }}">
+                {% include 'partials/sticky_button.html' with button_label='承認する' %}
+            </div>
+       </form>
 </div>
 {% endblock footer %}

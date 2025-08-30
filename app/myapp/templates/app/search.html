@@ -18,97 +18,35 @@
 
 
     <div class="user-box-wrapper">
-
-        <!-- バックエンドと連携する時はこんな感じになる？ -->
-        <!-- {% for user in users %}
-        <form method="POST" action="">
-            {% csrf_token %}
-
+        {% for user in users %}
             <div class="user-box">
 
-                <div class="search-user-info">
-                    <div class="search-user-icon-circle">
-                        <i class="fa-regular fa-user search-user-icon"></i>
+                <a href="{% url 'user_detail' %}?role={{ role }}&requested_user_id={{ user.requested_id }}&request_status={{ user.request_status }}">
+                    <div class="search-user-info">
+                        <div class="search-user-icon-circle">
+                            <i class="fa-regular fa-user search-user-icon"></i>
+                        </div>
+                        <p>
+                            {{ user.requeted_nickname }}
+                        </p>         
                     </div>
-                    <p>{{ user.name }}</p>
-                </div>
+                </a>
+                <form method="post" action="">
+                    {% csrf_token %}
 
-                <input type="hidden" name="user_id" value="{{ user.id }}">
-                <button class="request-button" type="submit">リクエストする</button>
-                
+                    <input type="hidden" name="form_type" value="send_request">
+                    <input type="hidden" name="requested_user_id" value="{{ user.requested_id }}">
+                    <input type="hidden" name="requester_user_role" value="{{ user.requester_role }}">
+                    <input type="hidden" name="get_role" value="{{ role }}">
+
+                    {% if user.request_status == 'リクエスト済み' %}
+                    <button class="request-button requested" type="submit" disabled>{{ user.request_status }}</button>
+                    {% else %}
+                    <button class="request-button " type="submit" >{{ user.request_status }}</button>
+                    {% endif %}
+                </form>
             </div>
-
-        </form>
-        {% endfor %} -->
-
-        <form method="post" action="">
-            {% csrf_token %}
-
-            <div class="user-box">
-
-                <div class="search-user-info">
-                    <div class="search-user-icon-circle">
-                        <i class="fa-regular fa-user search-user-icon"></i>
-                    </div>
-                    <p>MANA</p>
-                </div>
-
-                <button class="request-button" type="button">リクエストする</button>
-
-            </div>
-
-        </form>
-
-        <!-- UI確認用 -->
-            <div class="user-box">
-
-                <div class="search-user-info">
-                    <div class="search-user-icon-circle">
-                        <i class="fa-regular fa-user search-user-icon"></i>
-                    </div>
-                    <p>ひいろ</p>
-                </div>
-                <button class="request-button">リクエストする</button>
-
-            </div>
-
-            <div class="user-box">
-
-                <div class="search-user-info">
-                    <div class="search-user-icon-circle">
-                        <i class="fa-regular fa-user search-user-icon"></i>
-                    </div>
-                    <p>てつき</p>
-                </div>
-                <button class="request-button">リクエストする</button>
-
-            </div>
-
-            <div class="user-box">
-
-                <div class="search-user-info">
-                    <div class="search-user-icon-circle">
-                        <i class="fa-regular fa-user search-user-icon"></i>
-                    </div>
-                    <p>たな</p>
-                </div>
-                <button class="request-button">リクエストする</button>
-
-            </div>
-
-            <div class="user-box">
-
-                <div class="search-user-info">
-                    <div class="search-user-icon-circle">
-                        <i class="fa-regular fa-user search-user-icon"></i>
-                    </div>
-                    <p>My name is MANA</p>
-                </div>
-                <button class="request-button">リクエストする</button>
-
-            </div>
-        <!-- UI確認用ここまで -->
-
+        {% endfor %}
     </div>
 
 </main>

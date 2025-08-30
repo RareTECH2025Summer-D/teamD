@@ -3,15 +3,18 @@
 .circle-wrapper {
     display: flex;
     justify-content: center;
-    height: 22%;
+    height: 22dvh;
     overflow: hidden;
     position: relative;
 }
 
 .app-name {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 23px;
     align-self: center;
     color: var(--white);
-    margin-right: 15em;
+    margin-right: 12em;
     z-index: 1;
 }
 
@@ -43,17 +46,29 @@
 /* ！ スキル登録・スキル作成・プロフィール作成画面ヘッダーの部分の指定 ！ */
 
 .opening-header {
+    height: 15dvh;
     position: relative;
-    height: 15vh;
     background: var(--primary_translucent);
 }
 
 .opening-app-name {
+    font-weight: 600;
+    font-style: normal;
+    font-size: 22px;
     position: absolute;
     left: 0;
     bottom: 0;
     margin: 15px;
     color: var(--charcoal_gray);
+}
+
+.skill-back-icon {
+    font-size: 30px;
+    color: var(--charcoal_gray);
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-100%);
 }
 
 /* ! ホーム・探す・ハンドシェイク・設定画面（フッターアイコンの並ぶ画面）のヘッダー部分の指定 ! */
@@ -67,10 +82,11 @@
 
 /* 「初期ホーム画面」ヘッダー */
 .opening-home-header-wrapper {
-    height: 15vh;
+    height: 15dvh;
     display: flex;
     flex-direction: column;
 }
+
 .opening-user-info {
     height: 100%;
     display: flex;
@@ -109,7 +125,7 @@
 
 /* 「通常ホーム」ヘッダー */
 .home-header-wrapper {
-    height: 15vh;
+    height: 15dvh;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -156,7 +172,7 @@
 /* !「探す画面」ヘッダー ! */
 
 .search-header-wrapper {
-    height: 15vh;
+    height: 15dvh;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -165,7 +181,6 @@
 
 .search-title {
     font-size: 33px;
-    /* font-weight: bold; */
     color: var(--charcoal_gray);
     margin-top: 4px; /* 微調整 */
 }
@@ -188,7 +203,7 @@
 /* !「ハンドシェイク画面」ヘッダー ! */
 
 .handshake-header-wrapper {
-    height: 15vh;
+    height: 15dvh;
     display: flex;
     align-items: flex-end;
 }
@@ -218,6 +233,7 @@
     height: 57px;
     width: 80%;
     transition: 0.1s;
+    -webkit-tap-highlight-color: transparent;  
 }
 
 .handshake-tabs hr {
@@ -240,7 +256,7 @@
 /* !「設定画面」ヘッダー ! */
 
 .settings-header-wrapper {
-    height: 15vh;
+    height: 15dvh;
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -255,11 +271,15 @@
 
 /* !「ユーザープロフィール画面」ヘッダー ! */
 .profile-header {
-    height: 15vh;
+    height: 15dvh;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     padding-left: 20px;  /* 微調整 */
+}
+
+.profile-header a {
+    -webkit-tap-highlight-color: transparent;  
 }
 
 .back-icon {

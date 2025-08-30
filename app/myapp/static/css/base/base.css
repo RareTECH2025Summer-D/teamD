@@ -8,29 +8,36 @@
 }
 
 html, body {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100dvh;
     text-align: center;
 }
 
 
 /* 「スキル登録画面」「スキル作成画面」「プロフィール作成画面」のメイン部分の指定 */
 .opening-main {
-    height: 85vh;
+    height: 85dvh;
     overflow-y: auto;
-    padding-bottom: 120px; /* ボタンの高さ分の余白を確保 */
+    padding-bottom: 140px; /* ボタンの高さ分の余白を確保 */
     position: relative;
 }
 
 /* 「ホーム画面」のメイン部分の指定 */ 
 .home-normal-main {
-    height: 73vh; /* それぞれの画面で指定するので、消すかも！ */
+    height: 73dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /*「探す画面」「ハンドシェイク画面」「設定画面」のメイン部分の指定 */
 .normal-main {
-    height: 73vh; /* それぞれの画面で指定するので、消すかも！ */
+    height: 73dvh;
     overflow-y: auto;
     padding-bottom: 70px;
     position: relative;
+}
+
+.no-footer {
+    height: 85dvh;
 }

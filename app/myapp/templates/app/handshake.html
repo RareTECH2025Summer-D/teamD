@@ -1,4 +1,5 @@
 {% extends 'base/base_app_button.html' %}
+{% load static %}
 
 {% block header %}
     {% include 'partials/header_handshake.html' %}
@@ -11,7 +12,7 @@
     <ul class="handshake-contents">
 
         <!-- 「マッチング成功」のタブの中のコンテンツ -->
-        <li class="active">
+        <li>
 
             <form method="get" action=""> <!-- 検索窓 -->
                 <div class="search-wrapper">
@@ -25,80 +26,36 @@
             <!-- ユーザ一覧 -->
             <div class="user-box-wrapper">
 
-                <form method="post" action="">
-                    {% csrf_token %}
-            
-                    <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
+                    {% for match_user in matching_list %}
+                        <div class="user-box">
+
+                            <div class="search-user-info">
+                                <div class="search-user-icon-circle">
+                                    <i class="fa-regular fa-user search-user-icon"></i>
+                                </div>
+                                <p>{{match_user.nickname}}</p>
                             </div>
-                            <p>MANA</p>
+                
+                            <form method="post" action="{% url 'contact_user' %}">
+                                {% csrf_token %}
+                                <div class="handshake-btn-wrapper">
+                                    <input type="hidden" name="role" value="{{ role }}">
+                                    <input type="hidden" name="requested_user_id" value="{{ match_user.user_id_id }}">
+                                    <button class="matching-button" type="submit">コンタクトを取る</button>
+                                </div>
+                            </form>
                         </div>
+                    {% endfor %}
             
-                        <button class="matching-button" type="button">コンタクトを取る</button>
             
-                    </div>
-            
-                </form>
-            
-                <!-- UI確認用 -->
-                    <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
-                            </div>
-                            <p>ひいろ</p>
-                        </div>
-                        <button class="matching-button">コンタクトを取る</button>
-            
-                    </div>
-            
-                    <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
-                            </div>
-                            <p>てつき</p>
-                        </div>
-                        <button class="matching-button">コンタクトを取る</button>
-            
-                    </div>
-            
-                    <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
-                            </div>
-                            <p>たな</p>
-                        </div>
-                        <button class="matching-button">コンタクトを取る</button>
-            
-                    </div>
-            
-                    <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
-                            </div>
-                            <p>My name is MANA</p>
-                        </div>
-                        <button class="matching-button">コンタクトを取る</button>
-            
-                    </div>
-                <!-- UI確認用ここまで！ --> 
+ 
             
             </div>
 
         </li>
 
         <!-- 「リクエスト」の中のコンテンツ -->
-        <li>
+        <li class="active">
 
             <form method="get" action=""> <!-- 検索窓 -->
                 <div class="search-wrapper">
@@ -110,61 +67,32 @@
             </form>
 
             <div class="user-box-wrapper">
-
-                <form method="post" action="">
-                    {% csrf_token %}
-            
+                {% for request_user in request_list %}
                     <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
-                            </div>
-                            <p>ひいろ</p>
-                        </div>
 
-                        <div class="handshake-btn-wrapper">
-                            <button class="accept-button" type="button">承認</button>
-                            <button class="remove-button" type="button">削除</button>
-                        </div>
+                        <a href="{% url 'requester_profile' %}?role={{ role }}&requested_user_id={{ request_user.user_id.id }}">
+                        
+                            <div class="search-user-info">
+                                <div class="search-user-icon-circle">
+                                    <i class="fa-regular fa-user search-user-icon"></i>
+                                </div>
+                                <p>{{request_user.nickname}}</p>
+                            </div>
+                        </a>
+
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="handshake-btn-wrapper">
+                                <input type="hidden" name="form_type" value="approval_request">
+                                <input type="hidden" name="target_user_id" value="{{ request_user.user_id.id }}">
+                                <button class="accept-button" type="submit">承認</button>
+                                <button class="remove-button" type="button">削除</button>
+                            </div>
+                        </form>
             
                     </div>
-            
-                </form>
-            
-                <!-- UI確認用 -->
-                    <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
-                            </div>
-                            <p>てつき</p>
-                        </div>
-
-                        <div class="handshake-btn-wrapper">
-                            <button class="accept-button" type="button">承認</button>
-                            <button class="remove-button" type="button">削除</button>
-                        </div>
-            
-                    </div>
-            
-                    <div class="user-box">
-            
-                        <div class="search-user-info">
-                            <div class="search-user-icon-circle">
-                                <i class="fa-regular fa-user search-user-icon"></i>
-                            </div>
-                            <p>たなですよろく</p>
-                        </div>
-
-                        <div class="handshake-btn-wrapper">
-                            <button class="accept-button" type="button">承認</button>
-                            <button class="remove-button" type="button">削除</button>
-                        </div>
-            
-                    </div>
-                <!-- UI確認用ここまで -->
+                {% endfor %}
+ 
 
         </li>
 
@@ -180,3 +108,7 @@
         {% include 'partials/footer.html' %}
     {% endif %}
 {% endblock footer %}
+
+{% block extra_js %}
+    <script src="{% static 'javascript/handshake.js' %}"></script> 
+{% endblock extra_js %}

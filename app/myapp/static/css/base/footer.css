@@ -2,7 +2,7 @@
 
 /* フッター部分の指定 */
 .normal-footer {
-    height: 12vh;
+    height: 12dvh;
     display: flex;
     flex-direction: column;
 }
@@ -34,6 +34,7 @@
     text-decoration: none;
     color: var(--gray);
     border-radius: 20%;
+    -webkit-tap-highlight-color: transparent;  
 }
 
 /* アイコンをタップした際の色の変化 */

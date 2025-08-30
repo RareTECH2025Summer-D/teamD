@@ -1,7 +1,7 @@
 {% extends 'base/base_app_button.html' %}
 
 {% block header %}
-{% include 'partials/header_opening.html' %}
+{% include 'partials/header_opening.html' with show_back_button=True%}
 {% endblock header %}
 
 {% block content %}
@@ -9,24 +9,34 @@
 
     <p class="opening-title">
         {{ page_title|safe }}
-        <!-- 学びたいスキルを
-        <br>
-        作りましょう！ -->
     </p>
-    
+
     <form method="post" action="">
-    {% csrf_token %}
-    
+        {% csrf_token %}
+
+        <!-- エラーメッセージが表示されたとき用 -->
+        {% if form.skill_name.errors.0 %}
+        <div class="error-message">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            {{ form.skill_name.errors.0 }}
+        </div>
+        {% endif %}
+
         <div class="skill-form-wrapper">
             <label class="input-skill-name" for="skill_name">スキル名入力</label>
+            {{ form.skill_name }}
+            <!--
             <input class="skill-form" type="text" id="skill_name" name="skill_name">
+            -->
+
+
         </div>
-    
+
         <div class="sticky-button-wrapper">
             <hr />
-            {% include 'partials/sticky_button.html' with button_label='作成する' %}
+            {% include 'partials/sticky_button.html' with button_label='追加する' %}
         </div>
-    
+
     </form>
 
 </main>

@@ -68,7 +68,7 @@
 
 /* 「スキル作成画面」のフォーム */
 .skill-form {
-    width: 300px;
+    width: 310px;
     height: 40px;
     border-radius: 25px;
     border: none;
@@ -80,7 +80,7 @@
 
 /* 「プロフィール作成画面」のフォーム */
 .profile-form {
-    width: 285px;
+    width: 300px;
     height: 35px;
     border-radius: 25px;
     border: none;
@@ -91,7 +91,7 @@
 }
 
 .introduction-form {
-    width: 285px;
+    width: 300px;
     height: 250px;
     border-radius: 25px;
     border: none;
@@ -104,32 +104,37 @@
 /* ！ 「スキル登録画面」のパーツ ！ */
 
 /* 虫眼鏡ボタン */
-.skill-search-btn {
-    width: 35px;
-    height: 35px;
-    border-radius: 20px 0 0 20px;
-    background-color: var(--slate_white);
-    border: none;
-    box-shadow: 1px 1px 5px 1px var(--shadow_gray);
-    cursor: pointer;
-}
-
-.skill-search-btn:hover {
-    background-color: var(--student_primary);
-    color: var(--white);
-}
-
-/* 検索窓 */
 .skill-search-form {
-    width: 220px;
-    height: 35px;
-    border-radius: 0 20px 20px 0;
-    background-color: var(--slate_white);
+    width: 100%;
+    height: 41px;
+    position: relative;
+    border-radius: 20px;
+    background-color: var(--form_gray);
     border: none;
-    box-shadow: 1px 1px 5px 1px var(--shadow_gray);
-    padding: 5px 17px;
+    padding: 5px 71px 5px 28px; /* 上右下左 / ボタン分の余白を右に設定 */
     outline: none;
-    font-size: 15px;
+    font-size: 18px;
+}
+
+.skill-search-btn {
+    width: 47px;
+    height: 41px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 0 20px 20px 0;
+    background-color: var(--primary_color);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+}
+
+.skill-search-icon {
+    font-size: 20px;
+    color: var(--white);
 }
 
 /* プラスボタン(「スキル作成画面」遷移) */
@@ -137,21 +142,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background-color: var(--primary_color);
-    opacity: 0.6;
-    transition: 0.2s;
+    padding-top: 2px;  /* 円の中のプラスボタン微調整 */
+    margin-top: 2px;  /* プラスボタンごと微調整 */
+}
+
+.plus-btn-circle a {
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;  /* スマホのタップ時の一瞬だけ出現する四角を消す */
 }
 
 .plus-btn {
     font-size: 20px;
     color: var(--white);
-}
-
-.plus-btn-circle:hover {
-    opacity: 1;
 }
 
 /* スキル選択タグ */
@@ -171,9 +177,10 @@
     border: 1px solid var(--gray);
     color: var(--charcoal_gray);
     border-radius: 20px;
-    padding: 5px 15px;
+    padding: 6px 17px;
     font-weight: bold;
-    margin: 4px 0;
+    font-size: 18px;
+    margin: 5px 0;
 }
 
 
@@ -226,6 +233,9 @@
     padding-bottom: 3px; /* 微調整 */
 }
 
+.student-button.active {
+    background-color: #c7a62f;
+}
 
 .teacher-button {
     width: 210px;
@@ -240,6 +250,10 @@
     font-size: 38px;
     font-weight: bold;
     padding-bottom: 3px; /* 微調整 */
+}
+
+.teacher-button.active {
+    background-color: #4978AE;
 }
 
 
@@ -290,6 +304,11 @@
     padding: 0 20px;
 }
 
+.user-box a {
+    text-decoration: none; 
+    -webkit-tap-highlight-color: transparent;  
+}
+
 .search-user-info {
     display: flex;
     align-items: center;
@@ -297,6 +316,7 @@
 }
 
 .search-user-info p {
+    color: var(--black);
     font-size: 24px;
     max-width: 85px;
     white-space: nowrap; /* 折り返さない */
@@ -304,6 +324,7 @@
     text-overflow: ellipsis; /* はみ出し部分「...」にする */
 }
 
+/* 「リクエストする」ボタン */
 .request-button {
     width: 130px;
     height: 35px;
@@ -315,11 +336,20 @@
     font-size: 15px;
 }
 
+/* 「リクエスト済み」ボタン */
+.requested {
+    background-color: var(--gray);
+}
+
 
 /* ！「ハンドシェイク画面」パーツ！ */
 
 .matching-button {
-    width: 140px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 143px;
     height: 35px;
     border: none;
     border-radius: 25px;
@@ -327,6 +357,10 @@
     color: var(--white);
     font-weight: bold;
     font-size: 15px;
+}
+
+.matching-button:hover {
+    cursor: default;
 }
 
 .accept-button {
@@ -370,14 +404,33 @@
 }
 
 .settings-box p {
+    padding-left: 5px;
     font-size: 23px;
 }
 
+/* 「アカウント管理」の左のアイコン */
+.settings-user-icon-circle {
+    width: 47px;
+    height: 47px;
+    border-radius: 50%;
+    border: 3px solid var(--charcoal_gray);
+    margin-top: 4px; /* 微調整 */
+}
+
+.settings-user-icon {
+    font-size: 32px;
+    color: var(--charcoal_gray);
+    padding-top: 9px;
+}
+
+/* 「送信済みリクエスト」の左のアイコン */
 .people-icon {
-    font-size: 38px;
+    font-size: 36px;
+    color: var(--charcoal_gray);
 }
 
 .logout-btn {
+    text-decoration: none;
     background: none;
     color: var(--red);
     font-size: 22px;

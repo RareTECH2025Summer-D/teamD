@@ -24,11 +24,12 @@ hr {
     margin-top: 30px;
 }
 
+
 .skill-form-wrapper {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin: 40px auto;
+    margin: 42px auto;
     width: max-content;
 }
 
@@ -36,7 +37,23 @@ hr {
     font-size: 18px;
     font-weight: bold;
     color: var(--charcoal_gray);
-    margin: 0 0 5px 15px; /*　上・右・下・左 */
+    margin: 0 0 5px 13px; /*　上・右・下・左 */
+}
+
+.error-message {
+    width: 300px;
+    margin: 15px auto;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--caution);
+    padding: 10px 13px;
+    border-radius: 6px;
+    background-color: var(--caution_background);
+    margin-bottom: -20px;
+}
+
+.error-message i {
+    font-size: 16px;
 }
 
 
@@ -48,6 +65,13 @@ hr {
     gap: 15px;
 }
 
+.skill-search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 270px;
+    margin: 0 auto;
+}
+
 .skill-selection-wrapper {
     width: 90%;
     margin: 0 auto;
@@ -55,6 +79,5 @@ hr {
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: 10px;
-    /* margin-top: 35px;
-    text-align: left; */
+    padding-top: 13px;
 }

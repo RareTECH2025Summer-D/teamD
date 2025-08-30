@@ -57,9 +57,12 @@ class UserProfile(models.Model):
     self_introduction = models.TextField(blank=True, null=True)
     star_rating_sum = models.IntegerField(default=0)  # 星の合計
     star_rating_count = models.IntegerField(default=0)
-    star_rating_average = models.DecimalField(max_digits=1,decimal_places=1)  # 星の平均値
+    star_rating_average = models.DecimalField(max_digits=1,decimal_places=1,default=0.0)  # 星の平均値
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.nickname # adminの管理画面でデータを文字列として表示させる処理（migrateなど不要）
     
 class Skills(models.Model):
     skill_name = models.CharField(max_length = 100)
@@ -69,6 +72,9 @@ class Skills(models.Model):
     skill_count = models.IntegerField(default=0)  # スキルの登録数
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.skill_name
 
 class UserSkills(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -76,9 +82,15 @@ class UserSkills(models.Model):
     is_teacher = models.BooleanField(blank=True, null=True)  # True: 先生, False: 生徒
     created_at = models.DateTimeField(auto_now_add=True)  # 登録日時
     updated_at = models.DateTimeField(auto_now=True)
+    
 
-class Channel(models.Model):
-    name = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.name
+class Matchings(models.Model):
+    requester_user_id = models.ForeignKey(Users, related_name='requester', on_delete=models.CASCADE)
+    requested_user_id = models.ForeignKey(Users, related_name='requested', on_delete=models.CASCADE)
+    requester_user_role = models.BooleanField(blank=True, null=True)  # True: 先生, False: 生徒
+    requester_status = models.CharField(max_length=20, default='pending')  # リクエストのステータス
+    requested_status = models.CharField(max_length=20, default='pending')  # リクエストのステータス
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    

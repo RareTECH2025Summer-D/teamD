@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q, F
 from .models import *
 
 # Metaはモデルに存在するフィールドを、入力フォームにそのまま利用できる（12行目）
@@ -25,7 +26,7 @@ class LoginForm(AuthenticationForm):
             'required': True,
         })
 
-        self.error_messages['invalid_login'] = 'メールアドレスまたはパスワードが間違っています。'
+        self.error_messages['invalid_login'] = 'メールアドレスまたはパスワードが間違っています'
 
         
 # サインアップ画面
@@ -83,11 +84,8 @@ class SignupForm(forms.ModelForm):
         
         return cleaned_data
 
-    
-    
 
-
-# 学ぶ教える選択画面（作成中）
+# 学ぶ教える選択画面
 class RoleForm(forms.ModelForm):
     
     class Meta:
@@ -102,35 +100,81 @@ class RoleForm(forms.ModelForm):
     ]
     
 
-# スキル選択画面（作成中）
-class SkillSelectForm(forms.ModelForm):
 
-    # skillsよりスキル一覧を取得
-    def __init__(self,*args, **kwargs):
+# ===============================
+# スキル選択フォーム
+# ===============================
+class SkillSelectForm(forms.Form):
+    skills = forms.ModelMultipleChoiceField(
+        queryset=Skills.objects.filter(skill_count__gte=10),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'skill-checkbox'}),
+        required=False,
+    )
+
+    def __init__(self, *args, created_skills_ids=None, **kwargs):
         super().__init__(*args, **kwargs)
-        skill_choices = [(skill.name, skill.name) for skill in Skills.objects.all()] # スキル名をタプル型にし、List形式で格納
-
-        self.fields['selected_skills'] = forms.MultipleChoiceField(
-            choices=skill_choices
-            , widget=forms.CheckboxSelectMultiple(
-                attrs={
-                    'class': 'skill-checkbox'
-                    , 'id': {{ skill.id }}
-                    , 'name': 'skill_name[]'
-                }
-            )
-            , required=False
-        )
+        # 10人以上の既存スキル + 作成スキル（ID指定）を表示
+        qs = Skills.objects.filter(skill_count__gte=10)
+        if created_skills_ids:
+            qs = Skills.objects.filter(Q(skill_count__gte=10) | Q(id__in=created_skills_ids))
+        self.fields['skills'].queryset = qs
 
 
-# スキル作成
+# ===============================
+# スキル作成フォーム
+# ===============================
 class SkillCreationForm(forms.ModelForm):
-    skill_name = forms.CharField(max_length=100)
+    class Meta:
+        model = Skills
+        fields = ['skill_name']
+        widgets = {
+            'skill_name': forms.TextInput(attrs={
+                'class': 'skill-form',
+                'name': 'skill_name',
+                'required': True
+            })
+        }
+        labels = {
+            'skill_name': ''
+        }
+
+    def clean_skill_name(self):
+        skill_name = self.cleaned_data.get("skill_name")
+        if Skills.objects.filter(skill_name=skill_name).exists():
+            raise forms.ValidationError("このスキルはすでに登録されています")
+        return skill_name
 
 
-# プロフィール作成・編集
+# ===============================
+# プロフィール作成フォーム
+# ===============================
 class ProfileForm(forms.ModelForm):
-    nickname = forms.CharField(max_length=50)
-    contact_info = forms.EmailField
-    self_introduction = forms.CharField
+    class Meta:
+        model = UserProfile
+        fields = ["nickname", "self_introduction", "contact_info"]
+        widgets = {
+            "nickname": forms.TextInput(attrs={
+                "class": "profile-form",
+                "id": "user_name",
+                "type": "text",
+                "name": "user_name",
+            }),
+            "contact_info": forms.TextInput(attrs={
+                "class": "profile-form",
+                "id": "contact_info",
+                "type": "text",
+                "name": "contact_info",
+            }),
+            "self_introduction": forms.Textarea(attrs={
+                "class": "introduction-form",
+                "id": "self_introduction",
+                "maxlength": "255",
+            }),
+        }
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
+        super().__init__(*args, **kwargs)
+        if user and not self.data:
+            self.fields["contact_info"].initial = self.instance.contact_info or user.email
+            

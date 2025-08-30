@@ -1,0 +1,72 @@
+{% extends 'base/base_app_button.html' %}
+{% load static %}
+
+{% block header %}
+    {% include 'partials/header_back.html' with back_url_name='request_list' %}
+{% endblock header %}
+
+{% block content %}
+<main class="normal-main no-footer">
+
+    <p class="matching-words">マッチング成功<br>おめでとうございます！</p>
+
+    <div class="user-icon-name-piece">
+
+        <!-- プロフィール画像 -->
+        <div class="user-icon-circle">
+            <i class="fa-regular fa-user user-icon"></i>
+        </div>
+
+        <!-- ニックネーム -->
+        <p class="profile-user-name">{{ nickname }}</p>
+
+    </div>
+
+    <div class="modal-contact-wrapper">
+                
+        <a href="" id="modalOpen" class="modal-open">連絡先を見る</a>
+
+        <div id="mask" class="mask"></div>
+
+        <div id="modal" class="modal">
+            <div class="modal-contents">
+
+                <div id="modalClose" class="modal-close"><i class="fa-solid fa-xmark"></i></div>
+
+                <div class="contact-address-piece">
+                    <p class="modal-text">連絡先：</p>
+                    <p class="contact-address">{{ contact_info }}</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- スキル一覧 -->
+    <div class="skills-list">
+        {% if role == "student" %}
+        <p>教えたいもの：</p>
+        {% else %}
+        <p>学びたいもの：</p>
+        {% endif %}
+
+        <ul>
+            {% for skill in skills %}
+            <li><span class="skill-tag">{{ skill }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+        <!-- 自己紹介文 -->
+    <div class="user-introduction">
+        <p>{{ self_introduction|linebreaksbr }}</p>
+    </div>
+
+</main>
+{% endblock content %}
+
+
+{% block extra_js %}
+    <script src="{% static 'javascript/modal.js' %}"></script> 
+{% endblock extra_js %}
